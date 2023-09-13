@@ -20,13 +20,19 @@ acc_pay_ref = "ref"
 def get_price_from_pl( pricelist, product, quantity ):
     pl = pricelist
     return_val = {}
+
+    if not product and pl:
+        return_val[pl.id] = '0'
+        return return_val
+
     try:
         return_val[pl.id] = pl._get_product_price(product=product,quantity=quantity)
     except Exception as E:
         _logger.info("get_price_from_pl error:"+str(pricelist)+" product"+str(product)+" qty:"+str(quantity))
-        return_val[pl.id] = '0'
+        if pl:
+            return_val[pl.id] = '0'
         pass;
-        
+
     return return_val
 
 #Autocommit
@@ -138,7 +144,7 @@ def ml_tax_excluded(self, config=None ):
     #tax_excluded = self.env.user.has_group('sale.group_show_price_subtotal')
     #12.0 and 13.0
     tax_excluded = self.env.user.has_group('account.group_show_line_subtotals_tax_excluded')
-        
+
     company = (config and "company_id" in config._fields and config.company_id) or self.env.user.company_id
     config = config or company
     if (config and config.mercadolibre_tax_included not in ['auto']):
@@ -198,6 +204,6 @@ def set_delivery_line( sorder, delivery_price, delivery_message ):
     	'delivery_message': delivery_message,
     })
     return oline
-    
+
 def order_create_invoices( sale_order, grouped=False, final=False ):
 	return sale_order._create_invoices(grouped=grouped, final=final)

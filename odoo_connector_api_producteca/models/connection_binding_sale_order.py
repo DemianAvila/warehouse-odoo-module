@@ -560,7 +560,7 @@ class ProductecaConnectionBindingSaleOrder(models.Model):
         #_logger.info("shippingLinkPrint from: "+str(self.shippingLink))
         warningobj = self.env["producteca.warning"]
         ret = {}
-        if self.shippingLink:
+        if self.shippingLink and not self.shippingLink_pdf_file:
             try:
                 data = urlopen(self.shippingLink).read()
                 #_logger.info(data)

@@ -286,23 +286,7 @@ class ProductecaConnectionAccount(models.Model):
                 "barcode": variant.barcode or "",
             }
 
-            stocks = []
-            #ss = variant._product_available()
-            sq = self.env["stock.quant"].search([('product_id','=',variant.id)])
-            if (sq):
-                #_logger.info( sq )
-                #_logger.info( sq.name )
-                for s in sq:
-                    if ( s.location_id.usage == "internal" and s.location_id.id in account.configuration.publish_stock_locations.mapped("id")):
-                        _logger.info( s )
-                        sjson = {
-                            "warehouseId": s.location_id.id,
-                            "warehouse": s.location_id.display_name,
-                            "quantity": s.quantity,
-                            "reserved": s.reserved_quantity,
-                            "available": s.quantity - s.reserved_quantity
-                        }
-                        stocks.append(sjson)
+            stocks = binding.get_stocks()
 
             var["stocks"] = stocks
 
@@ -431,23 +415,7 @@ class ProductecaConnectionAccount(models.Model):
             }
 
 
-            stocks = []
-            #ss = variant._product_available()
-            sq = self.env["stock.quant"].search([('product_id','=',variant.id)])
-            if (sq):
-                #_logger.info( sq )
-                #_logger.info( sq.name )
-                for s in sq:
-                    if ( s.location_id.usage == "internal" and s.location_id.id in account.configuration.publish_stock_locations.mapped("id")):
-                        _logger.info( s )
-                        sjson = {
-                            "warehouseId": s.location_id.id,
-                            "warehouse": s.location_id.display_name,
-                            "quantity": s.quantity,
-                            "reserved": s.reserved_quantity,
-                            "available": s.quantity - s.reserved_quantity
-                        }
-                        stocks.append(sjson)
+            stocks = binding.get_stocks()
 
             var["stocks"] = stocks
 
@@ -1721,15 +1689,21 @@ class ProductecaConnectionAccount(models.Model):
                             so.producteca_update_forbidden = True
                             so.action_cancel()
 
+                _logger.info("_shipment: "+str(import_sales_action)+" pso.deliveryStatus: "+str(pso.deliveryStatus))
+
                 if "_shipment" in import_sales_action and not cond_canceled:
+                    #if so.state in ['sale','done'] and pso.deliveryStatus in ["InTransit","Done"]:
                     if so.state in ['sale','done']:
                         _logger.info("Shipment confirm")
                         dones = False
                         cancels = False
                         drafts = False
                         if cond:
-                            if so.picking_ids:
-                                for spick in so.picking_ids:
+                            stock_pickings = self.env["stock.picking"].search([
+                                    ('sale_id','=',so.id)
+                                    ])
+                            if stock_pickings:
+                                for spick in stock_pickings:
                                     _logger.info(str(spick)+" state:"+str(spick.state))
                                     if spick.state in ['done']:
                                         dones = True
@@ -1783,6 +1757,8 @@ class ProductecaConnectionAccount(models.Model):
                                     res = so.action_invoice_create(grouped=True) #agrupar por SO id
                                     _logger.info("invoice create res:"+str(res))
                                     #invoices = self.env[acc_inv_model].search([('invoice_origin','=',so.name)])
+
+                                invoices = so.invoice_ids
 
                                 if invoices:
                                     for inv in invoices:

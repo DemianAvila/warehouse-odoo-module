@@ -54,9 +54,9 @@ class SaleOrder(models.Model):
         for so in self:
             so.producteca_sale_order = (so.producteca_bindings and so.producteca_bindings[0]) or None
             so.producteca_channel_binding = (so.producteca_sale_order and so.producteca_sale_order.channel_binding_id) or None
-            
+
     producteca_channel_binding = fields.Many2one( "producteca.channel.binding", string="Channel", compute=_producteca_channel_binding, store=True, index=True  )
-    
+
     @api.depends('producteca_bindings')
     def _producteca_sale_order_account( self ):
         for so in self:
@@ -71,7 +71,7 @@ class SaleOrder(models.Model):
             if (so.producteca_bindings and (not so.producteca_sale_order or not so.producteca_channel_binding or not so.producteca_sale_order_account)):
                 so._producteca_sale_order_account()
                 so.producteca_update_needed = False
-                
+
     producteca_update_needed = fields.Boolean(string="Test Update Needed",compute=_producteca_update_needed)
 
     #etiqueta analitica con etiqueta (asociada al canal)
@@ -87,6 +87,7 @@ class SaleOrder(models.Model):
         )
 
     producteca_logistic_type = fields.Char(string="Logistic Type (Producteca)",related="producteca_sale_order.logisticType", index=True)
+    producteca_shippingLink_attachment_ok = fields.Boolean(string="Ok",default=False)
 
     def producteca_update( self, context=None ):
         _logger.info("producteca_update:"+str(self))
@@ -128,8 +129,8 @@ class SaleOrder(models.Model):
                         if (len(spick.move_line_ids)>=1):
                             for pop in spick.move_line_ids:
                                 _logger.info(pop)
-                                if (pop.qty_done==0.0 and pop.product_qty>=0.0):
-                                    pop.qty_done = pop.product_qty
+                                if (pop.qty_done==0.0 and pop.reserved_uom_qty>=0.0):
+                                    pop.qty_done = pop.reserved_uom_qty
                     res = spick.sudo().button_validate()
                     #res = spick.sudo()._action_done()
                     _logger.info("producteca_deliver > button_validate res: "+str(res))
@@ -149,8 +150,8 @@ class SaleOrder(models.Model):
                         if (len(spick.move_line_ids)>=1):
                             for pop in spick.move_line_ids:
                                 _logger.info(pop)
-                                if (pop.qty_done==0.0 and pop.product_qty>=0.0):
-                                    pop.qty_done = pop.product_qty
+                                if (pop.qty_done==0.0 and pop.reserved_uom_qty>=0.0):
+                                    pop.qty_done = pop.reserved_uom_qty
                     res = spick.sudo().button_validate()
                     #spick.sudo()._action_done()
                     _logger.info("producteca_deliver > button_validate res: "+str(res))
@@ -168,8 +169,8 @@ class SaleOrder(models.Model):
         invoice_vals_list = []
         invoice_vals = order._prepare_invoice()
         invoiceable_lines = order._get_invoiceable_lines(final=False)
-        _logger.info("_prepare_invoice:"+str(invoice_vals))
-        _logger.info("_get_invoiceable_lines:"+str(invoiceable_lines))
+        #_logger.info("_prepare_invoice:"+str(invoice_vals))
+        #_logger.info("_get_invoiceable_lines:"+str(invoiceable_lines))
         invoice_line_vals = []
         invoice_item_sequence = 0
         for line in invoiceable_lines:
@@ -181,15 +182,16 @@ class SaleOrder(models.Model):
             invoice_item_sequence += 1
         invoice_vals['invoice_line_ids'] += invoice_line_vals
         #invoice_vals_list.append(invoice_vals)
-        _logger.info("invoice_line_vals:"+str(invoice_line_vals))
+        #_logger.info("invoice_line_vals:"+str(invoice_line_vals))
 
         invoice_vals_list.append(invoice_vals)
-        _logger.info("invoice_vals_list:"+str(invoice_vals_list))
-        invoice_vals_list = self.env["account.move"]._move_autocomplete_invoice_lines_create(invoice_vals_list)
-        _logger.info("invoice_vals_list:"+str(invoice_vals_list))
+        #_logger.info("invoice_vals_list:"+str(invoice_vals_list))
+        #invoice_vals_list = self.env["account.move"]._move_autocomplete_invoice_lines_create(invoice_vals_list)
+        #_logger.info("invoice_vals_list:"+str(invoice_vals_list))
 
         #real creation
-        _invoices = order_create_invoices( super(SaleOrder,self).with_context({'default_journal_id': invoice_vals['journal_id'] }), grouped=grouped, final=final )
+        default_journal_id = 'journal_id' in invoice_vals and invoice_vals['journal_id']
+        _invoices = order_create_invoices( super(SaleOrder,self).with_context({'default_journal_id': default_journal_id }), grouped=grouped, final=final )
 
         return _invoices
 
@@ -208,13 +210,13 @@ class ResPartner(models.Model):
     #besides, is there a way to identify duplicates other than integration ids
     producteca_bindings = fields.Many2many( "producteca.client", string="Producteca Connection Bindings" )
 
-#Odoo 15.0 Only            
+#Odoo 15.0 Only
 class AccountPaymentMethod(models.Model):
     _inherit = 'account.payment.method'
 
     @api.model
     def _get_payment_method_information(self):
         res = super()._get_payment_method_information()
-        res['outbound_online_producteca'] = {'mode': 'unique', 'domain': [('type', '=', 'bank')]}
-        res['inbound_online_producteca'] = {'mode': 'unique', 'domain': [('type', '=', 'bank')]}
+        res['outbound_online_producteca'] = {'mode': 'multi', 'domain': [('type', '=', 'bank')]}
+        res['inbound_online_producteca'] = {'mode': 'multi', 'domain': [('type', '=', 'bank')]}
         return res
