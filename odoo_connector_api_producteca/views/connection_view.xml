@@ -106,8 +106,21 @@
                 </group>
                 <group string="Configuración básica">
                   <group>
-                    <field name="producteca_channels"/>
-                    <field name="producteca_channels_bindings"/>
+                    <field name="producteca_channels">
+                      <tree>
+                        <field name="app_id"/>
+                        <field name="name"/>
+                      </tree>
+                    </field>
+                    <field name="producteca_channels_bindings">
+                      <tree>
+                        <field name="name"/>
+                        <field name="channel_id"/>
+                        <field name="code"/>
+                        <field name="app_id"/>
+                        <field name="seller_user"/>
+                      </tree>
+                    </field>
                     <field name="doc_undefined"/>
                     <field name="import_payments_shipment"/>
                   </group>

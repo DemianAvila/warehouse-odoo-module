@@ -949,6 +949,8 @@ class ProductecaConnectionAccount(models.Model):
                         error = {"error": "Updated res.partner error. Check account configuration and this message: "+str(E)}
                         result.append(error)
                         _logger.error(E, exc_info=True)
+                        if so:
+                            so.message_post(body=str(error["error"]))
                     break;
             else:
                 _logger.info("Create partner")
@@ -962,6 +964,8 @@ class ProductecaConnectionAccount(models.Model):
                     result.append(error)
                     _logger.error(str(error["error"]))
                     _logger.error(E, exc_info=True)
+                    if so:
+                        so.message_post(body=str(error["error"]))
                     pass;
 
         if partner_id:
