@@ -180,4 +180,112 @@ class stock_picking(models.Model):
             })
             if attachment:
                 self.producteca_shippingLink_attachment = attachment.id
-    
+
+class StockMove(models.Model):
+    _inherit = "stock.move"
+
+    def producteca_update_boms( self  ):
+        #config = config or self.env.user.company_id
+        company_ids = self.env.user.company_ids
+        mov = self
+
+        _logger.info("producteca_update_boms > "+str(company_ids))
+
+        if mov.product_id:
+
+            product_id = mov.product_id
+
+            config = None
+            is_producteca = False
+
+            for binding in mov.product_id.producteca_bindings:
+                account = binding.connection_account
+                config = account and account.configuration
+                if not config:
+                    break;
+
+                #product_id.process_producteca_stock_moves_update()
+                is_producteca = (binding)
+
+                if (config and config.publish_stock and is_producteca):
+                    #_logger.info("meli_update_boms > mercadolibre_cron_post_update_stock "+str(config and config.name))
+                    product_id.producteca_post_stock(account=account)
+
+            #sin config, recorremos las companias a las que forma parte este producto
+            if not config and company_ids:
+                for comp in company_ids:
+                    is_company = (product_id.company_id==False or product_id.company_id==comp)
+                    if (is_company):
+                        for account in comp.producteca_connections:
+                            config = account and account.configuration
+                            #_logger.info("is_company: "+str(is_company)+" product_id.company_id:"+str(product_id.company_id)+" comp:"+str(comp))
+                            #_logger.info("is_meli: "+str(is_meli)+" comp.mercadolibre_cron_post_update_stock:"+str(comp.mercadolibre_cron_post_update_stock))
+                            if (config and config.publish_stock and is_company and is_producteca):
+                                product_id.producteca_post_stock(account=account)
+
+
+
+            #BOM SECTION POST STOCK if needed
+
+            if not ("mrp.bom" in self.env):
+                return False
+
+            bomlines = "bom_line_ids" in product_id._fields and product_id.bom_line_ids
+            bomlines = bomlines or self.env['mrp.bom.line'].search([('product_id','=',product_id.id)])
+            bomlines = bomlines or []
+
+            config = None
+            bm_is_producteca = False
+
+            for bomline in bomlines:
+
+                bm_product_id = bomline.bom_id and bomline.bom_id.product_id
+                #bm_is_meli = (bm_product_id.meli_id and bm_product_id.meli_pub)
+                for binding in mov.product_id.producteca_bindings:
+                    account = binding.connection_account
+                    config = account and account.configuration
+                    if not config:
+                        break;
+
+                    bm_is_producteca = (binding)
+
+                    if (config and config.publish_stock and bm_product_id and bm_is_producteca):
+                        bm_product_id.producteca_post_stock(account=account)
+
+                #sin config, recorremos las companias a las que forma parte este producto
+                if not config and company_ids and bm_product_id:
+
+                    bindings = bm_product_id.producteca_bindings
+
+                    for comp in company_ids:
+                        bm_is_company = (bm_product_id.company_id==False or bm_product_id.company_id==comp)
+                        bm_is_producteca = (bindings)
+                        for binding in bindings:
+                            account = binding.connection_account
+                            config = account and account.configuration
+                            if (config and config.publish_stock and bm_is_company and bm_is_producteca):
+                                bm_product_id.producteca_post_stock(account=account)
+
+        return True
+
+    def _action_assign(self):
+        company = self.env.user.company_id
+
+        res = super(StockMove, self)._action_assign()
+
+        for mov in self:
+            mov.producteca_update_boms()
+
+        return res
+
+
+    def _action_done(self, cancel_backorder=False):
+        #import pdb; pdb.set_trace()
+        #_logger.info("Stock move: meli_oerp > _action_done")
+        company = self.env.user.company_id
+        moves_todo = super(StockMove, self)._action_done(cancel_backorder=cancel_backorder)
+
+        for mov in self:
+            mov.producteca_update_boms()
+
+        return moves_todo

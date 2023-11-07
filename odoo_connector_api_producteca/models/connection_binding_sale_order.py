@@ -174,7 +174,7 @@ class OcapiConnectionBindingSaleOrderPayment(models.Model):
 
         payment_method_line_id = self.env['account.payment.method.line'].search([('journal_id','=',journal_id.id),
                                                                                 ('payment_method_id','=',payment_method_id.id),
-                                                                                ('payment_type','=','inbound')])
+                                                                                ('payment_type','=','outbound')])
 
         if not payment_method_line_id:
             raise ValidationError('Debe configurar el diario/metodo de pago con el metodo de pago')

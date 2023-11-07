@@ -121,6 +121,7 @@
               					<field name="topic" />
               					<field name="resource" />
                         <field name="state" />
+                        <field name="processing_errors" />
                       </tree>
                     </field>
                   </page>

@@ -524,38 +524,71 @@ class ProductecaConnectionAccount(models.Model):
 
     def doc_info(self, contactfields, doc_undefined=None):
         dinfo = {}
+        identid = None
         if "billingInfo_docNumber" in contactfields and 'billingInfo_docType' in contactfields:
 
             doc_number = contactfields["billingInfo_docNumber"]
             doc_type = contactfields['billingInfo_docType']
+            tax_type = contactfields['billingInfo_taxPayerType']
 
-            if (doc_type and ('afip.responsability.type' in self.env) and doc_number ):
-                doctypeid = self.env['res.partner.id_category'].search([('code','=',doc_type)]).id
-                if (doctypeid):
-                    dinfo['main_id_category_id'] = doctypeid
-                    dinfo['main_id_number'] = doc_number
-                    if (doc_type=="CUIT"):
-                        #IVA Responsable Inscripto
-                        afipid = self.env['afip.responsability.type'].search([('code','=',1)]).id
-                        #dinfo["afip_responsability_type_id"] = afipid
+            if ('afip.responsability.type' in self.env):
+                if (doc_type and ('afip.responsability.type' in self.env) and doc_number ):
+                    doctypeid = self.env['res.partner.id_category'].search([('code','=',doc_type)]).id
+                    if (doctypeid):
+                        dinfo['main_id_category_id'] = doctypeid
+                        dinfo['main_id_number'] = doc_number
+                        if (doc_type=="CUIT"):
+                            #IVA Responsable Inscripto
+                            afipid = self.env['afip.responsability.type'].search([('code','=',1)]).id
+                            #dinfo["afip_responsability_type_id"] = afipid
+                        else:
+                            #if (Buyer['billing_info']['doc_type']=="DNI"):
+                            #Consumidor Final
+                            afipid = self.env['afip.responsability.type'].search([('code','=',5)]).id
+                            dinfo["afip_responsability_type_id"] = afipid
                     else:
-                        #if (Buyer['billing_info']['doc_type']=="DNI"):
-                        #Consumidor Final
-                        afipid = self.env['afip.responsability.type'].search([('code','=',5)]).id
-                        dinfo["afip_responsability_type_id"] = afipid
+                        _logger.error("res.partner.id_category:" + str(doc_type))
                 else:
-                    _logger.error("res.partner.id_category:" + str(doc_type))
+                    #use doc_undefined
+                    if doc_undefined:
+
+                        if ('afip.responsability.type' in self.env):
+                            afipid = self.env['afip.responsability.type'].search([('code','=',5)]).id
+                            dinfo["afip_responsability_type_id"] = afipid
+
+                        doctypeid = self.env['res.partner.id_category'].search([('code','=','DNI')]).id
+                        dinfo['main_id_category_id'] = doctypeid
+                        dinfo['main_id_number'] = doc_undefined
             else:
-                #use doc_undefined
-                if doc_undefined:
 
-                    if ('afip.responsability.type' in self.env):
-                        afipid = self.env['afip.responsability.type'].search([('code','=',5)]).id
-                        dinfo["afip_responsability_type_id"] = afipid
+                if doc_number and doc_type:
 
-                    doctypeid = self.env['res.partner.id_category'].search([('code','=','DNI')]).id
-                    dinfo['main_id_category_id'] = doctypeid
-                    dinfo['main_id_number'] = doc_undefined
+                    dinfo['vat'] = doc_number
+
+                else:
+
+                    if doc_undefined:
+                        doc_number = doc_undefined
+                        doc_type = 'DNI'
+                        tax_type = 'Consumidor Final'
+
+
+                #LATAM
+                if doc_type and 'l10n_latam.identification.type' in self.env:
+                    identid = self.env['l10n_latam.identification.type'].search([('name','=ilike',doc_type)]).id
+                    if identid:
+                        dinfo["l10n_latam_identification_type_id"] = identid
+
+                #ARGENTINA
+                if tax_type and 'l10n_ar.afip.responsibility.type' in self.env:
+                    resafipid = self.env['l10n_ar.afip.responsibility.type'].search([('name','=ilike', tax_type )]).id
+                    if not resafipid:
+                        resafipid = self.env['l10n_ar.afip.responsibility.type'].search([('name','=ilike', '%'+tax_type )]).id
+                    if resafipid:
+                        dinfo["l10n_ar_afip_responsibility_type_id"] = resafipid
+
+
+
         return dinfo
 
     def ocapi_price_unit( self, product=False, price=0, tax_id=False ):
@@ -780,7 +813,7 @@ class ProductecaConnectionAccount(models.Model):
         contactkey_bind = ["name","contactPerson","mail",
                     "phoneNumber","taxId","location",
                     "type","profile",
-                    #"billingInfo",
+                    "billingInfo",
                     "id"]
 
         #process "contact"
@@ -810,13 +843,28 @@ class ProductecaConnectionAccount(models.Model):
                                                                 ("connection_account","=",account.id)])
             if not client:
                 _logger.info("Creating producteca client")
-                client = self.env["producteca.client"].sudo().create( contactfields )
+                BIfields = {}
+                for bikey in contactfields:
+                    if bikey in self.env["producteca.client"]._fields:
+                        BIfields[bikey] = contactfields[bikey]
+                client = self.env["producteca.client"].sudo().create( BIfields )
             else:
                 if len(client)>1:
                     client = client[0]
                 _logger.info("Updating producteca client")
                 if ('location_stateId' in contactfields) or ('billingInfo_stateId' in contactfields):
                     client.write( { 'location_stateId': ('location_stateId' in contactfields and contactfields['location_stateId']),'billingInfo_stateId': ('billingInfo_stateId' in contactfields and contactfields['billingInfo_stateId']) } )
+                if (not (client.billingInfo_docNumber) and "billingInfo_docNumber" in contactfields and contactfields["billingInfo_docNumber"]):
+                    BIfields = {}
+                    for bikey in contactfields:
+                        if ("billingInfo" in bikey):
+                            if bikey in self.env["producteca.client"]._fields:
+                                BIfields[bikey] = contactfields[bikey]
+                    if BIfields:
+                        client.write(BIfields)
+
+
+
             if not client:
                 error = {"error": "Producteca Client creation error"}
                 result.append(error)
@@ -1045,6 +1093,18 @@ class ProductecaConnectionAccount(models.Model):
             if not so:
                 so = self.env["sale.order"].search([('name','like',sale_order_fields['name'])],limit=1)
 
+            if so and so.producteca_update_forbidden:
+                error = {"error": "Sale Order Forbidden > notificacion enviada el "+str(noti and noti.sent)}
+                _logger.error(error)
+                result.append(error)
+                if so:
+                    so.message_post(body=str(error["error"]))
+                if noti:
+                    errors = str(result)
+                    #logs = str(sale)
+                    noti.stop_internal_notification(errors=errors,logs=noti.processing_logs)
+                return result
+
             if so:
                 _logger.info("Updating order")
                 _logger.info(sale_order_fields)
@@ -1170,10 +1230,18 @@ class ProductecaConnectionAccount(models.Model):
                                                         ('product_id','=',product.id),
                                                         ('order_id','=',so.id)] )
 
-                        if not so_line or len(so_line)==0:
-                            so_line = soline_mod.create( ( so_line_fields ))
-                        else:
-                            so_line.write( ( so_line_fields ) )
+                        try:
+                            if not so_line or len(so_line)==0:
+                                so_line = soline_mod.create( ( so_line_fields ))
+                            else:
+                                so_line.write( ( so_line_fields ) )
+                        except Exception as E:
+                            error = {"error": "Creating order line error. Check account configuration and this message: "+str(E)}
+                            result.append(error)
+                            _logger.error(str(error["error"]))
+                            _logger.error(E, exc_info=True)
+                            if so:
+                                so.message_post(body=str(error["error"]))
 
                         so_line_fields["price"] = float(linefields['price'])
                         lines_processed.append(so_line_fields)
@@ -1673,154 +1741,164 @@ class ProductecaConnectionAccount(models.Model):
                 cond_canceled = so.producteca_bindings[0].isCanceled
                 if cond_canceled:
                     so.producteca_update_forbidden = True
+                    error = {"error": "Sale Order Forbidden > notificacion enviada el "+str(noti and noti.sent)}
+                    _logger.error(error)
+                    result.append(error)
+                    if so:
+                        so.message_post(body=str(error["error"]))
+                    if noti:
+                        errors = str(result)
+                        noti.stop_internal_notification(errors=errors,logs=noti.processing_logs)
+                    so.action_cancel()
+                    return result
+                else:
 
+                    _logger.info("import_sales_action: "+str(import_sales_action)+" cond:"+str(cond))
+                    _logger.info("so.name: "+str(so.name)+" so.state: "+str(so.state))
+                    _logger.info("cond_refunded: "+str(cond_refunded)+" paymentStatus: "+str(so.producteca_bindings[0].paymentStatus))
+                    _logger.info("cond_canceled: "+str(cond_canceled)+"  isCanceled: "+str(so.producteca_bindings[0].isCanceled))
 
-                _logger.info("import_sales_action: "+str(import_sales_action)+" cond:"+str(cond))
-                _logger.info("so.name: "+str(so.name)+" so.state: "+str(so.state))
-                _logger.info("cond_refunded: "+str(cond_refunded)+" paymentStatus: "+str(so.producteca_bindings[0].paymentStatus))
-                _logger.info("cond_canceled: "+str(cond_canceled)+"  isCanceled: "+str(so.producteca_bindings[0].isCanceled))
+                    if "payed_confirm_order" in import_sales_action:
+                        if so.state in ['draft','sent'] and cond:
+                            so.action_confirm()
+                        if so.state in['open','done','sale'] and cond_refunded:
+                            if cond_canceled:
+                                _logger.info("Cancelling order")
+                                so.producteca_update_forbidden = True
+                                so.action_cancel()
 
-                if "payed_confirm_order" in import_sales_action:
-                    if so.state in ['draft','sent'] and cond:
-                        so.action_confirm()
-                    if so.state in['open','done','sale'] and cond_refunded:
-                        if cond_canceled:
-                            _logger.info("Cancelling order")
-                            so.producteca_update_forbidden = True
-                            so.action_cancel()
+                    _logger.info("_shipment: "+str(import_sales_action)+" pso.deliveryStatus: "+str(pso.deliveryStatus))
 
-                _logger.info("_shipment: "+str(import_sales_action)+" pso.deliveryStatus: "+str(pso.deliveryStatus))
+                    if "_shipment" in import_sales_action and not cond_canceled:
+                        if so.state in ['sale','done'] and pso.deliveryStatus in ["InTransit","Done"]:
+                        #if so.state in ['sale','done']:
+                            _logger.info("Shipment confirm")
+                            dones = False
+                            cancels = False
+                            drafts = False
+                            if cond:
+                                stock_pickings = self.env["stock.picking"].search([
+                                        ('sale_id','=',so.id)
+                                        ])
+                                if stock_pickings:
+                                    for spick in stock_pickings:
+                                        _logger.info(str(spick)+" state:"+str(spick.state))
+                                        if spick.state in ['done']:
+                                            dones = True
+                                        elif spick.state in ['cancel']:
+                                            cancels = True
+                                        else:
+                                            drafts = True
+                                else:
+                                    dones = False
 
-                if "_shipment" in import_sales_action and not cond_canceled:
-                    #if so.state in ['sale','done'] and pso.deliveryStatus in ["InTransit","Done"]:
-                    if so.state in ['sale','done']:
-                        _logger.info("Shipment confirm")
-                        dones = False
-                        cancels = False
-                        drafts = False
-                        if cond:
-                            stock_pickings = self.env["stock.picking"].search([
-                                    ('sale_id','=',so.id)
-                                    ])
-                            if stock_pickings:
-                                for spick in stock_pickings:
-                                    _logger.info(str(spick)+" state:"+str(spick.state))
-                                    if spick.state in ['done']:
-                                        dones = True
-                                    elif spick.state in ['cancel']:
-                                        cancels = True
-                                    else:
-                                        drafts = True
-                            else:
-                                dones = False
+                                if drafts:
+                                    #drafts then nothing is full done
+                                    dones = False
 
-                            if drafts:
-                                #drafts then nothing is full done
-                                dones = False
+                                if dones:
+                                    _logger.info("Shipment complete")
+                                else:
+                                    _logger.info("Shipment not complete: TODO: make an action, dones:"+str(dones)+" drafts: "+str(drafts)+" cancels:"+str(cancels))
+                                    so.producteca_deliver()
 
-                            if dones:
-                                _logger.info("Shipment complete")
-                            else:
-                                _logger.info("Shipment not complete: TODO: make an action, dones:"+str(dones)+" drafts: "+str(drafts)+" cancels:"+str(cancels))
-                                so.producteca_deliver()
+                    if "_invoice" in import_sales_action and not cond_canceled:
+                        if so.state in ['sale','done']:
+                            _logger.info("Invoice confirm")
+                            dones = False
+                            cancels = False
+                            drafts = False
+                            if cond:
+                                if so.picking_ids:
+                                    for spick in so.picking_ids:
+                                        _logger.info(str(spick)+" state:"+str(spick.state))
+                                        if spick.state in ['done']:
+                                            dones = True
+                                        elif spick.state in ['cancel']:
+                                            cancels = True
+                                        else:
+                                            drafts = True
+                                else:
+                                    dones = False
 
-                if "_invoice" in import_sales_action and not cond_canceled:
-                    if so.state in ['sale','done']:
-                        _logger.info("Invoice confirm")
-                        dones = False
-                        cancels = False
-                        drafts = False
-                        if cond:
-                            if so.picking_ids:
-                                for spick in so.picking_ids:
-                                    _logger.info(str(spick)+" state:"+str(spick.state))
-                                    if spick.state in ['done']:
-                                        dones = True
-                                    elif spick.state in ['cancel']:
-                                        cancels = True
-                                    else:
-                                        drafts = True
-                            else:
-                                dones = False
+                                if drafts:
+                                    #drafts then nothing is full done
+                                    dones = False
 
-                            if drafts:
-                                #drafts then nothing is full done
-                                dones = False
-
-                            if dones:
-                                _logger.info("Creating invoice...")
-                                #invoices = self.env[acc_inv_model].search([('invoice_origin','=',so.name)])
-                                invoices = so.invoice_ids
-
-                                if not invoices:
-                                    _logger.info("Creating new invoices")
-                                    res = so.action_invoice_create(grouped=True) #agrupar por SO id
-                                    _logger.info("invoice create res:"+str(res))
+                                if dones:
+                                    _logger.info("Creating invoice...")
                                     #invoices = self.env[acc_inv_model].search([('invoice_origin','=',so.name)])
+                                    invoices = so.invoice_ids
 
-                                invoices = so.invoice_ids
+                                    if not invoices:
+                                        _logger.info("Creating new invoices")
+                                        res = so.action_invoice_create(grouped=True) #agrupar por SO id
+                                        _logger.info("invoice create res:"+str(res))
+                                        #invoices = self.env[acc_inv_model].search([('invoice_origin','=',so.name)])
 
-                                if invoices:
-                                    for inv in invoices:
-                                        #try:
-                                        _logger.info("Invoice to process:"+str( inv.name ) )
-                                        if inv.state in ['draft']:
-                                            if (chanbinded and chanbinded.journal_id):
-                                                #chanbinded and chanbinded.journal_id and inv.write({"journal_id": chanbinded.journal_id.id })
-                                                if ('account.journal.document.type' in  self.env and
-                                                    'journal_document_type_id' in inv._fields
-                                                    and inv.journal_document_type_id
-                                                    and inv.journal_document_type_id.document_type_id
-                                                    and not (inv.journal_document_type_id.journal_id.id==chanbinded.journal_id.id)):
+                                    invoices = so.invoice_ids
 
-                                                    doctype = self.env['account.journal.document.type'].search([('document_type_id','=',inv.journal_document_type_id.document_type_id.id),('journal_id','=',chanbinded.journal_id.id)],limit=1)
-                                                    if doctype:
-                                                        #inv.journal_document_type_id = doctype.id
-                                                        inv.write({"journal_id": chanbinded.journal_id.id, "journal_document_type_id": doctype.id  })
+                                    if invoices:
+                                        for inv in invoices:
+                                            #try:
+                                            _logger.info("Invoice to process:"+str( inv.name ) )
+                                            if inv.state in ['draft']:
+                                                if (chanbinded and chanbinded.journal_id):
+                                                    #chanbinded and chanbinded.journal_id and inv.write({"journal_id": chanbinded.journal_id.id })
+                                                    if ('account.journal.document.type' in  self.env and
+                                                        'journal_document_type_id' in inv._fields
+                                                        and inv.journal_document_type_id
+                                                        and inv.journal_document_type_id.document_type_id
+                                                        and not (inv.journal_document_type_id.journal_id.id==chanbinded.journal_id.id)):
 
-                                                inv.write(
-                                                        {
-                                                            "journal_id": chanbinded.journal_id.id
+                                                        doctype = self.env['account.journal.document.type'].search([('document_type_id','=',inv.journal_document_type_id.document_type_id.id),('journal_id','=',chanbinded.journal_id.id)],limit=1)
+                                                        if doctype:
+                                                            #inv.journal_document_type_id = doctype.id
+                                                            inv.write({"journal_id": chanbinded.journal_id.id, "journal_document_type_id": doctype.id  })
+
+                                                    inv.write(
+                                                            {
+                                                                "journal_id": chanbinded.journal_id.id
+                                                            })
+                                                    if ("account_id" in inv._fields):
+                                                        inv.write({
+                                                            "account_id": (chanbinded and chanbinded.partner_account_receive_id and chanbinded.partner_account_receive_id.id)
                                                         })
-                                                if ("account_id" in inv._fields):
-                                                    inv.write({
-                                                        "account_id": (chanbinded and chanbinded.partner_account_receive_id and chanbinded.partner_account_receive_id.id)
-                                                    })
 
-                                            _logger.info("Validate invoice: "+str(inv.name)+" journal:"+str(inv.journal_id and inv.journal_id.name))
-                                            #_logger.info("main_id_number: "+str(inv.partner_id.main_id_number))
-                                            if inv.partner_id and "main_id_number" in inv.partner_id._fields and inv.partner_id.main_id_number and inv.partner_id.afip_responsability_type_id and inv.partner_id.main_id_category_id:
-                                                inv.action_invoice_open()
-                                            else:
-                                                error = { 'error': 'Datos de facturación incompletos, revisar Responsabilidad, Tipo de documento y número.' }
-                                                _logger.error(str(error["error"]))
-                                                #_logger.error(E, exc_info=True)
-                                                if so:
-                                                    so.message_post(body=str(error["error"]))
-                                        if inv.state in ['open'] and not inv.producteca_inv_attachment_id:
-                                            _logger.info("Send to Producteca: "+str(inv.name))
-                                            inv.enviar_factura_producteca()
-                                        elif inv.state in ['open']:
-                                            _logger.info("Invoice already sent: result:"+str(result))
-                                        #except:
-                                            #inv.message_post()
-                                        #    error = {"error": "Invoice Error"}
-                                        #    result.append(error)
-                                        #    raise;
+                                                _logger.info("Validate invoice: "+str(inv.name)+" journal:"+str(inv.journal_id and inv.journal_id.name))
+                                                #_logger.info("main_id_number: "+str(inv.partner_id.main_id_number))
+                                                if inv.partner_id and "main_id_number" in inv.partner_id._fields and inv.partner_id.main_id_number and inv.partner_id.afip_responsability_type_id and inv.partner_id.main_id_category_id:
+                                                    inv.action_invoice_open()
+                                                else:
+                                                    error = { 'error': 'Datos de facturación incompletos, revisar Responsabilidad, Tipo de documento y número.' }
+                                                    _logger.error(str(error["error"]))
+                                                    #_logger.error(E, exc_info=True)
+                                                    if so:
+                                                        so.message_post(body=str(error["error"]))
+                                            if inv.state in ['open'] and not inv.producteca_inv_attachment_id:
+                                                _logger.info("Send to Producteca: "+str(inv.name))
+                                                inv.enviar_factura_producteca()
+                                            elif inv.state in ['open']:
+                                                _logger.info("Invoice already sent: result:"+str(result))
+                                            #except:
+                                                #inv.message_post()
+                                            #    error = {"error": "Invoice Error"}
+                                            #    result.append(error)
+                                            #    raise;
+                                else:
+                                    _logger.info("Creating invoices not processed, shipment not complete: dones:"+str(False)+" drafts: "+str(drafts)+" cancels:"+str(cancels))
                             else:
-                                _logger.info("Creating invoices not processed, shipment not complete: dones:"+str(False)+" drafts: "+str(drafts)+" cancels:"+str(cancels))
-                        else:
-                            _logger.error("Conditions not met for invoicing > cond_total: " + str(cond_total) +" cond: "+str(cond) )
+                                _logger.error("Conditions not met for invoicing > cond_total: " + str(cond_total) +" cond: "+str(cond) )
 
-                if "stock_picking_type_id" in chanbinded._fields and chanbinded.stock_picking_type_id  and not cond_canceled:
-                    _logger.info("stock_pickings_to_print")
-                    stock_pickings_to_print = self.env["stock.picking"].search([
-                            ('sale_id','=',so.id),
-                            ('picking_type_id','=',chanbinded.stock_picking_type_id.id)
-                            ])
-                    _logger.info("stock_pickings_to_print:"+str(stock_pickings_to_print))
-                    for sp in stock_pickings_to_print:
-                        sp.producteca_print()
+                    if "stock_picking_type_id" in chanbinded._fields and chanbinded.stock_picking_type_id  and not cond_canceled:
+                        _logger.info("stock_pickings_to_print")
+                        stock_pickings_to_print = self.env["stock.picking"].search([
+                                ('sale_id','=',so.id),
+                                ('picking_type_id','=',chanbinded.stock_picking_type_id.id)
+                                ])
+                        _logger.info("stock_pickings_to_print:"+str(stock_pickings_to_print))
+                        for sp in stock_pickings_to_print:
+                            sp.producteca_print()
         #except Exception as E:
         #    error = {"error": "Error sale order post processing error: " +str(E)}
         #    _logger.error(error)

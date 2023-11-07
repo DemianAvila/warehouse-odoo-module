@@ -118,14 +118,14 @@ class SaleOrder(models.Model):
         res= {}
         if self.picking_ids:
             for spick in self.picking_ids:
-                _logger.info(spick)
+                #_logger.info(spick)
 
                 _logger.info("producteca_deliver > validating")
                 try:
                     _logger.info("producteca_deliver > button_validate")
-                    _logger.info(spick.move_line_ids)
+                    #_logger.info(spick.move_line_ids)
                     if (spick.move_line_ids):
-                        _logger.info(spick.move_line_ids)
+                        #_logger.info(spick.move_line_ids)
                         if (len(spick.move_line_ids)>=1):
                             for pop in spick.move_line_ids:
                                 _logger.info(pop)

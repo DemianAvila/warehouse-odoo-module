@@ -27,6 +27,9 @@ import pdb
 from .warning import warning
 import requests
 
+from . import versions
+from .versions import *
+
 class product_template(models.Model):
 
     _inherit = "product.template"
@@ -255,6 +258,43 @@ class product_product(models.Model):
                 _logger.info(e, exc_info=True)
 
         return pv_bind
+
+
+    def producteca_post_stock( self, account = None ):
+        if account and account.configuration.publish_stock and 1==2:
+            for product in self:
+                for binding in product.producteca_bindings:
+                    if account.id!=binding.connection_account.id:
+                        break;
+
+                    #https://apps.producteca.com/producteca-syncer/api/notifications/245777/62de8459a0d5cb008e6547f6
+                    url = 'https://apps.producteca.com/producteca-syncer/api/notifications/245777/62de8459a0d5cb008e6547f6'
+
+                    var = {
+                        'sku': product.default_code or "",
+                        'barcode': product.barcode or "",
+                    }
+
+                    stocks = binding.get_stocks()
+
+                    var["stocks"] = stocks
+
+                    prices = []
+                    for pl in account.configuration.publish_price_lists:
+                        #plprice = variant.with_context(pricelist=pl.id).price
+                        plprice = get_price_from_pl(pricelist=pl, product=product, quantity=1 )[pl.id]
+                        price = {
+                            "priceListId": pl.id,
+                            "priceList": pl.name,
+                            "amount": plprice,
+                            "currency": pl.currency_id.name
+                        }
+                        prices.append(price)
+                    var["prices"] = prices
+
+                    res = requests.post(url=url, json=dict(var))
+                    if res:
+                        _logger.info("res:"+str(res))
 
 #class product_image(models.Model):
 

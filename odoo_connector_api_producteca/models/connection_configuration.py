@@ -88,6 +88,8 @@ class ProductectaChannelBinding(models.Model):
                                             string="Action from importing Sale (FULL)",default="quotation_only")
     import_sales_action_full_logistic = fields.Char(string="Full Logistic",help="MercadoEnvios Full",index=True)
 
+    publish_stock = fields.Boolean(string="Publicar stock directo",default=True)
+
     def FixJournalMethod(self):
         _logger.info("FixJournalMethod")
         journal_id = self.payment_journal_id
