@@ -738,6 +738,11 @@ class ProductecaConnectionAccount(models.Model):
         #use producteca channel and integrations data to set Order Name
         chan = None
         chanbinded = None
+        cartId = ("cartId" in fields and fields["cartId"])
+        integId = ("integrations_integrationId" in fields and fields["integrations_integrationId"])
+        integId = cartId or integId
+        _logger.info("integId:"+str(integId))
+
         if "producteca.channel" in self.env:
             iapp = 0
             if "integrations_app" in fields and fields["integrations_app"] and len(fields["integrations_app"]):
@@ -757,14 +762,11 @@ class ProductecaConnectionAccount(models.Model):
 
             if not chan:
                 #chan = self.env["producteca.channel"].search([], limit=1)
-                return { "error": "channel not found" }
+                error = { "error": "channel not found or not configurated > app_id: "+str(iapp)+ " integrationId: "+str(integId) }
+                result.append(error)
+                return result
 
         if chan:
-
-            cartId = ("cartId" in fields and fields["cartId"])
-            integId = ("integrations_integrationId" in fields and fields["integrations_integrationId"])
-            integId = cartId or integId
-            _logger.info("integId:"+str(integId))
 
             chanbinded = config.producteca_channels_bindings and config.producteca_channels_bindings.filtered(lambda b: (b.channel_id and b.channel_id.id == chan.id))
             chanbinded and fields.update( { "channel_binding_id": chanbinded.id } )
