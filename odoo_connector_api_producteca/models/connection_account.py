@@ -966,8 +966,18 @@ class ProductecaConnectionAccount(models.Model):
                     _logger.error(E, exc_info=True)
                     if so:
                         so.message_post(body=str(error["error"]))
+
+                    sqls = 'select producteca_client_id, res_partner_id from producteca_client_res_partner_rel where producteca_client_id = '+str(client.id)
+                    _logger.info("Search Partner Binding "+str(sqls))
+                    respb = self._cr.execute(sqls)
+                    _logger.info(respb)
+                    restot = self.env.cr.fetchall()
+                    if restot:
+                        partner_id_id = restot[0][1]
+                        partner_id = self.env["res.partner"].sudo().browse([partner_id_id])
                     pass;
 
+        _logger.info("partner_id: " +str(partner_id))
         if partner_id:
 
             if client:
