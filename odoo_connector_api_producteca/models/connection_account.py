@@ -572,6 +572,8 @@ class ProductecaConnectionAccount(models.Model):
                         doc_type = 'DNI'
                         tax_type = 'Consumidor Final'
 
+                if doc_type == 'DNI':
+                    tax_type = 'Consumidor Final'
 
                 #LATAM
                 if doc_type and 'l10n_latam.identification.type' in self.env:
@@ -1252,7 +1254,7 @@ class ProductecaConnectionAccount(models.Model):
                             else:
                                 so_line.write( ( so_line_fields ) )
                         except Exception as E:
-                            error = {"error": "Creating order line error. Check account configuration and this message: "+str(E)}
+                            error = {"error": "Creating or writing order line error. Check account configuration and this message: "+str(E)}
                             result.append(error)
                             _logger.error(str(error["error"]))
                             _logger.error(E, exc_info=True)
@@ -1710,7 +1712,18 @@ class ProductecaConnectionAccount(models.Model):
                                 so_line_fields["discount"] = 100.0 * ((line_total_perc * pso.couponAmount) / line_total)
                         else:
                             so_line_fields["price_unit"] =  self.ocapi_price_unit( product, float( line_price_unit - (line_total_perc * pso.couponAmount) / line_price_qty ) )
-                        so_line.write( ( so_line_fields ) )
+
+                        try:
+                            so_line.write( ( so_line_fields ) )
+                        except Exception as E:
+                            error = {"error": "Creating or writing order line DISCOUNT error. Check account configuration and this message: "+str(E)}
+                            result.append(error)
+                            _logger.error(str(error["error"]))
+                            _logger.error(E, exc_info=True)
+                            if so:
+                                so.message_post(body=str(error["error"]))
+
+
                     else:
                         _logger.info("NO so_line! "+str(so_line))
 

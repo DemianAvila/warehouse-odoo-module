@@ -100,6 +100,7 @@ class OcapiConnectionNotification(models.Model):
     def start_internal_notification(self, internals):
 
         date_time = ml_datetime( str( datetime.now() ) )
+
         base_str = str(internals["application_id"]) + str(internals["user_id"]) + str(date_time)
 
         hash = hashlib.md5()
@@ -112,6 +113,8 @@ class OcapiConnectionNotification(models.Model):
         internals["sent"] = date_time
         internals["attempts"] = 1
         internals["state"] = "RECEIVED"
+
+        _logger.info("start_internal_notification internals: "+str(internals))
 
         vals = self._prepare_values(values=internals)
         noti = self.create(vals)

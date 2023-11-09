@@ -128,7 +128,7 @@ class SaleOrder(models.Model):
                         #_logger.info(spick.move_line_ids)
                         if (len(spick.move_line_ids)>=1):
                             for pop in spick.move_line_ids:
-                                _logger.info(pop)
+                                #_logger.info(pop)
                                 if (pop.qty_done==0.0 and pop.reserved_uom_qty>=0.0):
                                     pop.qty_done = pop.reserved_uom_qty
                     res = spick.sudo().button_validate()

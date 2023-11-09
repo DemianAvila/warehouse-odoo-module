@@ -74,7 +74,7 @@ def get_company_selected( self, context=None, company=None, company_id=None, use
     company = company or self.env.user.company_id
     #_logger.info("context:"+str(context)+" company:"+str(company))
     company_id = company_id or (context and 'allowed_company_ids' in context and context['allowed_company_ids'] and context['allowed_company_ids'][0]) or company.id
-    company = self.env['res.company'].browse(company_id) or company    
+    company = self.env['res.company'].browse(company_id) or company
     return company
 
 #variant mage ids
