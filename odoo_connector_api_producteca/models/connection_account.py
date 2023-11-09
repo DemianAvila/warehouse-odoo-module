@@ -928,7 +928,7 @@ class ProductecaConnectionAccount(models.Model):
             _logger.info(ocapi_buyer_fields)
 
             #check vat
-            country_code = country_id and country_id.code
+            country_code = country_id and self.env["res.country"].browse(country_id).code
             if ("vat" in ocapi_buyer_fields and country_code and not self.env["res.partner"].simple_vat_check( country_code, ocapi_buyer_fields["vat"] ) ):
                 del ocapi_buyer_fields["vat"]
 
