@@ -114,6 +114,7 @@ class OcapiConnectionNotification(models.Model):
         internals["attempts"] = 1
         internals["state"] = "RECEIVED"
 
+        _logger.info("start_internal_notification base_str: "+str(base_str))
         _logger.info("start_internal_notification internals: "+str(internals))
 
         vals = self._prepare_values(values=internals)

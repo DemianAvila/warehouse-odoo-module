@@ -927,6 +927,11 @@ class ProductecaConnectionAccount(models.Model):
             ocapi_buyer_fields.update( self.doc_info( contactfields, doc_undefined=(account.configuration and account.configuration.doc_undefined) ) )
             _logger.info(ocapi_buyer_fields)
 
+            #check vat
+            country_code = country_id and country_id.code
+            if ("vat" in ocapi_buyer_fields and country_code and not self.env["res.partner"].simple_vat_check( country_code, ocapi_buyer_fields["vat"] ) ):
+                del ocapi_buyer_fields["vat"]
+
             if len(restot):
                 _logger.info("Upgrade partner")
                 _logger.info(restot)
