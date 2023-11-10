@@ -179,7 +179,7 @@ class OcapiCatalog(http.Controller):
             return { "error": "bad format" }
         connection = self.get_connection_account(connector,**post)
         if not connection:
-            return {'error': 'acceso de cuenta'}
+            return {'error': 'no se puede acceder a la cuenta, causa: access_token invalido o vencido! Intente de nuevo con otro access_token.'}
         return connection.list_pricestock(**post)
 
     @http.route('/ocapi/<string:connector>/pricelist', auth='public', type='json', methods=['POST'], csrf=False, cors='*')
@@ -210,5 +210,5 @@ class OcapiCatalog(http.Controller):
         connection = self.get_connection_account(connector,**post)
         if not connection:
             _logger.error("connection not found.")
-            return {}
+            return { "error": "connection not found" }
         return connection.import_sales(**post)
