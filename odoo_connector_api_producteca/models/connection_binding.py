@@ -160,7 +160,7 @@ class ProductecaConnectionBindingProductTemplate(models.Model):
                             #if (bom_line.product_id.default_code.find(product_tmpl.code_prefix)==0):
                             if (bom_line.product_id):
                                 #_logger.info(product_tmpl.code_prefix)
-                                _logger.info("bom product: " + str(bom_line.product_id.default_code) )
+                                #_logger.info("bom product: " + str(bom_line.product_id.default_code) )
                                 #for route in product.route_ids:
                                     #if (route.name in ['Fabricar','Manufacture']):
                                         #_logger.info("Fabricar")
@@ -169,11 +169,11 @@ class ProductecaConnectionBindingProductTemplate(models.Model):
                                     #_logger.info("Comprar")
                                 virtual_comp_av_sq = self.env['stock.quant']._gather( bom_line.product_id, location_id=locid_obj )
 
-                                _logger.info("bom component stock: " + str(virtual_comp_av_sq) )
+                                #_logger.info("bom component stock: " + str(virtual_comp_av_sq) )
 
                                 virtual_comp_av = virtual_comp_av_sq.quantity-virtual_comp_av_sq.reserved_quantity
 
-                                _logger.info("bom component stock: " + str(virtual_comp_av) )
+                                #_logger.info("bom component stock: " + str(virtual_comp_av) )
                                 virtual_comp_av_qty = virtual_comp_av_sq.quantity
                                 virtual_comp_av_reserved = virtual_comp_av_sq.reserved_quantity
 
@@ -183,12 +183,12 @@ class ProductecaConnectionBindingProductTemplate(models.Model):
                                 if stock_material>=0 and stock_material<=stock_material_max:
                                     stock_material_max = stock_material
                                     new_quantity = stock_material_max
-                                    _logger.info("stock based on minimum material available / " +str(bom_line.product_qty)+ ": " + str(new_quantity))
+                                    #_logger.info("stock based on minimum material available / " +str(bom_line.product_qty)+ ": " + str(new_quantity))
 
                                 if stock_material_hand>=0 and stock_material_hand<=stock_material_max_hand:
                                     stock_material_max_hand = stock_material_hand
                                     new_quantity_hand = stock_material_max_hand
-                                    _logger.info("stock in hand based on minimum material available / " +str(bom_line.product_qty)+ ": " + str(new_quantity_hand))
+                                    #_logger.info("stock in hand based on minimum material available / " +str(bom_line.product_qty)+ ": " + str(new_quantity_hand))
 
                         sqbom.append({
                             "location_id": locid_obj,
@@ -208,7 +208,7 @@ class ProductecaConnectionBindingProductTemplate(models.Model):
                     #TODO: merge de stocks
                     #TODO: solo publicar available
                     if ( s["location_id"].usage == "internal"):
-                        _logger.info( s )
+                        #_logger.info( s )
                         sjson = {
                             "warehouseId": locid,
                             "warehouse": s["location_id"].display_name,
@@ -229,7 +229,7 @@ class ProductecaConnectionBindingProductTemplate(models.Model):
                     #TODO: merge de stocks
                     #TODO: solo publicar available
                     if ( s.location_id.usage == "internal"):
-                        _logger.info( s )
+                        #_logger.info( s )
                         sjson = {
                             "warehouseId": locid,
                             "warehouse": s.location_id.display_name,
@@ -384,7 +384,7 @@ class ProductecaConnectionBindingProductVariant(models.Model):
                         #if (bom_line.product_id.default_code.find(product_tmpl.code_prefix)==0):
                         if (bom_line.product_id):
                             #_logger.info(product_tmpl.code_prefix)
-                            _logger.info("bom product: " + str(bom_line.product_id.default_code) )
+                            #_logger.info("bom product: " + str(bom_line.product_id.default_code) )
                             #for route in product.route_ids:
                                 #if (route.name in ['Fabricar','Manufacture']):
                                     #_logger.info("Fabricar")
@@ -393,10 +393,10 @@ class ProductecaConnectionBindingProductVariant(models.Model):
                                 #_logger.info("Comprar")
                             virtual_comp_av_sq = self.env['stock.quant']._gather( bom_line.product_id, location_id=locid_obj )
 
-                            _logger.info("bom component stock: " + str(virtual_comp_av_sq) )
+                            #_logger.info("bom component stock: " + str(virtual_comp_av_sq) )
 
                             virtual_comp_av = virtual_comp_av_sq.quantity-virtual_comp_av_sq.reserved_quantity
-                            _logger.info("bom component stock: " + str(virtual_comp_av) )
+                            #_logger.info("bom component stock: " + str(virtual_comp_av) )
                             virtual_comp_av_qty = virtual_comp_av_sq.quantity
                             virtual_comp_av_reserved = virtual_comp_av_sq.reserved_quantity
 
@@ -406,12 +406,12 @@ class ProductecaConnectionBindingProductVariant(models.Model):
                             if stock_material>=0 and stock_material<=stock_material_max:
                                 stock_material_max = stock_material
                                 new_quantity = stock_material_max
-                                _logger.info("stock based on minimum material available / " +str(bom_line.product_qty)+ ": " + str(new_quantity))
+                                #_logger.info("stock based on minimum material available / " +str(bom_line.product_qty)+ ": " + str(new_quantity))
 
                             if stock_material_hand>=0 and stock_material_hand<=stock_material_max_hand:
                                 stock_material_max_hand = stock_material_hand
                                 new_quantity_hand = stock_material_max_hand
-                                _logger.info("stock in hand based on minimum material available / " +str(bom_line.product_qty)+ ": " + str(new_quantity_hand))
+                                #_logger.info("stock in hand based on minimum material available / " +str(bom_line.product_qty)+ ": " + str(new_quantity_hand))
 
                     sqbom.append({
                         "location_id": locid_obj,
@@ -433,7 +433,7 @@ class ProductecaConnectionBindingProductVariant(models.Model):
                     #TODO: merge de stocks
                     #TODO: solo publicar available
                     if ( s["location_id"].usage == "internal"):
-                        _logger.info( s )
+                        #_logger.info( s )
                         sjson = {
                             "warehouseId": locid,
                             "warehouse": s["location_id"].display_name,
@@ -454,7 +454,7 @@ class ProductecaConnectionBindingProductVariant(models.Model):
                     #TODO: merge de stocks
                     #TODO: solo publicar available
                     if ( s.location_id.usage == "internal"):
-                        _logger.info( s )
+                        #_logger.info( s )
                         sjson = {
                             "warehouseId": locid,
                             "warehouse": s.location_id.display_name,

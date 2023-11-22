@@ -307,7 +307,7 @@
   		</record>
 
 
-      <menuitem id="menu_producteca_connectors" name="Producteca" parent="sale.sale_menu_root" sequence="5"
+      <menuitem id="menu_producteca_connectors" name="Producteca" parent="sale.sale_menu_root" sequence="16"
           groups="odoo_connector_api_producteca.group_producteca_connectors_manager" />
 
 

@@ -291,7 +291,7 @@ class product_product(models.Model):
                         }
                         prices.append(price)
                     var["prices"] = prices
-
+                    #_logger.info("var:"+str(var))
                     res = requests.post(url=url, json=dict(var))
                     if res:
                         _logger.info("res:"+str(res))

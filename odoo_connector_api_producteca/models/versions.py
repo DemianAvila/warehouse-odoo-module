@@ -39,16 +39,16 @@ def get_price_from_pl( pricelist, product, quantity ):
 def Autocommit( self, act=False ):
     #no use
     return False
-    
-def UpdateProductType( product ):      
+
+def UpdateProductType( product ):
     if (product and product.detailed_type not in ['product']):
         try:
             product.write( { 'detailed_type': 'product' } )
         except Exception as e:
             _logger.info("Set type almacenable ('product') not possible:")
             _logger.error(e, exc_info=True)
-            pass;        
-    
+            pass;
+
 def ProductType():
     return { "detailed_type": "product" }
 
@@ -207,3 +207,20 @@ def set_delivery_line( sorder, delivery_price, delivery_message ):
 
 def order_create_invoices( sale_order, grouped=False, final=False ):
 	return sale_order._create_invoices(grouped=grouped, final=final)
+
+
+def get_default_shipment_service( self, name, sku ):
+    return {
+        "name": name,
+        "default_code": sku,
+        "type": "service",
+        "default_invoice_policy": "order"
+        #"taxes_id": None
+        #"categ_id": 279,
+        #"company_id": company.id
+    }
+
+def is_invoiceable( self, so ):
+    #return  so and "l10n_ar_afip_responsibility_type_id" in so.partner_invoice_id._fields and so.partner_invoice_id.l10n_ar_afip_responsibility_type_id.name == "Consumidor Final"
+    return True
+

@@ -85,6 +85,7 @@
                         <field name="name"/>
                         <field name="quantity"/>
                         <field name="price"/>
+                        <field name="originalPrice"/>
                       </tree>
                     </field>
                   </page>

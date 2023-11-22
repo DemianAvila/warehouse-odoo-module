@@ -984,7 +984,7 @@ class ProductecaConnectionAccount(models.Model):
                         partner_id = self.env["res.partner"].sudo().browse([partner_id_id])
                     pass;
 
-        _logger.info("partner_id: " +str(partner_id))
+        #_logger.info("partner_id: " +str(partner_id))
         if partner_id:
 
             if client:
@@ -1144,6 +1144,7 @@ class ProductecaConnectionAccount(models.Model):
         lines_processed = []
         lines_processed_full = False
         lines_processed_total = 0
+        lines_processed_total_original = 0
         if "lines" in sale and pso:
             lines = sale["lines"]
             lines_processed_full = True
@@ -1257,7 +1258,8 @@ class ProductecaConnectionAccount(models.Model):
                             if not so_line or len(so_line)==0:
                                 so_line = soline_mod.create( ( so_line_fields ))
                             else:
-                                so_line.write( ( so_line_fields ) )
+                                if (not so.state in ['done','cancel']):
+                                    so_line.write( ( so_line_fields ) )
                         except Exception as E:
                             error = {"error": "Creating or writing order line error. Check account configuration and this message: "+str(E)}
                             result.append(error)
@@ -1267,8 +1269,10 @@ class ProductecaConnectionAccount(models.Model):
                                 so.message_post(body=str(error["error"]))
 
                         so_line_fields["price"] = float(linefields['price'])
+                        so_line_fields["originalPrice"] = float(linefields['originalPrice'] or linefields['price'])
                         lines_processed.append(so_line_fields)
                         lines_processed_total+= so_line_fields["price"]*so_line_fields["product_uom_qty"]
+                        lines_processed_total_original+= so_line_fields["originalPrice"]*so_line_fields["product_uom_qty"]
 
                         if so_line and oli:
                             #Many2one this time
@@ -1380,14 +1384,7 @@ class ProductecaConnectionAccount(models.Model):
                     product_shipping_id = product_shipping_id[0]
                 else:
                     product_shipping_id = None
-                    ship_prod = {
-                        "name": ship_name,
-                        "default_code": ship_name,
-                        "type": "service",
-                        #"taxes_id": None
-                        #"categ_id": 279,
-                        #"company_id": company.id
-                    }
+                    ship_prod = get_default_shipment_service( self, ship_name, ship_name )
                     _logger.info(ship_prod)
                     product_shipping_tpl = product_tpl.create((ship_prod))
                     if (product_shipping_tpl):
@@ -1692,10 +1689,22 @@ class ProductecaConnectionAccount(models.Model):
                     else:
                         saleorderline_item_ids.write( ( saleorderline_item_fields ) )
 
-        if pso and so and "couponAmount" in pso._fields and pso.couponAmount > 0 and so:
+        if (1==1 and pso and so and "couponAmount" in pso._fields and pso.couponAmount > 0 and so):
+
             soline_mod = self.env["sale.order.line"]
             _logger.info("lines_processed:"+str(lines_processed)+" lines_processed_full:"+str(lines_processed_full))
+
             if lines_processed and lines_processed_full:
+
+                couponAmountFIX = 0
+                for liproidx in lines_processed:
+                    so_line_fields = liproidx
+                    line_price_unit_diff = so_line_fields["originalPrice"]-so_line_fields["price"]
+                    line_price_qty = so_line_fields["product_uom_qty"]
+                    couponAmountFIX+= line_price_unit_diff*line_price_qty
+
+                couponAmountFIX = couponAmountFIX or pso.couponAmount
+
                 for liproidx in lines_processed:
                     so_line_fields = liproidx
                     so_line = soline_mod.search( [  #('meli_order_item_id','=',saleorderline_item_fields['meli_order_item_id']),
@@ -1703,20 +1712,24 @@ class ProductecaConnectionAccount(models.Model):
                                                     ('product_id','=',so_line_fields["product_id"]),
                                                     ('order_id','=',so.id)] )
                     if so_line:
-                        line_price_unit = so_line_fields["price"]
+                        line_price_unit = so_line_fields["originalPrice"]
                         line_price_qty = so_line_fields["product_uom_qty"]
                         line_total = line_price_unit*line_price_qty
-                        line_total_perc = line_total / lines_processed_total
+                        #line_total_perc = line_total / lines_processed_total
+                        line_total_perc = line_total / lines_processed_total_original
 
-                        _logger.info("so_line ok! line_price_unit:"+str(line_price_unit)+" line_price_qty:"+str(line_price_qty)+" line_total:"+str(line_total)+" line_total_perc:"+str(line_total_perc)+" lines_processed_total:"+str(lines_processed_total) )
+                        _logger.info("so_line ok! line_price_unit:"+str(line_price_unit)+" line_price_qty:"+str(line_price_qty)+" line_total:"+str(line_total)+" line_total_perc:"+str(line_total_perc)+" lines_processed_total_original:"+str(lines_processed_total_original) )
                         #chequear si se puede aplicar simplemente el descuento fijo correspondiente a esta linea
 
                         del so_line_fields["price"]
+                        del so_line_fields["originalPrice"]
+
                         if "discount" in so_line._fields:
+                            so_line_fields["price_unit"] = line_price_unit
                             if line_total>0:
-                                so_line_fields["discount"] = 100.0 * ((line_total_perc * pso.couponAmount) / line_total)
+                                so_line_fields["discount"] = 100.0 * ((line_total_perc * couponAmountFIX) / line_total)
                         else:
-                            so_line_fields["price_unit"] =  self.ocapi_price_unit( product, float( line_price_unit - (line_total_perc * pso.couponAmount) / line_price_qty ) )
+                            so_line_fields["price_unit"] =  self.ocapi_price_unit( product, float( line_price_unit - (line_total_perc * couponAmountFIX) / line_price_qty ) )
 
                         try:
                             so_line.write( ( so_line_fields ) )
@@ -1765,10 +1778,11 @@ class ProductecaConnectionAccount(models.Model):
                 #    pso.state = "confirmed"
 
                 #check action:
-                cond_total = abs(so.amount_total - so.producteca_bindings[0].paidApproved + so.producteca_bindings[0].couponAmount ) <= 1.0
+                cond_total = abs(so.amount_total - so.producteca_bindings[0].paidApproved + so.producteca_bindings[0].couponAmount ) <= 2.0
+                cond_total = cond_total or abs(so.amount_total - so.producteca_bindings[0].paidApproved ) <= 2.0
 
                 if (including_shipping_cost=="never"):
-                    cond_total = abs(so.amount_total - so.producteca_bindings[0].amount_no_shipping ) <= 1.0
+                    cond_total = abs(so.amount_total - so.producteca_bindings[0].amount_no_shipping ) <= 2.0
 
                 cond = cond_total and so.producteca_bindings[0].paymentStatus in ['Approved']
                 cond_refunded = so.producteca_bindings[0].paymentStatus in ['Refunded']
@@ -1794,8 +1808,13 @@ class ProductecaConnectionAccount(models.Model):
 
                     if "payed_confirm_order" in import_sales_action:
                         if so.state in ['draft','sent'] and cond:
+                            _logger.info("action_confirming")
                             so.action_confirm()
-                        if so.state in['open','done','sale'] and cond_refunded:
+                            if so.state in ['done','sale']:
+                                _logger.info("action_confirming OK!")
+                            else:
+                                _logger.info("action_confirming CHECK...")
+                        if so.state in ['open','done','sale'] and cond_refunded:
                             if cond_canceled:
                                 _logger.info("Cancelling order")
                                 so.producteca_update_forbidden = True
@@ -1837,7 +1856,8 @@ class ProductecaConnectionAccount(models.Model):
                                     so.producteca_deliver()
 
                     if "_invoice" in import_sales_action and not cond_canceled:
-                        if so.state in ['sale','done']:
+
+                        if so.state in ['sale','done'] and is_invoiceable( self, so ):
                             _logger.info("Invoice confirm")
                             dones = False
                             cancels = False
