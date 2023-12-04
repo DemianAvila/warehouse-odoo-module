@@ -210,15 +210,19 @@ def order_create_invoices( sale_order, grouped=False, final=False ):
 
 
 def get_default_shipment_service( self, name, sku ):
-    return {
+    shipment_fields = {
         "name": name,
         "default_code": sku,
         "type": "service",
-        "default_invoice_policy": "order"
         #"taxes_id": None
         #"categ_id": 279,
         #"company_id": company.id
     }
+    if "default_invoice_policy" in self.env["product.template"]._fields:
+        shipment_fields["default_invoice_policy"] = 'order'
+
+    return shipment_fields
+
 
 def is_invoiceable( self, so ):
     #return  so and "l10n_ar_afip_responsibility_type_id" in so.partner_invoice_id._fields and so.partner_invoice_id.l10n_ar_afip_responsibility_type_id.name == "Consumidor Final"
