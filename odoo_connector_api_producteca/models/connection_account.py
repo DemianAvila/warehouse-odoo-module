@@ -669,7 +669,7 @@ class ProductecaConnectionAccount(models.Model):
             try:
                 res = self.import_sale( sale, noti )
             except Exception as E:
-                result.append({"error": str(E)})
+                res = [{"error": str(E)}]
                 pass;
             for r in res:
                 result.append(r)
