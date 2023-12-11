@@ -27,7 +27,7 @@ import pdb
 #from .warning import warning
 import requests
 import hashlib
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class OcapiConnectionAccount(models.Model):
@@ -49,6 +49,8 @@ class OcapiConnectionAccount(models.Model):
     client_id = fields.Char(string='Client Id/App Id', help='Client ID/App Id',size=128,index=True)
     secret_key = fields.Char(string='Secret Key/App Key', help='Secret Key/App Key',size=128,index=True)
     access_token = fields.Text( string='Access Token/Api Token', help='Access Token/Api Token',index=True)
+    access_token_date = fields.Datetime( string="Alta token", index=True )
+    access_token_date_expiration = fields.Datetime( string="Vencimiento token", index=True )
     state = fields.Boolean( compute=get_connector_state, string='State', help="Estado de la conexión", store=False )
     seller_id = fields.Char(string='App Seller Id', help='App Seller Id',size=128,index=True)
 
@@ -60,6 +62,10 @@ class OcapiConnectionAccount(models.Model):
             return { "error": "Bad credentials", "message": "Bad credentials, values does not match with any configuration" }
 
         now = datetime.now()
+
+        if (self.access_token_date_expiration and now<self.access_token_date_expiration):
+            return self.access_token
+
         date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
         base_str = str(client_id) + str(secret_key) + str(date_time)
 
@@ -68,6 +74,8 @@ class OcapiConnectionAccount(models.Model):
         hexhash = hash.hexdigest()
 
         access_token = hexhash
+        self.access_token_date = now
+        self.access_token_date_expiration = now + timedelta(hours=6)
         self.access_token = access_token
 
         return access_token
