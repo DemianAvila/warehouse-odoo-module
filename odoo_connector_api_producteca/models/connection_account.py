@@ -666,7 +666,11 @@ class ProductecaConnectionAccount(models.Model):
         _logger.info("Processing sales")
 
         for sale in sales:
-            res = self.import_sale( sale, noti )
+            try:
+                res = self.import_sale( sale, noti )
+            except Exception as E:
+                res.append({"error": str(E);})
+                pass;
             for r in res:
                 result.append(r)
 
