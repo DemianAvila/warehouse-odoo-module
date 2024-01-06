@@ -1,9 +1,9 @@
 {
-    'name': 'Operations - Storage',
+    'name': 'Operations - Warehouse',
     'version': '16',
     'author': 'Demian Avila - demian.avila@bossa.com.mx',
     'website': 'bossa.com.mx',
-    "category": "Operations",
+    "category": "Warehouse",
     "summary": 'Modlue to manage and automate the storage department task',
     "depends": ['base', 'sale_management'],
     'data': [
