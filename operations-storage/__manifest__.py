@@ -10,7 +10,7 @@
         "views/shipment_order_views.xml"
     ],
     'license': 'OPL-1',
-    'active': True,
+    'active': False,
     'installable': True,
     'application': True,
 
