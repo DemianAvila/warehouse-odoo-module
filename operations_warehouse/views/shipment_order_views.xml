@@ -3,7 +3,7 @@
 
   <record id="shipment_order_tree" model="ir.ui.view">
     <field name="name">shipment_orders_tree</field>
-    <field name="model">bossa_shipment_orders</field>
+    <field name="model">bossa.shipment.orders</field>
     <field name="arch" type="xml">
       <tree string="Shipment orders">
         <field name="order_title"/>
