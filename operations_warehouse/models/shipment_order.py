@@ -19,7 +19,7 @@ class ShipmentGuides(models.Model):
 
     order_line = fields.Many2one(
         string = "Order line",
-        comodel_name = "sale.order.lie"
+        comodel_name = "sale.order.line"
     )
 
 class ScanerLog(models.Model):
@@ -37,7 +37,7 @@ class ScanerLog(models.Model):
     )
 
 class ShipmentFields(models.Model):
-    _ihnerit = "sale.order.line"
+    _inherit = "sale.order.line"
     
     scaner_log = fields.One2many(
         string = "Scanner log",
