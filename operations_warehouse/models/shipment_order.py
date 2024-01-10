@@ -42,7 +42,7 @@ class ShipmentFields(models.Model):
     scaner_log = fields.One2many(
         string = "Scanner log",
         comodel_name = "scanner.log",
-        inverse_name = "order.line"
+        inverse_name = "order_line"
     )
     
     shipment_guides = fields.One2many(
