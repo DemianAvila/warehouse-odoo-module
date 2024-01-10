@@ -28,10 +28,28 @@ class ScanerLog(models.Model):
         string = "Time Stamp"
     )
 
-class ShipmentOrder(models.Model):
-    _name = "bossa.shipment.orders"
-    _description = """Generates and stores the shipment orders, 
-    as well as it manages the state of the orders"""
+class ShipmentFields(models.Model):
+    _inherit = "sale.order.line"
+    
+    scaner_log = fields.One2many(
+        string = "Scanner log",
+        comodel_name = "scanner.log",
+        inverse_name = "order_line"
+    )
+    
+    shipment_guides = fields.One2many(
+        string = "Shipment guides",
+        comodel_name = "shipment.guides",
+        inverse_name = "order_line"
+    )
+
+    has_been_shipped = fields.Boolean(
+        string = "Shipped",
+        default = False
+    )
+
+class ShipmentOrderInherit(models.Model):
+    _inherit = "bossa.shipment.orders"
 
     placement_date = fields.Date(
         string = "Placement date",
