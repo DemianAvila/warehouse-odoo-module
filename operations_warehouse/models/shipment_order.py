@@ -63,11 +63,11 @@ class ShipmentOrderInherit(models.Model):
         default = f"Shipment order from {datetime.strftime(date.today(), '%d/%m/%Y')}"
     )
 
-    sell_orders = fields.One2many(
-        string = "Sell orders",
-        comodel = "sale.order",
-        inverse_name = "shipment_order"
-    )
+    #sell_orders = fields.One2many(
+    #    string = "Sell orders",
+    #    comodel = "sale.order",
+    #    inverse_name = "shipment_order"
+    #)
 
     datetime_from = fields.Datetime(
         string = "From"
