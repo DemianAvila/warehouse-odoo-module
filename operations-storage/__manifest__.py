@@ -8,7 +8,7 @@
     'data': [
         "views/shipment_order_views.xml"
     ],
-    'license': 'OPL-1',
+    'license': 'GPL-3',
     'installable': True,
     'application': True,
 
