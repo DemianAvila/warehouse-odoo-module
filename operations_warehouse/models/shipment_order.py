@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from odoo import models, fields
 
+
 class ShipmentGuides(models.Model):
     _name = "shipment.guides"
     _description = """Stores all of the shipment guides for printing"""
@@ -13,6 +14,7 @@ class ShipmentGuides(models.Model):
         string = "Order line",
         comodel_name = "sale.order.line"
     )
+
 
 class ScanerLog(models.Model):
     _name = "scanner.log"
@@ -27,6 +29,28 @@ class ScanerLog(models.Model):
     timestamp = fields.Datetime(
         string = "Time Stamp"
     )
+
+
+class ShipmentFields(models.Model):
+    _inherit = "sale.order.line"
+    
+    scaner_log = fields.One2many(
+        string = "Scanner log",
+        comodel_name = "scanner.log",
+        inverse_name = "order_line"
+    )
+    
+    shipment_guides = fields.One2many(
+        string = "Shipment guides",
+        comodel_name = "shipment.guides",
+        inverse_name = "order_line"
+    )
+
+    has_been_shipped = fields.Boolean(
+        string = "Shipped",
+        default = False
+    )
+
 
 class ShipmentOrder(models.Model):
     _name = "bossa.shipment.orders"
@@ -46,7 +70,7 @@ class ShipmentOrder(models.Model):
     sell_orders = fields.One2many(
         string = "Sell orders",
         comodel = "sale.order",
-        inverse_name = "shipment_order"
+        inverse_name = False
     )
 
     datetime_from = fields.Datetime(
