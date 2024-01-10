@@ -13,7 +13,7 @@
 
   <record id="shipment_order_model_action" model="ir.actions.act_window"> 
     <field name="name">Shipment orders</field>
-    <field name="res_model">bossa_shipment_orders</field>
+    <field name="res_model">bossa.shipment.orders</field>
     <field name="view_mode">tree</field>
   </record>
 
