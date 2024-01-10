@@ -5,8 +5,8 @@ class InverseSell2Shipment(models.Model):
     _inherit = "sale.order"
     
     shipment_order = fields.Many2one(
-        string = "Shipment order",
-        comodel_name = "bossa.shipment.orders"
+        string="Shipment order",
+        comodel_name="bossa.shipment.orders"
     )
 
 class ShipmentGuides(models.Model):
