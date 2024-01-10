@@ -66,7 +66,7 @@ class ShipmentOrderInherit(models.Model):
     sell_orders = fields.One2many(
         string = "Sell orders",
         comodel = "sale.order",
-        inverse_name = False
+        inverse_name = "shipment_order"
     )
 
     datetime_from = fields.Datetime(
