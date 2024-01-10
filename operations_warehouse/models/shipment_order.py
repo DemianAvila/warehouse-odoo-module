@@ -18,7 +18,7 @@ class ShipmentGuides(models.Model):
     )
 
     order_line = fields.Many2one(
-        string = "Order line"
+        string = "Order line",
         comodel_name = "sale.order.lie"
     )
 
@@ -28,7 +28,7 @@ class ScanerLog(models.Model):
     preparing the shipment order"""
     
     order_line = fields.Many2one(
-        string = "Order line"
+        string = "Order line",
         comodel_name = "sale.order.line"
     )
 
@@ -46,8 +46,8 @@ class ShipmentFields(models.Model):
     )
     
     shipment_guides = fields.One2many(
-        string = "Shipment guides"
-        comodel_name = "shipment.guides"
+        string = "Shipment guides",
+        comodel_name = "shipment.guides",
         inverse_name = "order_line"
     )
 
@@ -74,7 +74,7 @@ class ShipmentOrder(models.Model):
     sell_orders = fields.One2many(
         string = "Sell orders",
         comodel = "sale.order",
-        inverse_name = "shipment_order",
+        inverse_name = "shipment_order"
     )
 
     datetime_from = fields.Datetime(
