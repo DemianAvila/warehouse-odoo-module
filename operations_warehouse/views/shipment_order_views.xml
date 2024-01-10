@@ -11,10 +11,25 @@
     </field>
   </record>
 
+  <record id="shipment_order_form" model="ir.ui.view">
+    <field name="name">shipment_orders_form</field>
+    <field name="model">bossa.shipment.orders</field>
+    <field name="arch" type="xml">
+      <form string="Create shipment order">
+        <field name="order_title"/>
+        <field name="placement_date"/>
+        <field name="order_title"/> 
+        <field name="datetime_from"/>
+        <field name="datetime_until"/>      
+      </form>
+    </field>
+  </record>
+
+
   <record id="shipment_order_model_action" model="ir.actions.act_window"> 
     <field name="name">Shipment orders</field>
     <field name="res_model">bossa.shipment.orders</field>
-    <field name="view_mode">tree</field>
+    <field name="view_mode">tree,form</field>
   </record>
 
   <menuitem 
