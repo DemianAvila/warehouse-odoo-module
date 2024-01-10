@@ -30,7 +30,6 @@ class ScanerLog(models.Model):
         string = "Time Stamp"
     )
 
-
 class ShipmentFields(models.Model):
     _inherit = "sale.order.line"
     
@@ -51,11 +50,8 @@ class ShipmentFields(models.Model):
         default = False
     )
 
-
-class ShipmentOrder(models.Model):
-    _name = "bossa.shipment.orders"
-    _description = """Generates and stores the shipment orders, 
-    as well as it manages the state of the orders"""
+class ShipmentOrderInherit(models.Model):
+    _inherit = "bossa.shipment.orders"
 
     placement_date = fields.Date(
         string = "Placement date",
