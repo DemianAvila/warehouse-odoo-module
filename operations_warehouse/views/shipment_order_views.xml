@@ -16,11 +16,17 @@
     <field name="model">bossa.shipment.orders</field>
     <field name="arch" type="xml">
       <form string="Create shipment order">
-        <field name="order_title"/>
-        <field name="placement_date"/>
-        <field name="order_title"/> 
-        <field name="datetime_from"/>
-        <field name="datetime_until"/>      
+        <sheet>
+          <div>
+            <hi>
+              <field name="order_title" string="Order title"/>
+            </h1>
+          </div>
+          <field name="placement_date"/>
+          <field name="order_title"/> 
+          <field name="datetime_from"/>
+          <field name="datetime_until"/>      
+        </sheet>
       </form>
     </field>
   </record>
