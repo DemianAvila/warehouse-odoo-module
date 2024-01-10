@@ -2,7 +2,7 @@ from datetime import date, datetime
 from odoo import models, fields
 
 class InverseSell2Shipment(models.Model):
-    _ihnerit = "sale.order"
+    _inherit = "sale.order"
     
     shipment_order = fields.Many2one(
         string = "Shipment order",
