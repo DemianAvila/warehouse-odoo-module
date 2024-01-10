@@ -18,7 +18,7 @@
       <form string="Create shipment order">
         <sheet>
           <div>
-            <hi>
+            <h1>
               <field name="order_title" string="Order title"/>
             </h1>
           </div>
