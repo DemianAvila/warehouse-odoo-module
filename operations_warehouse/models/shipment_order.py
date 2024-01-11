@@ -79,7 +79,7 @@ class ShipmentOrderInherit(models.Model):
         order_with_delivery_service = {}
         #FOR EACH ONE OF THE ORDERS
         for r in rec_in_dates:
-            delivery_service = r.x_studio_envio[0].name if len(r.x_studio_envio)>0 else "Paqueteria no asignada")
+            delivery_service = r.x_studio_envio[0].name if len(r.x_studio_envio)>0 else "Paqueteria no asignada"
             #IF DELIVERY SERVICE NOT IN DICT
             if delivery_service not in order_with_delivery_service.keys():
                 order_with_delivery_service[delivery_service] = {}
