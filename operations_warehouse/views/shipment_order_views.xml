@@ -46,7 +46,7 @@
           </div>
           <notebook>
             <page string="Sale orders">
-              <field name="sale_orders"/>
+              <field name="sell_orders"/>
             </page>
             <page string="Preview and print">
               <button name="create_pdf" type="object" class="btn text-nowrap me-2 btn-odoo" attrs="{'invisible': [('shipment_data', '=', False)]}">
