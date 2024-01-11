@@ -58,9 +58,7 @@ class ShipmentOrderInherit(models.Model):
             ]
         })
 
-    def see_product_info(self):
-        pass
-
+    
     def search_sale_orders(self, since, until):
         sale_order_cursor = self.env["sale.order"]
         rec_in_dates = sale_order_cursor.search(

@@ -38,6 +38,9 @@ class ShipmentOrder(models.Model):
 class InverseSell2Shipment(models.Model):
     _inherit = "sale.order"
 
+    def see_product_info(self):
+        pass
+
     document_shipment_guides = fields.One2many(
         string = "Document shipment Guides",
         comodel_name = "ir.attachment",
