@@ -49,8 +49,8 @@
               <field name="sell_orders">
                 <tree>
                   <field name="name"/>
-                  <button name="see_product_info" type="object" class="btn text-nowrap me-2 btn-odoo">
-                    Info_
+                  <button name="see_product_info" type="action" class="btn text-nowrap me-2 btn-odoo">
+                    Info
                   </button>
                 </tree>
               </field>
