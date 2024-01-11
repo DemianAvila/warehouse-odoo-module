@@ -51,10 +51,7 @@ class ShipmentFields(models.Model):
     )
 
 class ShipmentOrderInherit(models.Model):
-    _inherit = [
-        "bossa.shipment.orders",
-        "mail.thread"
-    ]
+    _inherit = "bossa.shipment.orders"
 
     placement_date = fields.Date(
         string = "Placement date",
