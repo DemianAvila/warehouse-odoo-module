@@ -6,11 +6,7 @@
     <field name="arch" type="xml">
       <form string="Edit your sale order">
         <field name="product_title"/>
-        <field name="documents">
-          <tree>
-            <field name="name"/>
-          </tree>
-        </field>
+        <field name="documents" />
         <field name="products">
           <tree>
             <field name="name"/>
