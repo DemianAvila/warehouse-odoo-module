@@ -8,7 +8,7 @@
         <field name="product_title"/>
         <field name="documents">
           <tree>
-            <field name="name" widget="binary"/>
+            <field name="name"/>
           </tree>
         </field>
         <field name="products">
