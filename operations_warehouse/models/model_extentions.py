@@ -27,14 +27,6 @@ class ShipmentOrder(models.Model):
     )
 
 
-class Guides (models.Model):
-    _inherit = "ir.attachment"
-
-    guide_from_sell_order = fields.Many2one(
-        string = "Guide from sell order",
-        comodel_name = "sale.order"
-    )
-
 
 class InverseSell2Shipment(models.Model):
     _inherit = "sale.order"

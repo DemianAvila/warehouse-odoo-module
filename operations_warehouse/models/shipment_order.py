@@ -2,14 +2,8 @@ from datetime import date, datetime
 from odoo import models, fields
 import json
 
-
-class ShipmentGuides(models.Model):
-    _name = "shipment.guides"
-    _description = """Stores all of the shipment guides for printing"""
-
-    guides = fields.Binary(
-        string = "File"
-    )
+class Guides (models.Model):
+    _inherit = "ir.attachment"
 
     order_line = fields.Many2one(
         string = "Order line",
@@ -42,7 +36,7 @@ class ShipmentFields(models.Model):
     
     shipment_guides = fields.One2many(
         string = "Shipment guides",
-        comodel_name = "shipment.guides",
+        comodel_name = "ir.attachment",
         inverse_name = "order_line"
     )
 
@@ -72,6 +66,9 @@ class ShipmentOrderInherit(models.Model):
                 (4, id_)
             ]
         })
+
+    def see_product_info(self):
+        pass
 
     def search_sale_orders(self, since, until):
         sale_order_cursor = self.env["sale.order"]
