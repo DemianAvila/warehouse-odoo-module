@@ -2,15 +2,6 @@ from datetime import date, datetime
 from odoo import models, fields
 import json
 
-class Guides (models.Model):
-    _inherit = "ir.attachment"
-
-    order_line = fields.Many2one(
-        string = "Order line",
-        comodel_name = "sale.order.line"
-    )
-
-
 class ScanerLog(models.Model):
     _name = "scanner.log"
     _description = """Store the tries of scan a right product when 

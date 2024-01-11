@@ -1,6 +1,13 @@
 from datetime import date, datetime
 from odoo import models, fields
 
+class Guides (models.Model):
+    _inherit = "ir.attachment"
+
+    order_line = fields.Many2one(
+        string = "Order line",
+        comodel_name = "sale.order.line"
+    )
 
 class ShipmentOrder(models.Model):
     _name = "bossa.shipment.orders"
@@ -34,7 +41,7 @@ class InverseSell2Shipment(models.Model):
     document_shipment_guides = fields.One2many(
         string = "Document shipment Guides",
         comodel_name = "ir.attachment",
-        inverse_name = "guide_from_sell_order"
+        inverse_name = "order_line"
     )
 
     shipment_order = fields.Many2one(
