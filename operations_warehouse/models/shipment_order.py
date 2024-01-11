@@ -96,9 +96,9 @@ class ShipmentOrderInherit(models.Model):
                 #EACH ONE OF THE PRODUCTS MUST BE SCANNED ONCE
                 for qty in range(int(line.product_uom_qty)):
                     #INTERNAL BARCODE THAT WILL BE NOT REPEATED
-                    order_barcode = datetime.datetime.now().strftime('%s')
+                    order_barcode = datetime.now().strftime('%s')
                     while order_barcode in epoch_ids:
-                        order_barcode = datetime.datetime.now().strftime('%s')
+                        order_barcode = datetime.now().strftime('%s')
                     epoch_ids.append(order_barcode)
                     product = {}
                     product["id"] = line.name
