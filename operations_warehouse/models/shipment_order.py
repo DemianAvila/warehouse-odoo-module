@@ -69,8 +69,8 @@ class ShipmentOrderInherit(models.Model):
         sale_order_cursor = self.env["sale.order"]
         rec_in_dates = sale_order_cursor.search(
             [
-                ("create_date", ">=", since),
-                ("create_date", "<=", until)
+                ("create_date", "<=", since),
+                ("create_date", ">=", until)
             ]
         )
         self.shipment_table = rec_in_dates
@@ -87,7 +87,7 @@ class ShipmentOrderInherit(models.Model):
             self.panic_error("Por favor, introduzca fecha de fin")
             return 1
         #CHECK IF DATE FROM IS LARGER THAN DATE UNTIL
-        if self.datetime_from<self.datetime_until:
+        if self.datetime_from>self.datetime_until:
             self.panic_error("No se puede buscar una fecha con intervalos invertidos")
             return 1
         
