@@ -34,6 +34,10 @@
               <field name="datetime_until"/>
             </group>
           </group>
+          
+          <group>
+            <field name="shipment_table" widget="html"/>
+          </group>
         </sheet>
         <div class="oe_chatter">
           <field name="message_follower_ids"/>
