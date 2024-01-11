@@ -34,10 +34,10 @@
               <field name="datetime_until"/>
             </group>
           </group>
-          
           <group>
-            <field name="shipment_table" widget="html"/>
+            <button name="create_shipment" class="btn text-nowrap me-2 btn-odoo">Create shipment order for today</button>
           </group>
+          <field class="w-100" name="shipment_table" widget="html" nolabel="1"/>
         </sheet>
         <div class="oe_chatter">
           <field name="message_follower_ids"/>
