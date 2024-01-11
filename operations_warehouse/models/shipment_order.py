@@ -69,7 +69,7 @@ class ShipmentOrderInherit(models.Model):
         sale_order_cursor = self.env["sale.order"]
         rec_in_dates = sale_order_cursor.search(
             [
-                ("create_date", ">=" since),
+                ("create_date", ">=", since),
                 ("create_date", "<=", until)
             ]
         )
