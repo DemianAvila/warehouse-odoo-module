@@ -39,12 +39,13 @@ class InverseSell2Shipment(models.Model):
     _inherit = "sale.order"
 
     def see_product_info(self):
-        print(self)
+        form_view_id = self.env.ref('operations_warehouse.sale_order_wizard_form').id
         return {
             'name': "Edit sale order",
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
             'res_model': 'sale.order.edit',
+            'view_id': form_view_id,
             'target': 'new'
         }
 

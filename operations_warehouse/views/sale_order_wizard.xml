@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="sale_order_wizard_form" model="ir.ui.view">
+    <field name="name">sale_order_wizard_form</field>
+    <field name="model">sale.order.edit</field>
+    <field name="arch" type="xml">
+      <form string="Edit your sale order">
+        <field name="product_title"/>
+        <field name="documents">
+          <tree>
+            <field name="name" widget="binary"/>
+          </tree>
+        </field>
+        <field name="products">
+          <tree>
+            <field name="name"/>
+            <field name="product_uom_qyt"/>
+          </tree>
+        </field>
+      </form>
+    </field>
+  </record>
+
+
+</odoo>
