@@ -88,7 +88,7 @@ class ShipmentOrderInherit(models.Model):
             #CREATE DICT FOR THIS ORDER ID
             order = {
                 "id": r.name,
-                "marketplace": r.tag_ids[0].name if len(r.tag_ids)>0 else "Marketplace no asignado"
+                "marketplace": r.tag_ids[0].name if len(r.tag_ids)>0 else "Marketplace no asignado",
                 "products": [] 
             }
             #FOR EACH ONE OF THE PRODUCTS
