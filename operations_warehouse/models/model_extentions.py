@@ -8,13 +8,45 @@ class ShipmentOrder(models.Model):
     _description = """Generates and stores the shipment orders, 
     as well as it manages the state of the orders"""
 
- 
+    placement_date = fields.Date(
+        string = "Placement date",
+        default = date.today()
+    )
+    
+    order_title = fields.Char(
+        string = "Order title",
+        default = f"Shipment order from {datetime.strftime(date.today(), '%d/%m/%Y')}"
+    )
+
+    datetime_from = fields.Datetime(
+        string = "From"
+    )
+    
+    datetime_until =  fields.Datetime(
+        string = "Until"
+    )
+
+
+class Guides (models.Model):
+    _inherit = "ir.attachment"
+
+    guide_from_sell_order = fields.Many2one(
+        string = "Guide from sell order",
+        comodel_name = "sale.order"
+    )
+
+
 class InverseSell2Shipment(models.Model):
     _inherit = "sale.order"
-    
+
+    document_shipment_guides = fields.One2many(
+        string = "Document shipment Guides",
+        comodel_name = "ir.attachment",
+        inverse = "guide_from_sell_order"
+    )
+
     shipment_order = fields.Many2one(
         string="Shipment order",
         comodel_name="bossa.shipment.orders"
     )
-
 

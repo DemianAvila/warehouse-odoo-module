@@ -35,14 +35,18 @@
             </group>
           </group>
           <group>
-            <button name="create_shipment" type="object" class="btn text-nowrap me-2 btn-odoo">Create shipment order</button>
-            <button name="pdf" type="object" class="btn text-nowrap me-2 btn-odoo">Get printable version</button>
+            <button name="create_shipment" type="object" class="btn text-nowrap me-2 btn-odoo">
+                Create shipment order
+            </button>
+            <button name="create_pdf" type="object" class="btn text-nowrap me-2 btn-odoo" attrs="{'invisible': [('shipment_data', '=', False)]}">
+                Get printable version
+            </button>
           </group>
           <field name="is_error" invisible="1"/>
           <div class="p-3 mb-2 bg-danger text-white" attrs="{'invisible': [('is_error', '=', False)]}">
             <field name="error_code" readonly="1"/>
           </div>
-          <field class="w-100" name="shipment_table" widget="html" nolabel="1"/>
+          <field class="w-100" name="shipment_table" widget="html" nolabel="1" attrs="{'invisible': [('shipment_table', '=', False)]}"/>
         </sheet>
         <div class="oe_chatter">
           <field name="message_follower_ids"/>

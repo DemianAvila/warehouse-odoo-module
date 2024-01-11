@@ -171,29 +171,13 @@ class ShipmentOrderInherit(models.Model):
         self.shipment_table = self.format_datatable(order)
         self.shipment_data = json.dumps(order)    
 
+    def create_pdf(self):
+        pass
 
-    placement_date = fields.Date(
-        string = "Placement date",
-        default = date.today()
-    )
-    
-    order_title = fields.Char(
-        string = "Order title",
-        default = f"Shipment order from {datetime.strftime(date.today(), '%d/%m/%Y')}"
-    )
-
-    #sell_orders = fields.One2many(
-    #    string = "Sell orders",
-    #    comodel = "sale.order",
-    #    inverse_name = "shipment_order"
-    #)
-
-    datetime_from = fields.Datetime(
-        string = "From"
-    )
-    
-    datetime_until =  fields.Datetime(
-        string = "Until"
+    sell_orders = fields.One2many(
+        string = "Sell orders",
+        comodel_name = "sale.order",
+        inverse_name = "shipment_order"
     )
 
     shipment_table = fields.Text(
