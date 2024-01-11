@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from odoo import models, fields
+import json
 
 
 class ShipmentGuides(models.Model):
@@ -112,14 +113,14 @@ class ShipmentOrderInherit(models.Model):
 
     def delivery_header(self, delivery):
         return f""" 
-        <div class="w-100 p-3 mb-2 bg-info text-white row font-weight-bold">
+        <div class="w-100 p-3  bg-info text-white row font-weight-bold">
             {delivery}
         </div>
         """
         
     def order_id_header(self, order, marketplace):
         return f""" 
-        <div class="w-100 p-3 mb-2 bg-info text-white row font-weight-bold">
+        <div class="w-100 p-3 bg-info text-white row font-weight-bold">
             <div class="w-50 col">
                 {order}
             </div>
@@ -131,7 +132,7 @@ class ShipmentOrderInherit(models.Model):
 
     def product_id(self, product):
         return f"""
-        <div class="w-100 p-3 mb-2 bg-light text-dark row">
+        <div class="w-100 p-3 bg-light text-dark row">
             {product}
         </div>
     """
@@ -168,7 +169,7 @@ class ShipmentOrderInherit(models.Model):
         
         order = self.search_sale_orders(self.datetime_from, self.datetime_until)
         self.shipment_table = self.format_datatable(order)
-    
+        self.shipment_data = json.dumps(order)    
 
 
     placement_date = fields.Date(
@@ -196,7 +197,10 @@ class ShipmentOrderInherit(models.Model):
     )
 
     shipment_table = fields.Text(
+        readonly = True
     )
+
+    shipment_data = fields.Char()
     
     is_error = fields.Boolean(
         default = False

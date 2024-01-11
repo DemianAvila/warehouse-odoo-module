@@ -36,6 +36,7 @@
           </group>
           <group>
             <button name="create_shipment" type="object" class="btn text-nowrap me-2 btn-odoo">Create shipment order</button>
+            <button name="pdf" type="object" class="btn text-nowrap me-2 btn-odoo">Get printable version</button>
           </group>
           <field name="is_error" invisible="1"/>
           <div class="p-3 mb-2 bg-danger text-white" attrs="{'invisible': [('is_error', '=', False)]}">
