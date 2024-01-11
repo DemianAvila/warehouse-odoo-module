@@ -113,7 +113,7 @@ class ShipmentOrderInherit(models.Model):
     def delivery_header(self, delivery):
         return f""" 
         <div class="w-100 p-3 mb-2 bg-primary text-white ">
-            {delivery_service}
+            {delivery}
         </div>
         """
         
