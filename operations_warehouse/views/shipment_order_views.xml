@@ -16,18 +16,30 @@
     <field name="model">bossa.shipment.orders</field>
     <field name="arch" type="xml">
       <form string="Create shipment order">
-        <header>
-          <group>
+        <sheet>
+          <label for="order_title" string="Order title"/>
+          <div class="oe_title">
             <h1>
-
-              <field name="order_title" string="Order title"/>
+              <field name="order_title"/>
             </h1>
+          </div>
+          <group>
+            <field name="placement_date"/>
           </group>
-        </header>
-        <field name="placement_date"/>
-        <field name="order_title"/> 
-        <field name="datetime_from"/>
-        <field name="datetime_until"/>      
+          <group>
+            <group id="header_left_group">
+              <field name="datetime_from"/>
+            </group>
+            <group id="header_right_group">
+              <field name="datetime_until"/>
+            </group>
+          </group>
+        </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids"/>
+          <field name="activity_ids"/>
+          <field name="message_ids"/>
+        </div>
       </form>
     </field>
   </record>
