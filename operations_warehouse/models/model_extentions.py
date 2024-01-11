@@ -42,7 +42,7 @@ class InverseSell2Shipment(models.Model):
     document_shipment_guides = fields.One2many(
         string = "Document shipment Guides",
         comodel_name = "ir.attachment",
-        inverse = "guide_from_sell_order"
+        inverse_name = "guide_from_sell_order"
     )
 
     shipment_order = fields.Many2one(
