@@ -35,7 +35,7 @@
             </group>
           </group>
           <group>
-            <button name="create_shipment" type="object" class="btn text-nowrap me-2 btn-odoo">Create shipment order for today</button>
+            <button name="create_shipment" type="object" class="btn text-nowrap me-2 btn-odoo">Create shipment order</button>
           </group>
           <field class="w-100" name="shipment_table" widget="html" nolabel="1"/>
         </sheet>

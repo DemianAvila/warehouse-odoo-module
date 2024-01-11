@@ -53,7 +53,29 @@ class ShipmentFields(models.Model):
 class ShipmentOrderInherit(models.Model):
     _inherit = "bossa.shipment.orders"
 
+    def null_date(sefl,date):
+        if not date:
+            return True
+
+    def reset_error(self):
+        self.is_error = False
+        self.error_code = ""
+
+    def panic_error(self, message):
+        self.is_error = True
+        self.error_code = message
+
     def create_shipment(self):
+        #AT ANY CLICK, RESTART THE ERROR 
+        self.reset_error()
+        #CHECK IF NO DATES
+        if null_date(self.datetime_from):
+            self.panic_error("Por favor, introduzca fecha de inicio")
+            return 1
+        if null_date(datetime_until):
+            self.panic_error("Por favor, introduzca fecha de fin")
+            return 1
+        #CHECK IF DATE FROM IS LARGER THAN DATE UNTIL
         self.shipment_table = "a"
 
     placement_date = fields.Date(
@@ -82,4 +104,10 @@ class ShipmentOrderInherit(models.Model):
 
     shipment_table = fields.Text(
     )
+    
+    is_error = fields.Boolean(
+        default = False
+    )
+
+    error_code = fields.Char()
 
