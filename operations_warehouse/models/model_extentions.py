@@ -39,7 +39,14 @@ class InverseSell2Shipment(models.Model):
     _inherit = "sale.order"
 
     def see_product_info(self):
-        pass
+        print(self)
+        return {
+            'name': "Edit sale order",
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'sale.order.edit',
+            'target': 'new'
+        }
 
     document_shipment_guides = fields.One2many(
         string = "Document shipment Guides",
