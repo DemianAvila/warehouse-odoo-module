@@ -65,18 +65,33 @@ class ShipmentOrderInherit(models.Model):
         self.is_error = True
         self.error_code = message
 
+    def search_sale_orders(self, since, until):
+        sale_order_cursor = self.env["sale.order"]
+        rec_in_dates = sale_order_cursor.search(
+            [
+                ("create_date", ">=" since),
+                ("create_date", "<=", until)
+            ]
+        )
+        self.shipment_table = rec_in_dates
+
+
     def create_shipment(self):
         #AT ANY CLICK, RESTART THE ERROR 
         self.reset_error()
         #CHECK IF NO DATES
-        if null_date(self.datetime_from):
+        if self.null_date(self.datetime_from):
             self.panic_error("Por favor, introduzca fecha de inicio")
             return 1
-        if null_date(datetime_until):
+        if self.null_date(self.datetime_until):
             self.panic_error("Por favor, introduzca fecha de fin")
             return 1
         #CHECK IF DATE FROM IS LARGER THAN DATE UNTIL
-        self.shipment_table = "a"
+        if self.datetime_from<self.datetime_until:
+            self.panic_error("No se puede buscar una fecha con intervalos invertidos")
+            return 1
+        
+        self.search_sale_orders(self.datetime_from, self.datetime_until)
 
     placement_date = fields.Date(
         string = "Placement date",
