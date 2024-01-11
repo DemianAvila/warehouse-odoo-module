@@ -102,16 +102,54 @@ class ShipmentOrderInherit(models.Model):
                     epoch_ids.append(order_barcode)
                     product = {}
                     product["id"] = line.name
-                    product["quantity"] = line.product_uom_qty
                     product["barcode"] = line.product_template_id[0].barcode if len(line.product_template_id)>0 else "Sin codigo de barras asignado"
                     product["internal_barcode"] = order_barcode
                     order["products"].append(product)
             order_with_delivery_service[delivery_service]["order_ids"].append(order)
                         
                 
-        self.shipment_table = order_with_delivery_service            
-            
+        return order_with_delivery_service 
 
+    def delivery_header(self, delivery):
+        return f""" 
+        <div class="w-100 p-3 mb-2 bg-primary text-white ">
+            {delivery_service}
+        </div>
+        """
+        
+    def order_id_header(self, order, marketplace):
+        return f""" 
+        <div class="w-100 p-3 mb-2 bg-info text-white ">
+            <div class="w-50">
+                {order}
+            </div>
+            <div class="w-50">
+                {marketplace}
+            </div>
+        </div>
+        """
+
+    def product_id(self, product):
+        return f"""
+        <div class="w-100 p-3 mb-2 bg-light text-dark">
+            {product}
+        </div>
+    """
+
+    def format_datatable(self, data):
+        html_agregate = ""
+        for delivery in data.keys():
+            html_agregate+=self.delivery_header(delivery)
+            for order in data[delivery]["order_ids"]:
+                html_agregate+=self.order_id_header(order["id"], order["marketplace"])
+                for product in order["products"]:
+                    html_agregate+=self.product_id(product["id"])
+
+        return f"""
+        <div class="w-100">
+            {html_agregate}
+        </div>    
+        """
 
     def create_shipment(self):
         #AT ANY CLICK, RESTART THE ERROR 
@@ -128,8 +166,10 @@ class ShipmentOrderInherit(models.Model):
             self.panic_error("No se puede buscar una fecha con intervalos invertidos")
             return 1
         
-        self.search_sale_orders(self.datetime_from, self.datetime_until)
+        order = self.search_sale_orders(self.datetime_from, self.datetime_until)
+        self.shipment_table = self.format_datatable(order)
     
+
 
     placement_date = fields.Date(
         string = "Placement date",
