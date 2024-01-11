@@ -73,7 +73,44 @@ class ShipmentOrderInherit(models.Model):
                 ("create_date", "<=", until)
             ]
         )
-        self.shipment_table = rec_in_dates
+        #STABLISH AN ONLY ID BY THE EPOCH
+        epoch_ids = []
+        #STORE PRODUCT BY ORDER CODE, AND ITSELF BY DELIVERY
+        order_with_delivery_service = {}
+        #FOR EACH ONE OF THE ORDERS
+        for r in rec_in_dates:
+            delivery_service = r.x_studio_envio[0].name if len(r.x_studio_envio)>0 else "Paqueteria no asignada")
+            #IF DELIVERY SERVICE NOT IN DICT
+            if delivery_service not in order_with_delivery_service.keys():
+                order_with_delivery_service[delivery_service] = {}
+                #STORE THE ORDER ID IN LIST OF DICTS
+                order_with_delivery_service[delivery_service]["order_ids"] = []
+            #CREATE DICT FOR THIS ORDER ID
+            order = {
+                "id": r.name,
+                "marketplace": r.tag_ids[0].name if len(r.tag_ids)>0 else "Marketplace no asignado"
+                "products": [] 
+            }
+            #FOR EACH ONE OF THE PRODUCTS
+            for line in r.order_line:
+                #EACH ONE OF THE PRODUCTS MUST BE SCANNED ONCE
+                for qty in range(int(line.product_uom_qty)):
+                    #INTERNAL BARCODE THAT WILL BE NOT REPEATED
+                    order_barcode = datetime.datetime.now().strftime('%s')
+                    while order_barcode in epoch_ids:
+                        order_barcode = datetime.datetime.now().strftime('%s')
+                    epoch_ids.append(order_barcode)
+                    product = {}
+                    product["id"] = line.name
+                    product["quantity"] = line.product_uom_qty
+                    product["barcode"] = line.product_template_id[0].barcode if len(line.product_template_id)>0 else "Sin codigo de barras asignado"
+                    product["internal_barcode"] = order_barcode
+                    order["products"].append(product)
+            order_with_delivery_service[delivery_service]["order_ids"].append(order)
+                        
+                
+        self.shipment_table = order_with_delivery_service            
+            
 
 
     def create_shipment(self):
@@ -92,6 +129,7 @@ class ShipmentOrderInherit(models.Model):
             return 1
         
         self.search_sale_orders(self.datetime_from, self.datetime_until)
+    
 
     placement_date = fields.Date(
         string = "Placement date",
