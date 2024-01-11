@@ -66,6 +66,13 @@ class ShipmentOrderInherit(models.Model):
         self.is_error = True
         self.error_code = message
 
+    def link_sale_order(self, id_):
+        self.write({
+            "sell_orders": [
+                (4, id_)
+            ]
+        })
+
     def search_sale_orders(self, since, until):
         sale_order_cursor = self.env["sale.order"]
         rec_in_dates = sale_order_cursor.search(
@@ -80,6 +87,9 @@ class ShipmentOrderInherit(models.Model):
         order_with_delivery_service = {}
         #FOR EACH ONE OF THE ORDERS
         for r in rec_in_dates:
+            #LINK THE SALE ORDER TO THE MODEL 
+            self.link_sale_order(r.id)
+            #GET NAME OF THE DELIVERY SERVICE
             delivery_service = r.x_studio_envio[0].name if len(r.x_studio_envio)>0 else "Paqueteria no asignada"
             #IF DELIVERY SERVICE NOT IN DICT
             if delivery_service not in order_with_delivery_service.keys():
@@ -151,6 +161,8 @@ class ShipmentOrderInherit(models.Model):
             {html_agregate}
         </div>    
         """
+
+    
 
     def create_shipment(self):
         #AT ANY CLICK, RESTART THE ERROR 
