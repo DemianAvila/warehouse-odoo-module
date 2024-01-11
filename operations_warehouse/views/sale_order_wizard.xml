@@ -7,12 +7,7 @@
       <form string="Edit your sale order">
         <field name="product_title"/>
         <field name="documents" />
-        <field name="products">
-          <tree>
-            <field name="name"/>
-            <field name="product_uom_qyt"/>
-          </tree>
-        </field>
+        <field name="products" />
       </form>
     </field>
   </record>
