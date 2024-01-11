@@ -112,18 +112,18 @@ class ShipmentOrderInherit(models.Model):
 
     def delivery_header(self, delivery):
         return f""" 
-        <div class="w-100 p-3 mb-2 bg-primary text-white ">
+        <div class="w-100 p-3 mb-2 bg-info text-white row font-weight-bold">
             {delivery}
         </div>
         """
         
     def order_id_header(self, order, marketplace):
         return f""" 
-        <div class="w-100 p-3 mb-2 bg-info text-white ">
-            <div class="w-50">
+        <div class="w-100 p-3 mb-2 bg-info text-white row font-weight-bold">
+            <div class="w-50 col">
                 {order}
             </div>
-            <div class="w-50">
+            <div class="w-50 col">
                 {marketplace}
             </div>
         </div>
@@ -131,7 +131,7 @@ class ShipmentOrderInherit(models.Model):
 
     def product_id(self, product):
         return f"""
-        <div class="w-100 p-3 mb-2 bg-light text-dark">
+        <div class="w-100 p-3 mb-2 bg-light text-dark row">
             {product}
         </div>
     """
@@ -146,7 +146,7 @@ class ShipmentOrderInherit(models.Model):
                     html_agregate+=self.product_id(product["id"])
 
         return f"""
-        <div class="w-100">
+        <div class="w-100 container">
             {html_agregate}
         </div>    
         """
