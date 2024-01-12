@@ -40,10 +40,12 @@ class InverseSell2Shipment(models.Model):
 
     def see_product_info(self):
         sale_order_pointer = self.env['sale.order.edit']
-        sale_order_pointer.create({
+        wizard = sale_order_pointer.create({
             'sale_order_id': self.id
         })
+        print("==========================")
         print(self.env.context.get('active_id')) 
+        print("==========================")
         return {
             'name': "Edit sale_order",
             'type': 'ir.actions.act_window',
