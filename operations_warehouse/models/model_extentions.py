@@ -44,12 +44,11 @@ class InverseSell2Shipment(models.Model):
             'sale_order_id': self.id
         })
         return {
-            'name': "edit_sale_order",
-            'type': 'ir.actions.act_window',
-            'res_model': 'sale.order.edit',
-            'view_mode': 'form',
-            'res_id': wizard.id,
-            'target': 'new'
+            "type": "ir.actions.act_window",
+            "res_model": "sale.order.edit",
+            "views": [[False, "form"]],
+            "res_id": wizard.id,
+            "target": "new",
         }
 
     document_shipment_guides = fields.One2many(
