@@ -5,7 +5,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 class SaleOrderWizard(models.TransientModel):
-    _name = "sale.edit"
+    _name = "edit.sale.wizard"
     sale_order_id = fields.Many2one(
         comodel_name = "sale.order"
     )
