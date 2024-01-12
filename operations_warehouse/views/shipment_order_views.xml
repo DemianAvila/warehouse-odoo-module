@@ -49,7 +49,7 @@
               <field name="sell_orders">
                 <tree>
                   <field name="name"/>
-                   <button string="Info" type="object" class="oe_highlight" name="see_product_info"/>
+                   <button string="Info" type="action" class="oe_highlight" name="see_product_info"/>
                 </tree>
               </field>
             </page>
