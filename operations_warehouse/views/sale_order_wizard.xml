@@ -12,5 +12,11 @@
     </field>
   </record>
 
-
+<record id="sale_order_edit_action" model="ir.actions.act_window"> 
+    <field name="name">Edit Sale Order</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">sale.order.edit</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
 </odoo>
