@@ -44,11 +44,11 @@ class InverseSell2Shipment(models.Model):
             'sale_order_id': self.id
         })
         return {
-            'name': "Edit sale_order",
+            'name': "edit_sale_order",
             'type': 'ir.actions.act_window',
             'res_model': 'sale.order.edit',
             'view_mode': 'form',
-            #'res_id': wizard.id,
+            'res_id': wizard.id,
             'target': 'new'
         }
 
