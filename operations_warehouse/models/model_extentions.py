@@ -39,13 +39,17 @@ class InverseSell2Shipment(models.Model):
     _inherit = "sale.order"
 
     def see_product_info(self):
-        form_view_id = self.env.ref('operations_warehouse.sale_order_wizard_form').id
+        sale_order_pointer = self.env['sale.order.edit']
+        sale_order_pointer.create({
+            'sale_order_id': self.id
+        })
+        print(self.env.context.get('active_id')) 
         return {
-            'name': "Edit sale order",
+            'name': "Edit sale_order",
             'type': 'ir.actions.act_window',
-            'view_mode': 'form',
             'res_model': 'sale.order.edit',
-            'view_id': form_view_id,
+            'view_mode': 'form',
+            'res_id': wizard.id,
             'target': 'new'
         }
 
