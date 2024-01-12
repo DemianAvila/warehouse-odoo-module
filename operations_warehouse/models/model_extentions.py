@@ -1,5 +1,8 @@
 from datetime import date, datetime
 from odoo import models, fields
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class Guides (models.Model):
     _inherit = "ir.attachment"
@@ -39,7 +42,7 @@ class InverseSell2Shipment(models.Model):
     _inherit = "sale.order"
 
     def see_product_info(self):
-        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        _logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         return self.env.ref("operations_warehouse.sale_order_edit_action").read()[0]
 
     document_shipment_guides = fields.One2many(
