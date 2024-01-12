@@ -43,7 +43,8 @@ class InverseSell2Shipment(models.Model):
 
     def see_product_info(self):
         _logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        return self.env.ref("operations_warehouse.sale_order_edit_action").read()[0]
+
+        #return self.env.ref("operations_warehouse.sale_order_edit_action").read()[0]
 
     document_shipment_guides = fields.One2many(
         string = "Document shipment Guides",
