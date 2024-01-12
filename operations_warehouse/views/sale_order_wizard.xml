@@ -5,8 +5,9 @@
     <field name="model">edit.sale.wizard</field>
     <field name="arch" type="xml">
       <form string="Edit your sale order">
-        <field name="sale_order_id"/>
-<!--<field name="documents" />
+        <field name="name" />
+        <!-- <field name="sale_order_id"/>
+<field name="documents" />
 <field name="products" />-->
       </form>
     </field>
