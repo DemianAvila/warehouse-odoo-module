@@ -173,7 +173,8 @@ class ShipmentOrderInherit(models.Model):
         self.shipment_table = self.format_datatable(order)
         self.shipment_data = json.dumps(order)    
 
-    def create_xlsx(self):
+    def create_xlsx(self, trash):
+        logging.info(trash)
         excel_data = base64.b64encode(
             printable_order.printable_order(self.shipment_data, self.order_title)
         ).decode('utf-8')
