@@ -177,22 +177,13 @@ class ShipmentOrderInherit(models.Model):
             printable_order.printable_order(self.shipment_data, self.order_title)
         ).decode('utf-8')
 
+        excel_mediatype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
         # Return the base64-encoded string
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': 'Download Excel File',
-                'message': 'Click the link below to download the Excel file',
-                'sticky': True,
-                'type': 'success',
-                'next': {
-                    'type': 'ir.actions.act_url',
-                    'url': 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,%s' % excel_data,
-                    'target': 'self',
-                },
-            },
+            'type': 'ir.actions.act_url',
+            'url': f"data:{excel_mediatype};base64,{excel_data}",
+            'target': 'new',
         }
 
     sell_orders = fields.One2many(
