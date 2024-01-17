@@ -184,12 +184,21 @@ class ShipmentOrderInherit(models.Model):
         logging.info(url)
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
-        # Return the base64-encoded string
         return {
-            'type': 'ir.actions.act_url',
-            'url': url,
-            'target': 'new',
-        }
+            {
+                'type': 'ir.actions.act_python',
+                'script': f"""
+                            data_url = '{url}';
+                            var link = document.createElement('a');
+                            link.href = data_url;
+                            link.download = 'Shipment_order.xlsx';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        """
+            },
+        },
+
 
     sell_orders = fields.One2many(
         string = "Sell orders",
