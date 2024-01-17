@@ -13,7 +13,9 @@ var PrintAction = AbstractAction.extend(
 				{
 					model: 'bossa.shipment.orders',
 					method: 'create_xlsx',
-					args: [""]
+					args: [{
+						trash: ""
+					}]
 				}
 			).then(
 				function (result) {
