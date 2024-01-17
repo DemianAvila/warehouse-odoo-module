@@ -2,8 +2,9 @@ from io import BytesIO
 import xlsxwriter
 from barcode import Code128
 from barcode.writer import ImageWriter
-
+import json
 def printable_order(data, title):
+    data = json.loads(data)
     output = BytesIO()
     workbook = xlsxwriter.Workbook(output)
     worksheet = workbook.add_worksheet()

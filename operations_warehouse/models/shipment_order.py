@@ -4,6 +4,7 @@ import json
 from . import printable_order
 import base64
 
+
 class ScanerLog(models.Model):
     _name = "scanner.log"
     _description = """Store the tries of scan a right product when 
