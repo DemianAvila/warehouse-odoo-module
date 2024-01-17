@@ -12,5 +12,11 @@
     'license': 'OPL-1',
     'installable': True,
     'application': True,
-
+    "external_dependencies": {
+        "python" : [
+            "xlsxwriter",
+            "io",
+            "python-barcode"
+        ]
+    }
 }

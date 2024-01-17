@@ -1,6 +1,8 @@
 from datetime import date, datetime
 from odoo import models, fields
 import json
+from . import printable_order
+import base64
 
 class ScanerLog(models.Model):
     _name = "scanner.log"
@@ -170,7 +172,27 @@ class ShipmentOrderInherit(models.Model):
         self.shipment_data = json.dumps(order)    
 
     def create_pdf(self):
-        pass
+        excel_data = base64.b64encode(
+            printable_order.printable_order(self.shipment_data, self.order_title)
+        ).decode('utf-8')
+
+
+        # Return the base64-encoded string
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Download Excel File',
+                'message': 'Click the link below to download the Excel file',
+                'sticky': True,
+                'type': 'success',
+                'next': {
+                    'type': 'ir.actions.act_url',
+                    'url': 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,%s' % excel_data,
+                    'target': 'self',
+                },
+            },
+        }
 
     sell_orders = fields.One2many(
         string = "Sell orders",
