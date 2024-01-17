@@ -14,6 +14,10 @@ var PrintAction = AbstractAction.extend(
 				}
 			).then(
 				function (result) {
+					console.log("================================")
+					console.log(result)
+					console.log("================================")
+
 					const link = document.createElement("a");
 					link.href = result;
 					link.download = "ShipmentOrder.xlsx"
