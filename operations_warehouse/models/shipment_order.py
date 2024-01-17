@@ -185,17 +185,13 @@ class ShipmentOrderInherit(models.Model):
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
         return {
-            'type': 'ir.actions.act_python',
-            'script': f"""
-                        data_url = '{url}';
-                        var link = document.createElement('a');
-                        link.href = data_url;
-                        link.download = 'Shipment_order.xlsx';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    """
-        },
+            'type': 'ir.actions.client',
+            'tag': 'download_file',
+            'params': {
+                'data': url,
+                'filename': 'ShipmentOrder.xlsx',
+            },
+        }
 
 
     sell_orders = fields.One2many(
