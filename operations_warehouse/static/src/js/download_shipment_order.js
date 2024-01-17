@@ -24,7 +24,11 @@ var PrintAction = AbstractAction.extend(
 					link.download = "ShipmentOrder.xlsx"
 					link.click();
 				}
-			);
+			).catch(
+				function(error) {
+					console.error("Error during RPC call:", error);
+				}
+			);;
 		}
 	}
 )
