@@ -1,3 +1,4 @@
+import logging
 from datetime import date, datetime
 from odoo import models, fields
 import json
@@ -178,11 +179,15 @@ class ShipmentOrderInherit(models.Model):
         ).decode('utf-8')
 
         excel_mediatype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        url = f"data:{excel_mediatype};base64,{excel_data}"
+        logging.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        logging.info(url)
+        logging.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
         # Return the base64-encoded string
         return {
             'type': 'ir.actions.act_url',
-            'url': f"data:{excel_mediatype};base64,{excel_data}",
+            'url': url,
             'target': 'new',
         }
 
