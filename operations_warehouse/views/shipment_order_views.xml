@@ -54,7 +54,7 @@
               </field>
             </page>
             <page string="Preview and print">
-              <button name="create_pdf" type="object" class="btn text-nowrap me-2 btn-odoo" attrs="{'invisible': [('shipment_data', '=', False)]}">
+              <button name="process_xlsx" type="object" class="btn text-nowrap me-2 btn-odoo" attrs="{'invisible': [('shipment_data', '=', False)]}">
                 Get printable version
               </button>
               <field class="w-100" name="shipment_table" widget="html" nolabel="1" attrs="{'invisible': [('shipment_table', '=', False)]}"/>

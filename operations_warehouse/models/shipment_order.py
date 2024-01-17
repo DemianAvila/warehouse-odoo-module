@@ -173,25 +173,20 @@ class ShipmentOrderInherit(models.Model):
         self.shipment_table = self.format_datatable(order)
         self.shipment_data = json.dumps(order)    
 
-    def create_pdf(self):
+    def create_xlsx(self):
         excel_data = base64.b64encode(
             printable_order.printable_order(self.shipment_data, self.order_title)
         ).decode('utf-8')
 
         excel_mediatype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        url = f"data:{excel_mediatype};base64,{excel_data}"
-        logging.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        logging.info(url)
-        logging.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        return f"data:{excel_mediatype};base64,{excel_data}"
 
+    def process_xlsx(self):
         return {
             'type': 'ir.actions.client',
-            'tag': 'download_file',
-            'params': {
-                'data': url,
-                'filename': 'ShipmentOrder.xlsx',
-            },
+            'tag': 'print_action',
         }
+
 
 
     sell_orders = fields.One2many(

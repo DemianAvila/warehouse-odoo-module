@@ -18,5 +18,10 @@
             "io",
             "python-barcode"
         ]
-    }
+    },
+    'assets': {
+        'web.assets_backend': [
+            "static/src/js/download_shipment_order.js",
+        ],
+    },
 }
