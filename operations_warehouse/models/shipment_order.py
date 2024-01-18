@@ -137,11 +137,11 @@ class ShipmentOrderInherit(models.Model):
                     product["id"] = line.name
                     product["barcode"] = line.product_template_id[0].barcode if len(line.product_template_id)>0 else "Sin codigo de barras asignado"
                     #IF THERE IS ALREADY INTERNAL BARCODE, DO NOT REASSIGN
-                    if not product["internal_barcode"]:
+                    if not line.internal_barcode:
                         product["internal_barcode"] = order_barcode
                         line.internal_barcode = order_barcode
                     else:
-                        line.internal_barcode = product["internal_barcode"]
+                        product["internal_barcode"] = line.internal_barcode 
                     order["products"].append(product)
             order_with_delivery_service[delivery_service]["order_ids"].append(order)
                         
