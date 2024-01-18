@@ -193,7 +193,7 @@ class ShipmentOrderInherit(models.Model):
 
 
     @api.model
-    def create_xlsx(self):
+    def create_xlsx(self, id):
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
         logging.info(self)
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")

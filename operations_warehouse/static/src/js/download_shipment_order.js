@@ -12,9 +12,19 @@ export class PrintAction extends Component {
     }
     loadData(){
         let self = this;
+		let recordId = this.getContext().active_id;
+		console.log("====================")
+		console.log(recordId)
+		console.log("====================")
+
          rpc.query({
             model: 'bossa.shipment.orders',
             method: 'create_xlsx',
+			 args: [
+				 {
+					 id: recordId
+				 }
+			 ]
         }).then(
 			function (result) {
 				console.log("================================")
