@@ -11,10 +11,12 @@ export class PrintAction extends Component {
         })
     }
     loadData(){
-        let self = this;
-		let recordId = this.props.context.active_id
 		console.log("====================")
-		console.log(self)
+		console.log(this)
+		console.log("====================")
+        let self = this;
+		let recordId = self.props.context.active_id
+		console.log("====================")
 		console.log(recordId)
 		console.log("====================")
 
