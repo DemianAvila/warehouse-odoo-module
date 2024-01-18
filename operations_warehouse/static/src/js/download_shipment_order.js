@@ -11,9 +11,7 @@ export class PrintAction extends Component {
         })
     }
     loadData(){
-		console.log("====================")
-		console.log(this)
-		console.log("====================")
+
         let self = this;
 		let recordId = self.props.action.context.active_id
 		console.log("====================")
