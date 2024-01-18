@@ -195,7 +195,7 @@ class ShipmentOrderInherit(models.Model):
     @api.model
     def create_xlsx(self):
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
-        logging.info(self.shipment_data)
+        logging.info(self)
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
         excel_data = base64.b64encode(
             printable_order.printable_order(self.shipment_data, self.order_title)
