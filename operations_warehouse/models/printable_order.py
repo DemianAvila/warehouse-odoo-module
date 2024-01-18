@@ -63,7 +63,7 @@ def printable_order(data, title):
                 Code128(str(product["internal_barcode"]), writer=ImageWriter()).write(rv)
                 logging.info("==============================")
                 rv.seek(0)
-                logging.info(rv)
+                logging.info(rv.read())
                 logging.info("==============================")
                 rv.seek(0)
                 h, w, _ = cv2.imdecode(np.frombuffer(rv.read(), np.uint8), 0).shape
