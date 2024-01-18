@@ -17,7 +17,8 @@
             "xlsxwriter",
             "io",
             "python-barcode",
-            "opencv-python"
+            "opencv-python",
+            "numpy"
         ]
     },
     'assets': {
