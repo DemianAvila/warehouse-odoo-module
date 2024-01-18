@@ -63,10 +63,11 @@ def printable_order(data, title):
                 Code128(str(product["internal_barcode"]), writer=ImageWriter()).write(rv)
                 logging.info("==============================")
                 rv.seek(0)
-                logging.info(rv.read())
+                buffer_array = np.frombuffer(rv.read(), np.uint8)
+                logging.info(buffer_array)
                 logging.info("==============================")
                 rv.seek(0)
-                h, w, _ = cv2.imdecode(np.frombuffer(rv.read(), np.uint8), 0).shape
+                h, w, _ = cv2.imdecode(buffer_array, 0).shape
                 larger_img_height = larger_pix_amount(h, larger_img_height)
                 larger_img_width = larger_pix_amount(w, larger_img_width)
                 worksheet.insert_image(
