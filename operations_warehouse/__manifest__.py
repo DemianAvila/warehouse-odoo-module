@@ -16,7 +16,8 @@
         "python" : [
             "xlsxwriter",
             "io",
-            "python-barcode"
+            "python-barcode",
+            "opencv-python"
         ]
     },
     'assets': {
