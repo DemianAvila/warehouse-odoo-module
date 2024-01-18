@@ -37,7 +37,7 @@ def printable_order(data, title):
         for order in data[delivery]["order_ids"]:
             worksheet.merge_range(
                 f"A{current_row}:C{current_row}",
-                f"{order['id']}\t{order["marketplace"]}",
+                f"{order['id']}\t{order['marketplace']}",
                 {
                     "bold": 1,
                     "border": 1,
