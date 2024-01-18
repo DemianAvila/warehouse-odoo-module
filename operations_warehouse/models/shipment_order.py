@@ -1,4 +1,3 @@
-import logging
 from datetime import date, datetime
 from odoo import models, fields, api
 import json
@@ -20,6 +19,11 @@ class ScanerLog(models.Model):
         string = "Time Stamp"
     )
 
+    correct_scan = fields.Boolean(
+        string = "Correct",
+        default = False
+    )
+
 class ShipmentFields(models.Model):
     _inherit = "sale.order.line"
     
@@ -35,9 +39,19 @@ class ShipmentFields(models.Model):
         inverse_name = "order_line"
     )
 
-    has_been_shipped = fields.Boolean(
-        string = "Shipped",
-        default = False
+
+    internal_barcode = fields.Char(
+        string = "Internal Barcode",
+        readonly = True
+    )
+
+    life_cycle = fields.Selection(
+        selection=[
+            ("not_suplied", "Not Suplied"),
+            ('supplied', 'Supplied'),
+            ('delivered_to_the_package_company', 'Delivered To The Package Company')
+        ],
+        default = 'not_suplied'
     )
 
 class ShipmentOrderInherit(models.Model):
@@ -122,7 +136,12 @@ class ShipmentOrderInherit(models.Model):
                     product = {}
                     product["id"] = line.name
                     product["barcode"] = line.product_template_id[0].barcode if len(line.product_template_id)>0 else "Sin codigo de barras asignado"
-                    product["internal_barcode"] = order_barcode
+                    #IF THERE IS ALREADY INTERNAL BARCODE, DO NOT REASSIGN
+                    if not product["internal_barcode"]:
+                        product["internal_barcode"] = order_barcode
+                        line.internal_barcode = order_barcode
+                    else:
+                        line.internal_barcode = product["internal_barcode"]
                     order["products"].append(product)
             order_with_delivery_service[delivery_service]["order_ids"].append(order)
                         
