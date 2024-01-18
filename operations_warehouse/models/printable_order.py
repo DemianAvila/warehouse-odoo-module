@@ -62,7 +62,7 @@ def printable_order(data, title):
                 rv = BytesIO()
                 Code128(str(product["internal_barcode"]), writer=ImageWriter()).write(rv)
                 logging.info("==============================")
-                logging.info(np.frombuffer(rv.read(), np.uint8))
+                logging.info(rv.read())
                 logging.info("==============================")
                 h, w, _ = cv2.imdecode(np.frombuffer(rv.read(), np.uint8), 0).shape
                 larger_img_height = larger_pix_amount(h, larger_img_height)
