@@ -22,41 +22,49 @@ def printable_order(data, title):
     workbook = xlsxwriter.Workbook(output)
     worksheet = workbook.add_worksheet()
     current_row = 1
-    worksheet.write(f"A{current_row}", title)
+    title_format = workbook.add_format(
+        {
+            "bold": 1,
+            "border": 1,
+            "align": "center",
+            "valign": "vcenter",
+        }
+    )
 
-    current_row += 1
+    order_format = workbook.add_format(
+        {
+            "border": 1,
+            "align": "center",
+            "valign": "vcenter",
+        }
+    )
+
+    worksheet.merge_range(
+        f"A{current_row}:C{current_row + 2}",
+        title,
+        title_format
+    )
+
+    current_row += 3
     for delivery in data.keys():
         worksheet.merge_range(
-            f"A{current_row}:C{current_row+2}",
+            f"A{current_row}:C{current_row}",
             delivery,
-            {
-                "bold": 1,
-                "border": 1,
-                "align": "center",
-                "valign": "vcenter",
-            })
-        current_row += 3
+            title_format
+        )
+        current_row += 1
         for order in data[delivery]["order_ids"]:
             worksheet.merge_range(
                 f"A{current_row}:C{current_row}",
                 f"{order['id']}\t{order['marketplace']}",
-                {
-                    "bold": 1,
-                    "border": 1,
-                    "align": "center",
-                    "valign": "vcenter",
-                }
+                order_format
             )
             current_row += 1
             for product in order["products"]:
                 worksheet.merge_range(
                     f"A{current_row}:B{current_row}",
                     product["id"],
-                    {
-                        "border": 1,
-                        "align": "center",
-                        "valign": "vcenter",
-                    }
+                    order_format
                 )
                 # Write to a file-like object:
                 rv = BytesIO()
@@ -76,7 +84,6 @@ def printable_order(data, title):
                         "y_scale": 0.25,
                         "x_offset": 5,
                         "y_offset": 5,
-                        "border": 1
                     }
                 )
                 barcode_rows.append(current_row)
