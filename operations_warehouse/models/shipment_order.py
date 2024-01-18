@@ -196,9 +196,9 @@ class ShipmentOrderInherit(models.Model):
     def create_xlsx(self, rec_id):
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
         logging.info(rec_id)
-        logging.info(self.env["bossa.shipment.orders"].search([("id", "=", int(rec_id))]))
+        logging.info(self.env["bossa.shipment.orders"].search([("id", "=", rec_id)]))
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
-        rec = self.env["bossa.shipment.orders"].search([("id", "=", int(rec_id))])[0]
+        rec = self.env["bossa.shipment.orders"].search([("id", "=", rec_id)])[0]
         excel_data = base64.b64encode(
             printable_order.printable_order(rec.shipment_data, rec.order_title)
         ).decode('utf-8')
