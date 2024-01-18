@@ -43,6 +43,24 @@ class ShipmentFields(models.Model):
 class ShipmentOrderInherit(models.Model):
     _inherit = "bossa.shipment.orders"
 
+    sell_orders = fields.One2many(
+        string="Sell orders",
+        comodel_name="sale.order",
+        inverse_name="shipment_order"
+    )
+
+    shipment_table = fields.Text(
+        readonly=True
+    )
+
+    shipment_data = fields.Char()
+
+    is_error = fields.Boolean(
+        default=False
+    )
+
+    error_code = fields.Char()
+    
     def null_date(sefl,date):
         if not date:
             return True
@@ -171,8 +189,10 @@ class ShipmentOrderInherit(models.Model):
         
         order = self.search_sale_orders(self.datetime_from, self.datetime_until)
         self.shipment_table = self.format_datatable(order)
-        logging.info(json.dumps(order))
         self.shipment_data = str(json.dumps(order))
+        logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
+        logging.info(self.shipment_data)
+        logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
 
     @api.model
     def create_xlsx(self):
@@ -191,21 +211,5 @@ class ShipmentOrderInherit(models.Model):
 
 
 
-    sell_orders = fields.One2many(
-        string = "Sell orders",
-        comodel_name = "sale.order",
-        inverse_name = "shipment_order"
-    )
 
-    shipment_table = fields.Text(
-        readonly = True
-    )
-
-    shipment_data = fields.Char()
-    
-    is_error = fields.Boolean(
-        default = False
-    )
-
-    error_code = fields.Char()
 
