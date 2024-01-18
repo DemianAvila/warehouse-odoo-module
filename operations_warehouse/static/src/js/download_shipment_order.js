@@ -15,12 +15,12 @@ export class PrintAction extends Component {
          rpc.query({
             model: 'bossa.shipment.orders',
             method: 'create_xlsx',
+			args: ["1"]
         }).then(
 			function (result) {
 				console.log("================================")
 				console.log(result)
 				console.log("================================")
-
 				const link = document.createElement("a");
 				link.href = result;
 				link.download = "ShipmentOrder.xlsx"
