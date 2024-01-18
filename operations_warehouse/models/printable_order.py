@@ -5,15 +5,7 @@ from barcode.writer import ImageWriter
 import json
 import logging
 def printable_order(data, title):
-    logging.info("=====================")
-    logging.info("1")
-    logging.info(data)
-    logging.info(title)
-    logging.info("=====================")
     data = json.loads(data)
-    logging.info("=====================")
-    logging.info("2")
-    logging.info("=====================")
     output = BytesIO()
     workbook = xlsxwriter.Workbook(output)
     worksheet = workbook.add_worksheet()
@@ -32,7 +24,7 @@ def printable_order(data, title):
                 # Write to a file-like object:
                 rv = BytesIO()
                 Code128(str(product["internal_barcode"]), writer=ImageWriter()).write(rv)
-                worksheet.insert_image(f"A{current_row}", "a", {"image_data": rv})
+                worksheet.insert_image(f"B{current_row}", "a", {"image_data": rv})
                 current_row += 1
 
     workbook.close()
