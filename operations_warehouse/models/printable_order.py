@@ -1,7 +1,7 @@
 import logging
 from io import BytesIO
 import xlsxwriter
-from barcode import Code128, barcode
+import barcode
 from barcode.writer import ImageWriter
 import json
 import cv2
@@ -71,7 +71,7 @@ def printable_order(data, title):
                 # Write to a file-like object:
                 rv = BytesIO()
                 barcode.default_writer_options['write_text'] = False
-                Code128(str(product["internal_barcode"]), writer=ImageWriter()).write(rv)
+                barcode.Code128(str(product["internal_barcode"]), writer=ImageWriter()).write(rv)
                 rv.seek(0)
                 buffer_array = np.frombuffer(rv.read(), np.uint8)
                 h, w = cv2.imdecode(buffer_array, 0).shape
