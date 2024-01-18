@@ -1,7 +1,7 @@
 import logging
 from io import BytesIO
 import xlsxwriter
-from barcode import Code128
+from barcode import Code128, barcode
 from barcode.writer import ImageWriter
 import json
 import cv2
@@ -70,6 +70,7 @@ def printable_order(data, title):
                 )
                 # Write to a file-like object:
                 rv = BytesIO()
+                barcode.default_writer_options['write_text'] = False
                 Code128(str(product["internal_barcode"]), writer=ImageWriter()).write(rv)
                 rv.seek(0)
                 buffer_array = np.frombuffer(rv.read(), np.uint8)
@@ -93,7 +94,7 @@ def printable_order(data, title):
     worksheet.set_column(
         first_col = 2,
         last_col = 2,
-        width = ((larger_img_width/4)+10)
+        width = larger_img_width
     )
     worksheet.set_column(
         first_col=1,
