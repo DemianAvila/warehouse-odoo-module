@@ -86,7 +86,8 @@ def printable_order(data, title):
                 current_row += 1
 
     worksheet.set_column('B:B', (larger_img_width/4)+10)
-    worksheet.set_row((x for x in barcode_rows), (larger_img_height/4)+10)
+    for x in barcode_rows:
+        worksheet.set_row(x, (larger_img_height/4)+10)
 
     workbook.close()
 
