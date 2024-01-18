@@ -195,10 +195,11 @@ class ShipmentOrderInherit(models.Model):
     @api.model
     def create_xlsx(self, id):
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
-        logging.info(self)
+        logging.info(self.env["bossa.shipment.orders"].search([("id", "=", id)]))
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
+        rec = self.env["bossa.shipment.orders"].search([("id", "=", id)])[0]
         excel_data = base64.b64encode(
-            printable_order.printable_order(self.shipment_data, self.order_title)
+            printable_order.printable_order(rec.shipment_data, rec.order_title)
         ).decode('utf-8')
 
         excel_mediatype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

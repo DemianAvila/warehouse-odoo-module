@@ -14,9 +14,6 @@ export class PrintAction extends Component {
 
         let self = this;
 		let recordId = self.props.action.context.active_id
-		console.log("====================")
-		console.log(recordId)
-		console.log("====================")
 
          rpc.query({
             model: 'bossa.shipment.orders',
