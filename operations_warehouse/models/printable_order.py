@@ -3,8 +3,15 @@ import xlsxwriter
 from barcode import Code128
 from barcode.writer import ImageWriter
 import json
+import logging
 def printable_order(data, title):
+    logging.info("=====================")
+    logging.info("1")
+    logging.info("=====================")
     data = json.loads(data)
+    logging.info("=====================")
+    logging.info("2")
+    logging.info("=====================")
     output = BytesIO()
     workbook = xlsxwriter.Workbook(output)
     worksheet = workbook.add_worksheet()

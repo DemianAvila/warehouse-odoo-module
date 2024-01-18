@@ -15,7 +15,6 @@ export class PrintAction extends Component {
          rpc.query({
             model: 'bossa.shipment.orders',
             method: 'create_xlsx',
-			args: ["1"]
         }).then(
 			function (result) {
 				console.log("================================")
