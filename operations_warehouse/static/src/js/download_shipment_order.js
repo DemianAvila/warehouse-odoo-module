@@ -6,7 +6,7 @@ var rpc = require('web.rpc');
 var PrintAction = AbstractAction.extend(
 	{
 		start: function() {
-			this._super.apply(this);
+			this._super.apply(this, arguments);
 			console.log(this)
 
 			rpc.query(
