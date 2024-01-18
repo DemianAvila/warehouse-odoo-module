@@ -1,5 +1,3 @@
-/** @odoo-module */
-import {loadBundle} from "@web/core/assets";
 var AbstractAction = require('web.AbstractAction');
 var core = require('web.core');
 var rpc = require('web.rpc');
@@ -7,13 +5,11 @@ var PrintAction = AbstractAction.extend(
 	{
 		start: function() {
 			this._super.apply(this, arguments);
-			console.log(this)
-
 			rpc.query(
 				{
 					model: 'bossa.shipment.orders',
 					method: 'create_xlsx',
-					args: [""]
+					args: [{}]
 				}
 			).then(
 				function (result) {
@@ -37,3 +33,4 @@ var PrintAction = AbstractAction.extend(
 	
 core.action_registry.add('print_action', PrintAction);
 return PrintAction;
+
