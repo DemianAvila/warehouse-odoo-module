@@ -70,9 +70,10 @@ def printable_order(data, title):
                 larger_img_height = larger_pix_amount(h, larger_img_height)
                 larger_img_width = larger_pix_amount(w, larger_img_width)
                 worksheet.insert_image(
-                    f"C{current_row}",
-                    "a",
-                    {
+                    col = "C",
+                    row= str(current_row),
+                    filename = "a",
+                    options = {
                         "image_data": rv,
                         "x_scale": 0.25,
                         "y_scale": 0.25,
