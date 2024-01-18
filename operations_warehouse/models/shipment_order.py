@@ -1,6 +1,6 @@
 import logging
 from datetime import date, datetime
-from odoo import models, fields
+from odoo import models, fields, api
 import json
 from . import printable_order
 import base64
@@ -171,8 +171,9 @@ class ShipmentOrderInherit(models.Model):
         
         order = self.search_sale_orders(self.datetime_from, self.datetime_until)
         self.shipment_table = self.format_datatable(order)
-        self.shipment_data = json.dumps(order)    
+        self.shipment_data = json.dumps(order)
 
+    @api.model
     def create_xlsx(self):
         excel_data = base64.b64encode(
             printable_order.printable_order(self.shipment_data, self.order_title)
