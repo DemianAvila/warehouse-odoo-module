@@ -9,7 +9,7 @@ def printable_order(data, title):
     logging.info("1")
     logging.info(data)
     logging.info("=====================")
-    data = json.load(data)
+    data = json.loads(data)
     logging.info("=====================")
     logging.info("2")
     logging.info("=====================")
