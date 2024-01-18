@@ -21,9 +21,6 @@ export class PrintAction extends Component {
 			args: [recordId]
         }).then(
 			function (result) {
-				console.log("================================")
-				console.log(result)
-				console.log("================================")
 				const link = document.createElement("a");
 				link.href = result;
 				link.download = "ShipmentOrder.xlsx"
