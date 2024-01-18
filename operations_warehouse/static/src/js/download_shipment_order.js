@@ -8,12 +8,13 @@ var PrintAction = AbstractAction.extend(
 		start: function() {
 			this._super.apply(this, arguments);
 			console.log("BEFORE RPC")
+			console.log(this)
 
 			rpc.query(
 				{
 					model: 'bossa.shipment.orders',
 					method: 'create_xlsx',
-					args: [[]]
+					args: [this.res_id]
 				}
 			).then(
 				function (result) {
