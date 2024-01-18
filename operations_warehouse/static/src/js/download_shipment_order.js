@@ -15,7 +15,7 @@ export class PrintAction extends Component {
 		console.log(this)
 		console.log("====================")
         let self = this;
-		let recordId = self.props.context.active_id
+		let recordId = self.props.action.context.active_id
 		console.log("====================")
 		console.log(recordId)
 		console.log("====================")
