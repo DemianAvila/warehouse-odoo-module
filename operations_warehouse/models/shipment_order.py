@@ -171,7 +171,7 @@ class ShipmentOrderInherit(models.Model):
         
         order = self.search_sale_orders(self.datetime_from, self.datetime_until)
         self.shipment_table = self.format_datatable(order)
-        self.shipment_data = json.dumps(order)
+        self.shipment_data = json.dump(order)
 
     @api.model
     def create_xlsx(self):
