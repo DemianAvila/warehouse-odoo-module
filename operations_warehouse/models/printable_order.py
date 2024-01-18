@@ -73,9 +73,7 @@ def printable_order(data, title):
                     f"C{current_row}",
                     "a",
                     {
-                        "image_data": rv
-                    },
-                    {
+                        "image_data": rv,
                         "x_scale": 0.25,
                         "y_scale": 0.25,
                         "x_offset": 5,
