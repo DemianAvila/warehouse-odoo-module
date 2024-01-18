@@ -7,8 +7,20 @@ class DownloadShipmentGuides(models.TransientModel):
         comodel_name = 'scanner.check.view',
         string = 'Scanner View'
     )
+
+class ShipmentOrders(models.TransientModel):
+    _name = 'shipment.orders'
+    name = fields.Char(
+        string = 'Shipment Order Name',
+        readonly = True
+    )
+
 class ScannerCheckLifecycle(models.TransientModel):
     _name = 'scanner.check.lifecycle'
+
+    shipment_order_id = fields.Many2one(
+        comodel_name = 'shipment.orders'
+    )
 
     internal_barcode = fields.Char(
         string = 'Internal Barcode'
@@ -56,6 +68,21 @@ class ScannerCheckLifecycle(models.TransientModel):
         readonly = True
     )
 
+    def get_sale_lines_ids(self):
+        ids = []
+        shipment_order= self.env["bossa.shipment.orders"].search(
+            [
+                ("order_title", "=", self.shipment_order_id.name)
+            ]
+        )
+
+        sell_orders = shipment_order.sell_orders
+        for sell_order in sell_orders:
+            for order_line in sell_order.order_line:
+                ids.append(order_line.id)
+
+        return ids
+
     @api.onchange("internal_barcode")
     def _onchange_internal_barcode(self):
         #IF THERE'S A BAR CODE TO SEARCH
@@ -63,7 +90,8 @@ class ScannerCheckLifecycle(models.TransientModel):
             #SEARCH THE INTERNAL BARCODE AND GET THE INFO
             sell_line = self.env['sale.order.line'].search(
                 [
-                    ('internal_barcode', '=', self.internal_barcode)
+                    ('internal_barcode', '=', self.internal_barcode),
+                    ('id', 'in', self.get_sale_lines_ids())
                 ]
             )
             #MUST BE AT LEAST 1

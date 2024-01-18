@@ -80,6 +80,6 @@
   <menuitem 
     action="shipment_order_model_action" 
     id="shipment_order_menu" 
-    name="Shipment Orders" 
+    name="Warehouse"
     sequence="1"/>
 </odoo>

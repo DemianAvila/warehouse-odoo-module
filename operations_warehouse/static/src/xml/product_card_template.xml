@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="operations_warehouse.product_id">
+        <div class="w-100 container p-3">
+            <div class="row">
+                <div class="col">
+                    <div t-if="not o.image"
+                         class="p-3 mb-2 bg-secondary text-white">
+                        <p>
+                            Sin imagen disponible
+                        </p>
+                    </div>
+                     <img t-if="o.image"
+                          t-attf-src="data:image/*;base64,{{o.image}}"
+                          align="center"/>
+                </div>
+                <div class="col container">
+                    <div class="row">
+                        <div class="col">
+                            <h1>
+                                <span t-field="o.product_name"/>
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <h2>
+                                <span t-field="o.status_of_product"/>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <h3>
+                                <span t-field="o.order_id"/>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>
+                                <span t-field="o.marketplace"/>
+                            </p>
+                        </div>
+                        <div class="col">
+                            <p>
+                                <span t-field="o.delivery_company"/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

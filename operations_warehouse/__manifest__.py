@@ -7,7 +7,8 @@
     "depends": ['base', 'sale_management'],
     'data': [
         "views/shipment_order_views.xml",
-        "views/sale_order_wizard.xml"
+        "views/sale_order_wizard.xml",
+        "views/shipment_order_views.xml"
     ],
     'license': 'OPL-1',
     'installable': True,
@@ -25,6 +26,7 @@
         'web.assets_backend': [
             "operations_warehouse/static/src/xml/empty_template.xml",
             "operations_warehouse/static/src/js/download_shipment_order.js",
+            "operations_warehouse/static/src/xml/product_card_template.xml",
         ],
     },
 }
