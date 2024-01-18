@@ -77,9 +77,17 @@
     <field name="view_mode">tree,form</field>
   </record>
 
+  <menuitem
+    id="shipment_order_menu"
+    name="Shipment orders"
+    parent="operations_warehouse.shipment_order_menu"
+    action="shipment_order_model_action"
+    view_mode="form"
+    model="bossa.shipment.orders"
+  />
+
   <menuitem 
-    action="shipment_order_model_action" 
-    id="shipment_order_menu" 
+    id="shipment_order_menu"
     name="Warehouse"
     sequence="1"/>
 </odoo>
