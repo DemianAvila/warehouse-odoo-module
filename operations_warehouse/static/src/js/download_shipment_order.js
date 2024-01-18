@@ -33,6 +33,6 @@ export class PrintAction extends Component {
 		);
 	};
 }
-
+PrintAction.template = "PrintAction"
 actionRegistry.add('print_action', PrintAction);
 
