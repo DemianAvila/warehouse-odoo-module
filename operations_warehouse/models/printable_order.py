@@ -78,12 +78,12 @@ def printable_order(data, title):
                 larger_img_width = larger_pix_amount(w, larger_img_width)
                 worksheet.insert_image(
                     col = 2,
-                    row= current_row,
+                    row= current_row-1,
                     filename = "a",
                     options = {
                         "image_data": rv,
-                        "x_scale": 0.4,
-                        "y_scale": 0.4,
+                        "x_scale": 1,
+                        "y_scale": 0.3,
                     }
                 )
                 barcode_rows.append(current_row)
