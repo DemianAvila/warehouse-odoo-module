@@ -64,10 +64,9 @@ def printable_order(data, title):
                 logging.info("==============================")
                 rv.seek(0)
                 buffer_array = np.frombuffer(rv.read(), np.uint8)
-                logging.info(buffer_array)
+                logging.info(cv2.imdecode(buffer_array, 0).shape)
                 logging.info("==============================")
-                rv.seek(0)
-                h, w, _ = cv2.imdecode(buffer_array, 0).shape
+                h, w, c = cv2.imdecode(buffer_array, 0).shape
                 larger_img_height = larger_pix_amount(h, larger_img_height)
                 larger_img_width = larger_pix_amount(w, larger_img_width)
                 worksheet.insert_image(
@@ -87,8 +86,8 @@ def printable_order(data, title):
                 barcode_rows.append(current_row)
                 current_row += 1
 
-    worksheet.set_column('B:B', larger_img_width+10)
-    worksheet.set_row((x for x in barcode_rows), larger_img_height+10)
+    worksheet.set_column('B:B', (larger_img_width/4)+10)
+    worksheet.set_row((x for x in barcode_rows), (larger_img_height/4)+10)
 
     workbook.close()
 
