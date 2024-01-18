@@ -16,6 +16,7 @@ def larger_pix_amount(first, comp):
 def printable_order(data, title):
     larger_img_width = 0
     larger_img_height = 0
+    larger_text = 0
     barcode_rows = []
     data = json.loads(data)
     output = BytesIO()
@@ -61,6 +62,7 @@ def printable_order(data, title):
             )
             current_row += 1
             for product in order["products"]:
+                larger_text = larger_pix_amount(larger_text, len(product["id"]))
                 worksheet.merge_range(
                     f"A{current_row}:B{current_row}",
                     product["id"],
@@ -80,10 +82,8 @@ def printable_order(data, title):
                     filename = "a",
                     options = {
                         "image_data": rv,
-                        "x_scale": 0.25,
-                        "y_scale": 0.25,
-                        "x_offset": 5,
-                        "y_offset": 5,
+                        "x_scale": 0.4,
+                        "y_scale": 0.4,
                     }
                 )
                 barcode_rows.append(current_row)
@@ -95,9 +95,12 @@ def printable_order(data, title):
         last_col = 2,
         width = ((larger_img_width/4)+10)
     )
-    logging.info("==============================")
-    logging.info(barcode_rows)
-    logging.info("==============================")
+    worksheet.set_column(
+        first_col=1,
+        last_col=1,
+        width=larger_text
+    )
+
     for x in barcode_rows:
         worksheet.set_row(
             row = x-1,
