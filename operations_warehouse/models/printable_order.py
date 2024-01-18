@@ -93,7 +93,7 @@ def printable_order(data, title):
     worksheet.set_column(
         first_col = 2,
         last_col = 2,
-        width = larger_img_width/4
+        width = larger_img_width/6
     )
     worksheet.set_column(
         first_col=1,
