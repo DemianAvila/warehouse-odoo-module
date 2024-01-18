@@ -66,7 +66,7 @@ def printable_order(data, title):
                 buffer_array = np.frombuffer(rv.read(), np.uint8)
                 logging.info(cv2.imdecode(buffer_array, 0).shape)
                 logging.info("==============================")
-                h, w, c = cv2.imdecode(buffer_array, 0).shape
+                h, w = cv2.imdecode(buffer_array, 0).shape
                 larger_img_height = larger_pix_amount(h, larger_img_height)
                 larger_img_width = larger_pix_amount(w, larger_img_width)
                 worksheet.insert_image(
