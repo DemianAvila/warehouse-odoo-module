@@ -98,7 +98,7 @@ def printable_order(data, title):
     worksheet.set_column(
         first_col=1,
         last_col=1,
-        width=larger_text
+        width=larger_text /4
     )
 
     for x in barcode_rows:
