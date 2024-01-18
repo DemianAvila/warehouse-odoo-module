@@ -12,8 +12,10 @@ export class PrintAction extends Component {
     }
     loadData(){
         let self = this;
+		let recordId = this.props.context.active_id
 		console.log("====================")
 		console.log(self)
+		console.log(recordId)
 		console.log("====================")
 
          rpc.query({
