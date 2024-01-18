@@ -67,7 +67,7 @@ def printable_order(data, title):
                 larger_img_height = larger_pix_amount(h, larger_img_height)
                 larger_img_width = larger_pix_amount(w, larger_img_width)
                 worksheet.insert_image(
-                    col = 3,
+                    col = 2,
                     row= current_row,
                     filename = "a",
                     options = {
@@ -82,12 +82,20 @@ def printable_order(data, title):
                 barcode_rows.append(current_row)
                 current_row += 1
 
-    worksheet.set_column('B:B', (larger_img_width/4)+10)
+
+    worksheet.set_column(
+        first_col = 2,
+        last_col = 2,
+        width = ((larger_img_width/4)+10)
+    )
     logging.info("==============================")
     logging.info(barcode_rows)
     logging.info("==============================")
     for x in barcode_rows:
-        worksheet.set_row(x, (larger_img_height/4)+10)
+        worksheet.set_row(
+            row = x-1,
+            height = ((larger_img_height/4)+10)
+        )
 
     workbook.close()
 
