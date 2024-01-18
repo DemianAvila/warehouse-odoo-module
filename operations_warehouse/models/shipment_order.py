@@ -195,6 +195,7 @@ class ShipmentOrderInherit(models.Model):
     @api.model
     def create_xlsx(self, rec_id):
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
+        logging.info(rec_id)
         logging.info(self.env["bossa.shipment.orders"].search([("id", "=", int(rec_id))]))
         logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
         rec = self.env["bossa.shipment.orders"].search([("id", "=", int(rec_id))])[0]
