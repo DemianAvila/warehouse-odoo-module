@@ -60,7 +60,7 @@ class ShipmentOrderInherit(models.Model):
     )
 
     error_code = fields.Char()
-    
+
     def null_date(sefl,date):
         if not date:
             return True
@@ -190,12 +190,13 @@ class ShipmentOrderInherit(models.Model):
         order = self.search_sale_orders(self.datetime_from, self.datetime_until)
         self.shipment_table = self.format_datatable(order)
         self.shipment_data = str(json.dumps(order))
-        logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
-        logging.info(self.shipment_data)
-        logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
+
 
     @api.model
     def create_xlsx(self):
+        logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
+        logging.info(self.shipment_data)
+        logging.info("AAAAAAAAAAAAAAAAAAAAAAAA00")
         excel_data = base64.b64encode(
             printable_order.printable_order(self.shipment_data, self.order_title)
         ).decode('utf-8')
