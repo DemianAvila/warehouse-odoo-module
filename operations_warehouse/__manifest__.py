@@ -21,6 +21,7 @@
     },
     'assets': {
         'web.assets_backend': [
+            "operations_warehouse/static/src/xml/empty_template.xml",
             "operations_warehouse/static/src/js/download_shipment_order.js",
         ],
     },
