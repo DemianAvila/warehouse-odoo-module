@@ -61,11 +61,8 @@ def printable_order(data, title):
                 # Write to a file-like object:
                 rv = BytesIO()
                 Code128(str(product["internal_barcode"]), writer=ImageWriter()).write(rv)
-                logging.info("==============================")
                 rv.seek(0)
                 buffer_array = np.frombuffer(rv.read(), np.uint8)
-                logging.info(cv2.imdecode(buffer_array, 0).shape)
-                logging.info("==============================")
                 h, w = cv2.imdecode(buffer_array, 0).shape
                 larger_img_height = larger_pix_amount(h, larger_img_height)
                 larger_img_width = larger_pix_amount(w, larger_img_width)
@@ -86,6 +83,9 @@ def printable_order(data, title):
                 current_row += 1
 
     worksheet.set_column('B:B', (larger_img_width/4)+10)
+    logging.info("==============================")
+    logging.info(barcode_rows)
+    logging.info("==============================")
     for x in barcode_rows:
         worksheet.set_row(x, (larger_img_height/4)+10)
 
