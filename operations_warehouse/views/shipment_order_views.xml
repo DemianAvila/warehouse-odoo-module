@@ -86,7 +86,7 @@
   />
 
   <menuitem 
-    id="shipment_order_menu"
+    id="warehouse_menu"
     name="Warehouse"
     sequence="1"/>
 </odoo>
