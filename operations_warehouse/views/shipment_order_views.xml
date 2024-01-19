@@ -82,7 +82,6 @@
     name="Shipment orders"
     parent="operations_warehouse.shipment_order_menu"
     action="shipment_order_model_action"
-    view_mode="form"
     model="bossa.shipment.orders"
   />
 
