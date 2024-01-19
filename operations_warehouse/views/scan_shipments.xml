@@ -42,7 +42,7 @@
   <menuitem
     id="scan_shipment_order_menu"
     name="Scan shipment "
-    parent="operations_warehouse.shipment_order_menu"
+    parent="operations_warehouse.warehouse_menu"
     action="scan_shipment_order_action"
     model="scanner.check.lifecycle"
   />

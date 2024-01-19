@@ -80,7 +80,7 @@
   <menuitem
     id="shipment_order_menu"
     name="Shipment orders"
-    parent="operations_warehouse.shipment_order_menu"
+    parent="operations_warehouse.warehouse_menu"
     action="shipment_order_model_action"
     model="bossa.shipment.orders"
   />
