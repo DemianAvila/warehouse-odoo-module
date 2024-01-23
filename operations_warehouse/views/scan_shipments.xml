@@ -13,14 +13,12 @@
             </h1>
           </div>
           <group>
-            <field name="internal_barcode" attrs="{'invisible': [('shipment_order_id', '=', False)]}" on_change="scannedInternalBarcode"/>
+            <field name="internal_barcode" attrs="{'invisible': [('shipment_order_id', '=', False)]}" on_change="scannedInternalBarcode" widget="product_card"/>
             <field name="internal_barcode_exists" invisible="1"/>}
           </group>
             <div class="p-3 mb-2 bg-danger text-white" attrs="{'invisible': [('internal_barcode_exists', '=', True)]}">
               El codigo escaneado no corresponde con esta orden de envio
             </div>
-            <div t-name="operations_warehouse.ProductCard"
-               attrs="{'invisible': [('internal_barcode_exists', '=', False)]}"/>
           <group>
             <field name="product_barcode" attrs="{'invisible': [('shipment_order_id', '=', False)]}"/>
           </group>
