@@ -30,25 +30,10 @@ export class ProductCard extends Component {
     		marketplace: "",
     		delivery_company: ""
 		});
-        onMounted(()=>{
-            console.log("the widget has been mounted")
-        });
     }
 
 
-	start() {
-        super.start();
-		console.log("Component.started")
-		this.on('scanned_internal', this, this._onCustomEvent);
-    }
 
-	 _onCustomEvent(ev) {
-		console.log("It triggers the event")
-        // Handle the custom_event and access the data
-        const eventData = ev.data;
-        console.log('Custom Event Received in Component:', eventData);
-
-    }
 
 }
 
