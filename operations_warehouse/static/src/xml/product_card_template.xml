@@ -48,8 +48,8 @@
                             </p>
                         </div>
                     </div>-->
-                    <t t-foreach="docs" t-as="doc">
-                        <span t-field="doc.shipment_order_id" />
+                    <t t-foreach="docs" t-as="doc" t-key="doc.id">
+                        <p t-raw="doc.shipment_order_id"></p>
                         <p>Hello, this is a test</p>
                     </t>
 
