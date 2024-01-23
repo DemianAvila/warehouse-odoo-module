@@ -3,7 +3,7 @@
     <t t-name="operations_warehouse.product_id" owl="1">
         <t t-foreach="docs" t-as="doc" t-key="doc.id">
             <div class="col bg-success">
-                <p t-raw="doc.shipment_order_id"></p>
+                <p t-raw="doc.product_name"></p>
                 <p>Hello, this is a test</p>
             </div>
         </t>
