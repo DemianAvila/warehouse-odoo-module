@@ -2,7 +2,7 @@
 <templates xml:space="preserve">
     <t t-name="operations_warehouse.product_id" owl="1">
         <div class="col bg-success">
-            <p t-esc="widget.datacd"></p>
+            <p t-esc="widget"></p>
             <p>Hello, this is a test</p>
         </div>
     </t>

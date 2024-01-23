@@ -1,6 +1,6 @@
 /**@odoo-module */
 const FormController = require('web.FormController');
-const { Component, useState } = owl;
+const { Component, useState, onMounted } = owl;
 const core = require('web.core');
 
 export class InternalCodeListener extends FormController{
@@ -30,6 +30,13 @@ export class ProductCard extends Component {
     		delivery_company: ""
 		});
 	}
+
+	setup(){
+        super.setup(...arguments);
+        onMounted(()=>{
+            console.log("the widget has been mounted")
+        })
+    }
 
 	start() {
         super.start();
