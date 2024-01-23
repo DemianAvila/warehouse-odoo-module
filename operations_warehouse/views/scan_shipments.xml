@@ -41,7 +41,7 @@
  <menuitem
     id="shipment_order_supply"
     name="Supply shipment orders"
-    parent="operations_warehouse.shipment_order_scan"
+    parent="shipment_order_scan"
     action="scan_shipment_order_action"
     sequence="15"/>
 

@@ -80,15 +80,16 @@
   <menuitem
     id="shipment_order_create"
     name="Create shipment orders"
-    parent="operations_warehouse.shipment_order_menu"
+    parent="shipment_order_menu"
     action="shipment_order_model_action"
     sequence="5"/>
 
-  <menuitem
-    id="shipment_order_menu"
-    name="Shipment orders"
-    parent="operations_warehouse.warehouse_menu"
-    sequence="2"/>
+
+
+  <menuitem id="shipment_order_menu"
+            name="Shipment orders"
+            parent='warehouse_menu'
+            sequence="2"/>
 
   <menuitem 
     id="warehouse_menu"
