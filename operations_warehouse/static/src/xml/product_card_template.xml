@@ -1,61 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="operations_warehouse.product_id" owl="1">
-        <div class="w-100 container p-3">
-            <div class="row">
-                <div class="col bg-success">
-                    <!--<div t-if="not o.image"
-                         class="p-3 mb-2 bg-secondary text-white">
-                        <p>
-                            Sin imagen disponible
-                        </p>
-                    </div>
-                     <img t-if="o.image"
-                          t-attf-src="data:image/*;base64,{{o.image}}"
-                          align="center"/>
-                </div>
-                <div class="col container">
-                    <div class="row">
-                        <div class="col">
-                            <h1>
-                                <span t-field="o.product_name"/>
-                            </h1>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <h2>
-                                <span t-field="o.status_of_product"/>
-                            </h2>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <h3>
-                                <span t-field="o.order_id"/>
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <p>
-                                <span t-field="o.marketplace"/>
-                            </p>
-                        </div>
-                        <div class="col">
-                            <p>
-                                <span t-field="o.delivery_company"/>
-                            </p>
-                        </div>
-                    </div>-->
-                    <t t-foreach="docs" t-as="doc" t-key="doc.id">
-                        <p t-raw="doc.shipment_order_id"></p>
-                        <p>Hello, this is a test</p>
-                    </t>
-
-
-                </div>
-            </div>
-        </div>
+         <t t-call="web.html_container">
+             <t t-foreach="docs" t-as="doc" t-key="doc.id">
+                 <div class="col bg-success">
+                     <p t-raw="doc.shipment_order_id"></p>
+                     <p>Hello, this is a test</p>
+                 </div>
+             </t>
+         </t>
     </t>
 </templates>
