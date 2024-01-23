@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="operations_warehouse.product_id" owl="1">
-        <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="o" t-key="o
-">
-                <div class="col bg-success">
-                    <p t-esc
-
-
-
-                               ="o.product_name"></p>
-                    <p>Hello, this is a test</p>
-                </div>
-            </t>
-        </t>
-
+        <div class="col bg-success">
+            <p t-esc="widget.datacd"></p>
+            <p>Hello, this is a test</p>
+        </div>
     </t>
 </templates>
