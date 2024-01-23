@@ -38,13 +38,20 @@
     <field name="view_mode">form</field>
   </record>
 
-  <!-- Child Menu Item -->
-  <menuitem
-    id="scan_shipment_order_menu"
-    name="Scan shipment "
-    parent="operations_warehouse.warehouse_menu"
+ <menuitem
+    id="shipment_order_supply"
+    name="Supply shipment orders"
+    parent="operations_warehouse.shipment_order_scan"
     action="scan_shipment_order_action"
-    model="scanner.check.lifecycle"
+    model="scanner.check.lifecyclecd "
+    sequence="1"
+  />
+
+  <menuitem
+    id="shipment_order_scan"
+    name="Scan shipment orders"
+    parent="operations_warehouse.warehouse_menu"
+    sequence="1"
   />
 
 </odoo>
