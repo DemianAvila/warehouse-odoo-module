@@ -38,6 +38,19 @@
     <field name="view_mode">form</field>
   </record>
 
+ <menuitem
+    id="shipment_order_supply"
+    name="Supply shipment orders"
+    parent="operations_warehouse.shipment_order_scan"
+    action="scan_shipment_order_action"
+    sequence="1"
+  />
 
+  <menuitem
+    id="shipment_order_scan"
+    name="Scan shipment orders"
+    parent="operations_warehouse.warehouse_menu"
+    sequence="1"
+  />
 
 </odoo>

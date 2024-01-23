@@ -77,7 +77,13 @@
     <field name="view_mode">tree,form</field>
   </record>
 
-
+  <menuitem
+    id="shipment_order_create"
+    name="Create shipment orders"
+    parent="operations_warehouse.shipment_order_menu"
+    action="shipment_order_model_action"
+    sequence="1"
+  />
 
   <menuitem
     id="shipment_order_menu"
