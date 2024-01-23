@@ -38,6 +38,12 @@
     <field name="view_mode">form</field>
   </record>
 
+  <menuitem
+    id="shipment_order_scan"
+    name="Scan shipment orders"
+    parent="operations_warehouse.warehouse_menu"
+    sequence="10"/>
+
  <menuitem
     id="shipment_order_supply"
     name="Supply shipment orders"
@@ -45,10 +51,6 @@
     action="scan_shipment_order_action"
     sequence="15"/>
 
-  <menuitem
-    id="shipment_order_scan"
-    name="Scan shipment orders"
-    parent="operations_warehouse.warehouse_menu"
-    sequence="10"/>
+
 
 </odoo>

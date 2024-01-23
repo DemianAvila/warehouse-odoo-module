@@ -8,7 +8,10 @@
     'data': [
         "views/shipment_order_views.xml",
         "views/sale_order_wizard.xml",
-        "views/shipment_order_views.xml"
+        "views/scan_shipments"
+        ""
+        ""
+        ".xml"
     ],
     'license': 'OPL-1',
     'installable': True,
