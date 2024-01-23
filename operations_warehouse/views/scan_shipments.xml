@@ -13,7 +13,8 @@
             </h1>
           </div>
           <group>
-            <field name="internal_barcode" attrs="{'invisible': [('shipment_order_id', '=', False)]}"/>
+            <field name="internal_barcode" attrs="{'invisible': [('shipment_order_id', '=', False)]}"/>}
+            <field name="internal_barcode_exists" invisible="1"/>}
           </group>
           <group>
             <div class="p-3 mb-2 bg-danger text-white" attrs="{'invisible': [('internal_barcode_exists', '=', False)]}">
