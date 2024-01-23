@@ -20,6 +20,7 @@ export class InternalCodeListener extends FormController{
 export class ProductCard extends Component {
 	static template = "operations_warehouse.product_id";
 	setup(){
+		console.log("access the state")
         super.setup();
 		this.state = useState({
 			product_name: "",
@@ -31,8 +32,9 @@ export class ProductCard extends Component {
 		});
         onMounted(()=>{
             console.log("the widget has been mounted")
-        })
+        });
     }
+
 
 	start() {
         super.start();
