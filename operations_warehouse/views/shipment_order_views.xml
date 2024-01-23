@@ -77,6 +77,16 @@
     <field name="view_mode">tree,form</field>
   </record>
 
+
+  <menuitem id="warehouse_menu"
+            name="Warehouse"
+            sequence="1"/>
+
+  <menuitem id="shipment_order_menu"
+            name="Shipment orders"
+            parent='warehouse_menu'
+            sequence="2"/>
+
   <menuitem
     id="shipment_order_create"
     name="Create shipment orders"
@@ -84,15 +94,4 @@
     action="shipment_order_model_action"
     sequence="5"/>
 
-
-
-  <menuitem id="shipment_order_menu"
-            name="Shipment orders"
-            parent='warehouse_menu'
-            sequence="2"/>
-
-  <menuitem 
-    id="warehouse_menu"
-    name="Warehouse"
-    sequence="1"/>
 </odoo>
