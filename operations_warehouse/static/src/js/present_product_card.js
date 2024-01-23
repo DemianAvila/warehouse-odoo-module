@@ -20,7 +20,7 @@ export class InternalCodeListener extends FormController{
 export class ProductCard extends Component {
 
 	constructor() {
-		super(...arguments);
+		super();
 		this.state = useState({
 			product_name: "",
     		image:"",
@@ -32,7 +32,7 @@ export class ProductCard extends Component {
 	}
 
 	setup(){
-        super.setup(...arguments);
+        super.setup();
         onMounted(()=>{
             console.log("the widget has been mounted")
         })
