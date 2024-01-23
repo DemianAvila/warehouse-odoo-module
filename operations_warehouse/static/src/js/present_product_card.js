@@ -32,6 +32,7 @@ export class ProductCard extends Component {
 		});
     }
 }
+ProductCard.template = 'operations_warehouse.ProductCard';
 
 
 
