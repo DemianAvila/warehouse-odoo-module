@@ -23,7 +23,7 @@ export class ProductCard extends Component {
 		console.log("access the state")
         super.setup();
 		this.state = useState({
-			product_name: "",
+			product_name: "a",
     		image:"",
     		status_of_product:"",
     		order_id:"",

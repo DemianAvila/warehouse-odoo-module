@@ -3,7 +3,7 @@
     <t t-name="operations_warehouse.product_id" owl="1">
         <div class="col bg-success">
             <p>
-                <t t-esc="state"/>
+                <t t-esc="state.product_name"/>
             </p>
             <p>Hello, this is a test</p>
         </div>
