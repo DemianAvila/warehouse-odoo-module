@@ -5,7 +5,11 @@
             <t t-foreach="docs" t-as="o" t-key="o
 ">
                 <div class="col bg-success">
-                    <p t-field="o.product_name"></p>
+                    <p t-esc
+
+
+
+                               ="o.product_name"></p>
                     <p>Hello, this is a test</p>
                 </div>
             </t>
