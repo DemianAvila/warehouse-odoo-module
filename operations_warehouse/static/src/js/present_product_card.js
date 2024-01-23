@@ -18,9 +18,9 @@ export class InternalCodeListener extends FormController{
 
 
 export class ProductCard extends Component {
-
-	constructor() {
-		super();
+	static template = "operations_warehouse.product_id";
+	setup(){
+        super.setup();
 		this.state = useState({
 			product_name: "",
     		image:"",
@@ -29,10 +29,6 @@ export class ProductCard extends Component {
     		marketplace: "",
     		delivery_company: ""
 		});
-	}
-
-	setup(){
-        super.setup();
         onMounted(()=>{
             console.log("the widget has been mounted")
         })
@@ -40,8 +36,8 @@ export class ProductCard extends Component {
 
 	start() {
         super.start();
+		console.log("Component.started")
 		this.on('scanned_internal', this, this._onCustomEvent);
-        return this._render();
     }
 
 	 _onCustomEvent(ev) {
@@ -52,15 +48,8 @@ export class ProductCard extends Component {
 
     }
 
-	render() {
-		console.log("Renders the widget")
-		return this.env.qweb.render('operations_warehouse.product_id', {
-			widget: this,
-			data: this.state,
-		});
-	}
 }
 
-ProductCard.template = 'operations_warehouse.product_id';
+
 
 
