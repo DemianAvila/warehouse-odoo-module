@@ -31,10 +31,6 @@ export class ProductCard extends Component {
     		delivery_company: ""
 		});
     }
-
-
-
-
 }
 
 
