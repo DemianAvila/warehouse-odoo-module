@@ -84,13 +84,13 @@ class ScannerCheckLifecycle(models.TransientModel):
     def default_get(self, fields):
         #visible_log("Creating a shipment scan")
         #DROP ALL THE RECORDS IN SHIPMENT ORDERS
-        for order in self.env["shipment.orders"].search([]):
-            #visible_log(f"deleting shipment order {order.name}")
-            order.unlink()
-            #visible_log("delete")
         #CREATE THEM AGAIN, BASED ON THE ACTUAL MODEL
         shipments = self.env["shipment.orders"]
-        for order in self.env["bossa.shipment.orders"].search([]):
+        writen_shipments = [s.id for s in shipments.search([])]
+        orders_in_model = self.env["bossa.shipment.orders"].search([
+            ("id", "not in", writen_shipments)
+        ])
+        for order in orders_in_model:
             #visible_log(f"creating shipment order {order.order_title}")
             shipments.create({
                 "name": order.order_title
