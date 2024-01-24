@@ -25,8 +25,10 @@ class ScannerCheckLifecycle(models.TransientModel):
     _name = 'scanner.check.lifecycle'
 
     shipment_order_id = fields.Many2one(
-        comodel_name = 'shipment.orders'
-        )
+        comodel_name = 'shipment.orders',
+        compute='on_load',
+        store=True
+    )
 
     internal_barcode = fields.Char(
         string = 'Internal Barcode'
@@ -47,8 +49,7 @@ class ScannerCheckLifecycle(models.TransientModel):
     )
 
     product_card = fields.Boolean(
-        compute='on_load',
-        store = True
+
     )
 
     image = fields.Binary()
@@ -96,11 +97,6 @@ class ScannerCheckLifecycle(models.TransientModel):
             visible_log("create")
             visible_log(self.env["shipment.orders"].search([]))
 
-    def on_load(self):
-        visible_log("Started computed")
-        for rec in self:
-            rec.product_card = True
-            self.check_shipment_values()
 
 
 
