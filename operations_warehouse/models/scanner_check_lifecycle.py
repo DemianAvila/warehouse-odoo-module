@@ -154,3 +154,6 @@ class ScannerCheckLifecycle(models.TransientModel):
                 visible_log(f"barcode does not exist")
                 self.internal_barcode_exists = False
                 self.product_card = False
+        else:
+            self.product_card = False
+            self.internal_barcode_exists = True
