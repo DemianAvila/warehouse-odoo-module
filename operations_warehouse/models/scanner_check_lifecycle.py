@@ -95,6 +95,8 @@ class ScannerCheckLifecycle(models.TransientModel):
             })
             visible_log("create")
             visible_log(self.env["shipment.orders"].search([]))
+        for rec in self:
+            rec.product_card = True
 
 
 
