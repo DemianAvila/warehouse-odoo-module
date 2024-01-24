@@ -23,10 +23,10 @@ export class ProductCard extends Component {
 		console.log("access the state")
         super.setup();
 		let self = this;
-		let recordId = self.props.action.context.active_id;
+		//let recordId = self.props.action.context.active_id;
 		console.log("==========================")
 		console.log(self)
-		console.log(recordId)
+		//console.log(recordId)
 		console.log("==========================")
 		this.state = useState({
 			product_name: "a",
