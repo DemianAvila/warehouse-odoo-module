@@ -97,9 +97,9 @@ class ScannerCheckLifecycle(models.TransientModel):
         for rec in self:
             shipment = self.env["shipment.orders"].search([])
             if len(shipment)==0:
-                rec.shipment_id = False
+                rec.shipment_order_id = False
             else:
-                rec.shipment_id = shipment[0]
+                rec.shipment_order_id = shipment[0]
 
 
 
