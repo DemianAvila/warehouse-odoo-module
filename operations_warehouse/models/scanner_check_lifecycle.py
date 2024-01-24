@@ -95,11 +95,10 @@ class ScannerCheckLifecycle(models.TransientModel):
             visible_log("create")
             visible_log(self.env["shipment.orders"].search([]))
 
-    @api.depends("shipment_order_id.name")
     def on_load(self):
         for rec in self:
             rec.product_card = True
-            self.check_shipment_values()
+            rec.check_shipment_values()
 
 
 
