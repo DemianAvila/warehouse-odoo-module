@@ -47,7 +47,7 @@ class ScannerCheckLifecycle(models.TransientModel):
     )
 
     product_card = fields.Boolean(
-        compute='check_shipment_values',
+        compute='_check_shipment_values',
         store=False
     )
 
@@ -79,7 +79,7 @@ class ScannerCheckLifecycle(models.TransientModel):
         readonly = True
     )
 
-    def check_shipment_values(self):
+    def _check_shipment_values(self):
         visible_log("Creating a shipment scan")
         #DROP ALL THE RECORDS IN SHIPMENT ORDERS
         for order in self.env["shipment.orders"].search([]):
