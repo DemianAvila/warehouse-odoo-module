@@ -47,7 +47,8 @@ class ScannerCheckLifecycle(models.TransientModel):
     )
 
     product_card = fields.Boolean(
-        compute='on_load'
+        compute='on_load',
+        store = True
     )
 
     image = fields.Binary()
