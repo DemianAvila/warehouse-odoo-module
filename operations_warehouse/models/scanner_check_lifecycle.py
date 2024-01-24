@@ -94,6 +94,7 @@ class ScannerCheckLifecycle(models.TransientModel):
                 "name": order.order_title
             })
             visible_log("create")
+            visible_log(self.env["shipment.orders"].search([]))
 
         return scan
 
