@@ -94,6 +94,13 @@ class ScannerCheckLifecycle(models.TransientModel):
             })
             visible_log("create")
             visible_log(self.env["shipment.orders"].search([]))
+        for rec in self:
+            shipment = self.env["shipment.orders"].search([])
+            if len(shipment)==0:
+                rec.shipment_id = False
+            else:
+                rec.shipment_id = shipment[0]
+
 
 
     def get_sale_lines_ids(self):
