@@ -1,4 +1,10 @@
 from odoo import models, fields, api
+import logging
+
+def visible_log(log):
+    logging.info("===============================")
+    logging.info(log)
+    logging.info("===============================")
 
 class DownloadShipmentGuides(models.TransientModel):
     _name = 'download.shipment.guides'
@@ -75,14 +81,19 @@ class ScannerCheckLifecycle(models.TransientModel):
     @api.model
     def create(self, vals):
         scan = super(ScannerCheckLifecycle, self).create(vals)
+        visible_log("Creating a shipment scan")
         #DROP ALL THE RECORDS IN SHIPMENT ORDERS
         for order in self.env["shipment.orders"].search([]):
+            visible_log(f"deleting shipment order {order.name}")
             order.unlink()
+            visible_log("delete")
         #CREATE THEM AGAIN, BASED ON THE ACTUAL MODEL
         for order in self.env["bossa.shipment.orders"].search([]):
+            visible_log(f"creating shipment order {order.order_title}")
             self.env["shipment.orders"].write({
                 "name": order.order_title
             })
+            visible_log("create")
 
         return scan
 
