@@ -72,6 +72,20 @@ class ScannerCheckLifecycle(models.TransientModel):
         readonly = True
     )
 
+    @api.model
+    def create(self, vals):
+        scan = super(ScannerCheckLifecycle, self).create(vals)
+        #DROP ALL THE RECORDS IN SHIPMENT ORDERS
+        for order in self.env["shipment.orders"].search([]):
+            order.unlink(force=True)
+        #CREATE THEM AGAIN, BASED ON THE ACTUAL MODEL
+        for order in self.env["bossa.shipment.orders"].search([]):
+            self.env["shipment.orders"].write({
+                "name": order.order_title
+            })
+
+        return scan
+
     def get_sale_lines_ids(self):
         ids = []
         shipment_order= self.env["bossa.shipment.orders"].search(
