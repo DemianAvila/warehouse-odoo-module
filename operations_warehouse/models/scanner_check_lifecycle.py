@@ -77,7 +77,7 @@ class ScannerCheckLifecycle(models.TransientModel):
         scan = super(ScannerCheckLifecycle, self).create(vals)
         #DROP ALL THE RECORDS IN SHIPMENT ORDERS
         for order in self.env["shipment.orders"].search([]):
-            order.unlink(force=True)
+            order.unlink()
         #CREATE THEM AGAIN, BASED ON THE ACTUAL MODEL
         for order in self.env["bossa.shipment.orders"].search([]):
             self.env["shipment.orders"].write({
