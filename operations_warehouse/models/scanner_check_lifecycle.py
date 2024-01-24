@@ -79,7 +79,6 @@ class ScannerCheckLifecycle(models.TransientModel):
         readonly = True
     )
 
-    @api.multi
     def check_shipment_values(self):
         visible_log("Creating a shipment scan")
         #DROP ALL THE RECORDS IN SHIPMENT ORDERS
@@ -96,8 +95,8 @@ class ScannerCheckLifecycle(models.TransientModel):
             })
             visible_log("create")
             visible_log(self.env["shipment.orders"].search([]))
-        for rec in self:
-            rec.product_card = True
+
+        self.product_card = not(self.product_card)
 
 
 
