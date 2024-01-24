@@ -47,9 +47,6 @@ class ScannerCheckLifecycle(models.TransientModel):
     )
 
     product_card = fields.Boolean(
-        compute='_check_shipment_values',
-        store=False,
-        compute_sudo=True
     )
 
     image = fields.Binary()
@@ -80,7 +77,8 @@ class ScannerCheckLifecycle(models.TransientModel):
         readonly = True
     )
 
-    def _check_shipment_values(self):
+    @api.model
+    def default_get(self, fields):
         visible_log("Creating a shipment scan")
         #DROP ALL THE RECORDS IN SHIPMENT ORDERS
         for order in self.env["shipment.orders"].search([]):
@@ -98,6 +96,7 @@ class ScannerCheckLifecycle(models.TransientModel):
             visible_log(self.env["shipment.orders"].search([]))
 
         self.product_card = not(self.product_card)
+        return super(ScannerCheckLifecycle, self).default_get(fields)
 
 
 
