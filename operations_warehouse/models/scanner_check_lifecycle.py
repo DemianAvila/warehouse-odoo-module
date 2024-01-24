@@ -77,23 +77,24 @@ class ScannerCheckLifecycle(models.TransientModel):
         readonly = True
     )
 
+    #EXECUTE FUNCTION WHEN OPENING THE MODEL
     @api.model
     def default_get(self, fields):
-        visible_log("Creating a shipment scan")
+        #visible_log("Creating a shipment scan")
         #DROP ALL THE RECORDS IN SHIPMENT ORDERS
         for order in self.env["shipment.orders"].search([]):
-            visible_log(f"deleting shipment order {order.name}")
+            #visible_log(f"deleting shipment order {order.name}")
             order.unlink()
-            visible_log("delete")
+            #visible_log("delete")
         #CREATE THEM AGAIN, BASED ON THE ACTUAL MODEL
         shipments = self.env["shipment.orders"]
         for order in self.env["bossa.shipment.orders"].search([]):
-            visible_log(f"creating shipment order {order.order_title}")
+            #visible_log(f"creating shipment order {order.order_title}")
             shipments.create({
                 "name": order.order_title
             })
-            visible_log("create")
-            visible_log(self.env["shipment.orders"].search([]))
+            #visible_log("create")
+            #visible_log(self.env["shipment.orders"].search([]))
 
         self.product_card = not(self.product_card)
         return super(ScannerCheckLifecycle, self).default_get(fields)
@@ -120,6 +121,7 @@ class ScannerCheckLifecycle(models.TransientModel):
 
     @api.onchange("internal_barcode")
     def _onchange_internal_barcode(self):
+        visible_log(f"search internal barcode {self.internal_barcode}")
         #IF THERE'S A BAR CODE TO SEARCH
         if self.internal_barcode:
             #SEARCH THE INTERNAL BARCODE AND GET THE INFO
@@ -131,6 +133,7 @@ class ScannerCheckLifecycle(models.TransientModel):
             )
             #MUST BE AT LEAST 1
             if len(sell_line) >0 :
+                visible_log(f"barcode exists {sell_line}")
                 self.internal_barcode_exists = True
                 sell_line = sell_line [0]
                 #ASSIGN THE DATA TO THE VIEW
@@ -141,6 +144,16 @@ class ScannerCheckLifecycle(models.TransientModel):
                 self.order_id = sell_line.order_id.name
                 self.marketplace = "Marketplace no asignado" if len(sell_line.order_id.tag_ids) == 0  else sell_line.order_id.tag_ids[0].name
                 self.delivery_company = "Paqueteria no asignada" if len(sell_line.order_id.x_studio_envio) == 0 else sell_line.order_id.x_studio_envio[0].name
-
+                visible_log(f"""
+                {self.internal_barcode_exists}
+                {sell_line}
+                {self.product_name} 
+                {self.image} 
+                {self.status_of_product} 
+                {self.order_id} 
+                {self.marketplace} 
+                {self.delivery_company} 
+                """)
             else:
+                visible_log(f"barcode does not exist")
                 self.internal_barcode_exists = False
