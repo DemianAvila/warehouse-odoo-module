@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 import logging
+import time
 
 def visible_log(log):
     logging.info("===============================")
@@ -116,6 +117,7 @@ class ScannerCheckLifecycle(models.TransientModel):
     @api.onchange("internal_barcode")
     def _onchange_internal_barcode(self):
         self.product_card = False
+        time.sleep(1)
         visible_log(f"search internal barcode {self.internal_barcode}")
         #IF THERE'S A BAR CODE TO SEARCH
         if self.internal_barcode:
