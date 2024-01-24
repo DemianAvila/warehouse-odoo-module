@@ -40,6 +40,10 @@ class ScannerCheckLifecycle(models.TransientModel):
         readonly = True
     )
 
+    product_card = fields.Char(
+        readonly=True
+    )
+
     image = fields.Binary()
 
     status_of_product = fields.Char(

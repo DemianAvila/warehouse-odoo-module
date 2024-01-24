@@ -1,6 +1,6 @@
 /**@odoo-module */
 const FormController = require('web.FormController');
-const { Component, useState, status } = owl;
+const { Component, useState} = owl;
 import { registry } from "@web/core/registry";
 
 export class InternalCodeListener extends FormController{
@@ -21,8 +21,13 @@ export class ProductCard extends Component {
 	static template = "operations_warehouse.ProductCard";
 	setup(){
 		console.log("access the state")
-		console.log(status)
         super.setup();
+		let self = this;
+		let recordId = self.props.action.context.active_id;
+		console.log("==========================")
+		console.log(self)
+		console.log(recordId)
+		console.log("==========================")
 		this.state = useState({
 			product_name: "a",
     		image:"",
