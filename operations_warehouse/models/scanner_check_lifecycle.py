@@ -116,6 +116,7 @@ class ScannerCheckLifecycle(models.TransientModel):
     @api.onchange("internal_barcode")
     def _onchange_internal_barcode(self):
         self.product_card = False
+        self.product_card = {'invisible': True}
         visible_log(f"search internal barcode {self.internal_barcode} {self.product_card}")
         #IF THERE'S A BAR CODE TO SEARCH
         if self.internal_barcode:
