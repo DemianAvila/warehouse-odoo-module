@@ -47,6 +47,7 @@ class ScannerCheckLifecycle(models.TransientModel):
     )
 
     product_card = fields.Boolean(
+        default=False
     )
 
     image = fields.Binary()
@@ -95,14 +96,7 @@ class ScannerCheckLifecycle(models.TransientModel):
             })
             #visible_log("create")
             #visible_log(self.env["shipment.orders"].search([]))
-
-        self.product_card = not(self.product_card)
         return super(ScannerCheckLifecycle, self).default_get(fields)
-
-
-
-
-
 
     def get_sale_lines_ids(self):
         ids = []
@@ -121,6 +115,7 @@ class ScannerCheckLifecycle(models.TransientModel):
 
     @api.onchange("internal_barcode")
     def _onchange_internal_barcode(self):
+        self.product_card = False
         visible_log(f"search internal barcode {self.internal_barcode}")
         #IF THERE'S A BAR CODE TO SEARCH
         if self.internal_barcode:
@@ -134,7 +129,6 @@ class ScannerCheckLifecycle(models.TransientModel):
             #MUST BE AT LEAST 1
             if len(sell_line) >0 :
                 visible_log(f"barcode exists {sell_line}")
-                self.internal_barcode_exists = True
                 sell_line = sell_line [0]
                 #ASSIGN THE DATA TO THE VIEW
                 self.product_name = sell_line.name
@@ -154,6 +148,9 @@ class ScannerCheckLifecycle(models.TransientModel):
                 {self.marketplace} 
                 {self.delivery_company} 
                 """)
+                self.internal_barcode_exists = True
+                self.product_card = True
             else:
                 visible_log(f"barcode does not exist")
                 self.internal_barcode_exists = False
+                self.product_card = False

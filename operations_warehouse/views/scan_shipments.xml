@@ -6,20 +6,28 @@
     <field name="arch" type="xml">
       <form string="Scan a shipment order">
         <sheet>
-          <label for="shipment_order_id" string="Choose shipment order"/>
-          <div class="oe_title">
-            <h1>
-              <field name="shipment_order_id"/>
-            </h1>
-          </div>
+          <group>
+            <label for="shipment_order_id" string="Choose shipment order"/>
+            <div class="oe_title">
+              <h1>
+                <field name="shipment_order_id"/>
+              </h1>
+            </div>
+          </group>
           <group>
             <field name="internal_barcode" attrs="{'invisible': [('shipment_order_id', '=', False)]}" on_change="scannedInternalBarcode"/>
-            <field name="internal_barcode_exists" invisible="1"/>}
+            <field name="internal_barcode_exists" invisible="1"/>
+            <field name="product_name" invisible="1"/>
+            <field name="image" invisible="1"/>
+            <field name="status_of_product" invisible="1"/>
+            <field name="order_id" invisible="1"/>
+            <field name="marketplace" invisible="1"/>
+            <field name="delivery_company" invisible="1"/>
           </group>
-            <div class="p-3 mb-2 bg-danger text-white" attrs="{'invisible': [('internal_barcode_exists', '=', True)]}">
-              El codigo escaneado no corresponde con esta orden de envio
-            </div>
-            <field name="product_card" widget="product_card" attrs="{'invisible': [('internal_barcode_exists', '=', False)]}"/>
+          <div class="p-3 mb-2 bg-danger text-white" attrs="{'invisible': [('internal_barcode_exists', '=', True)]}">
+            El codigo escaneado no corresponde con esta orden de envio
+          </div>
+          <field name="product_card" widget="product_card" attrs="{'invisible': [('internal_barcode_exists', '=', False), ('product_card', '=', False)]}"/>
           <group>
             <field name="product_barcode" attrs="{'invisible': [('shipment_order_id', '=', False)]}"/>
           </group>
