@@ -15,12 +15,12 @@ export class ProductCard extends Component {
 		console.log(recordData)
 		console.log("==========================")
 		this.state = useState({
-			product_name: "a",
-    		image:"",
-    		status_of_product:"",
-    		order_id:"",
-    		marketplace: "",
-    		delivery_company: ""
+			product_name: recordData.product_name,
+    		image:recordData.image,
+    		status_of_product:recordData.status_of_product,
+    		order_id:recordData.order_id,
+    		marketplace: recordData.marketplace,
+    		delivery_company: recordData.delivery_company
 		});
     }
 }
