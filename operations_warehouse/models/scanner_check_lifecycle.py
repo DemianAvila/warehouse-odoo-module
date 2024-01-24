@@ -48,7 +48,8 @@ class ScannerCheckLifecycle(models.TransientModel):
 
     product_card = fields.Boolean(
         compute='_check_shipment_values',
-        store=False
+        store=True,
+        compute_sudo=True
     )
 
     image = fields.Binary()
