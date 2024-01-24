@@ -80,7 +80,7 @@ class ScannerCheckLifecycle(models.TransientModel):
     )
 
     @api.model
-    def check_shipment_values(self, vals):
+    def check_shipment_values(self):
         visible_log("Creating a shipment scan")
         #DROP ALL THE RECORDS IN SHIPMENT ORDERS
         for order in self.env["shipment.orders"].search([]):
