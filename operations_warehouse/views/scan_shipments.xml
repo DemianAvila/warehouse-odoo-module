@@ -9,7 +9,7 @@
           <label for="shipment_order_id" string="Choose shipment order"/>
           <div class="oe_title">
             <h1>
-              <field name="shipment_order_id"/>
+              <field class="w-100" name="shipment_order_id"/>
             </h1>
           </div>
           <group>
