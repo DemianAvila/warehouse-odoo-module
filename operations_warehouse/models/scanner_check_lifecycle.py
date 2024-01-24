@@ -98,8 +98,9 @@ class ScannerCheckLifecycle(models.TransientModel):
 
     def on_load(self):
         for rec in self:
+            visible_log("Started computed")
             rec.product_card = True
-            rec.check_shipment_values()
+            self.check_shipment_values()
 
 
 
