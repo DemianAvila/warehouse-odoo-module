@@ -6,7 +6,7 @@
                 <div class="col">
                     <div t-if="state.image"
                          class="p-3 mb-2 bg-secondary text-white">
-                            <img t-if="o.image"
+                            <img t-if="state.image"
                               t-attf-src="data:image/*;base64,{{state.image}}"
                               align="center"/>
 
