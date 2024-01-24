@@ -25,7 +25,8 @@ class ScannerCheckLifecycle(models.TransientModel):
     _name = 'scanner.check.lifecycle'
 
     shipment_order_id = fields.Many2one(
-        comodel_name = 'shipment.orders'
+        comodel_name = 'shipment.orders',
+        compute = 'check_shipment_values'
     )
 
     internal_barcode = fields.Char(
@@ -47,8 +48,7 @@ class ScannerCheckLifecycle(models.TransientModel):
     )
 
     product_card = fields.Char(
-        readonly=True,
-        compute='check_shipment_values'
+        readonly=True
     )
 
     image = fields.Binary()
@@ -79,13 +79,7 @@ class ScannerCheckLifecycle(models.TransientModel):
         readonly = True
     )
 
-    @api.depends('product_card')
     def check_shipment_values(self):
-        for rec in self:
-            if rec.product_card:
-                rec.product_card = "a"
-            else:
-                rec.product_card = 1
         visible_log("Creating a shipment scan")
         #DROP ALL THE RECORDS IN SHIPMENT ORDERS
         for order in self.env["shipment.orders"].search([]):
