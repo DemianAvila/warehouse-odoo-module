@@ -97,8 +97,8 @@ class ScannerCheckLifecycle(models.TransientModel):
             visible_log(self.env["shipment.orders"].search([]))
 
     def on_load(self):
+        visible_log("Started computed")
         for rec in self:
-            visible_log("Started computed")
             rec.product_card = True
             self.check_shipment_values()
 
