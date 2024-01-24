@@ -86,9 +86,9 @@ class ScannerCheckLifecycle(models.TransientModel):
         #DROP ALL THE RECORDS IN SHIPMENT ORDERS
         #CREATE THEM AGAIN, BASED ON THE ACTUAL MODEL
         shipments = self.env["shipment.orders"]
-        writen_shipments = [s.id for s in shipments.search([])]
+        writen_shipments = [s.name for s in shipments.search([])]
         orders_in_model = self.env["bossa.shipment.orders"].search([
-            ("id", "not in", writen_shipments)
+            ("order_title", "not in", writen_shipments)
         ])
         for order in orders_in_model:
             #visible_log(f"creating shipment order {order.order_title}")
