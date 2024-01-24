@@ -25,10 +25,8 @@ class ScannerCheckLifecycle(models.TransientModel):
     _name = 'scanner.check.lifecycle'
 
     shipment_order_id = fields.Many2one(
-        comodel_name = 'shipment.orders',
-        compute='on_load',
-        store=True
-    )
+        comodel_name = 'shipment.orders'
+        )
 
     internal_barcode = fields.Char(
         string = 'Internal Barcode'
@@ -49,7 +47,8 @@ class ScannerCheckLifecycle(models.TransientModel):
     )
 
     product_card = fields.Boolean(
-
+        compute='check_shipment_values',
+        store = True
     )
 
     image = fields.Binary()
@@ -88,10 +87,10 @@ class ScannerCheckLifecycle(models.TransientModel):
             order.unlink()
             visible_log("delete")
         #CREATE THEM AGAIN, BASED ON THE ACTUAL MODEL
-        shipments = self.env["shipment.orders"].search([])
+        shipments = self.env["shipment.orders"]
         for order in self.env["bossa.shipment.orders"].search([]):
             visible_log(f"creating shipment order {order.order_title}")
-            shipments.write({
+            shipments.create({
                 "name": order.order_title
             })
             visible_log("create")
