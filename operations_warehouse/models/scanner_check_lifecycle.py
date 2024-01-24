@@ -26,7 +26,8 @@ class ScannerCheckLifecycle(models.TransientModel):
 
     shipment_order_id = fields.Many2one(
         comodel_name = 'shipment.orders',
-        compute = 'check_shipment_values'
+        compute = 'check_shipment_values',
+        inverse = 'inverse_shipment'
     )
 
     internal_barcode = fields.Char(
@@ -87,9 +88,10 @@ class ScannerCheckLifecycle(models.TransientModel):
             order.unlink()
             visible_log("delete")
         #CREATE THEM AGAIN, BASED ON THE ACTUAL MODEL
+        shipments = self.env["shipment.orders"].search([])
         for order in self.env["bossa.shipment.orders"].search([]):
             visible_log(f"creating shipment order {order.order_title}")
-            self.env["shipment.orders"].write({
+            shipments.write({
                 "name": order.order_title
             })
             visible_log("create")
@@ -100,6 +102,12 @@ class ScannerCheckLifecycle(models.TransientModel):
                 rec.shipment_order_id = False
             else:
                 rec.shipment_order_id = shipment[0]
+
+        def inverse_shipment(self):
+            for rec in self:
+                shipments = self.env["shipment.orders"].search([])
+                rec.shipment_order_id = shipments[0] if len(shipments)>0 else False
+
 
 
 
