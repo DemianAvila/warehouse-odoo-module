@@ -86,6 +86,7 @@ class ScannerCheckLifecycle(models.TransientModel):
     #EXECUTE FUNCTION WHEN OPENING THE MODEL
     @api.model
     def default_get(self, fields):
+        self.internal_barcode_readonly = False
         #visible_log("Creating a shipment scan")
         #DROP ALL THE RECORDS IN SHIPMENT ORDERS
         #CREATE THEM AGAIN, BASED ON THE ACTUAL MODEL
