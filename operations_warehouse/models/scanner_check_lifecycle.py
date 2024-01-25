@@ -79,6 +79,10 @@ class ScannerCheckLifecycle(models.TransientModel):
         readonly = True
     )
 
+    internal_barcode_readonly = fields.Boolean(
+        default=False
+    )
+
     #EXECUTE FUNCTION WHEN OPENING THE MODEL
     @api.model
     def default_get(self, fields):
@@ -117,6 +121,7 @@ class ScannerCheckLifecycle(models.TransientModel):
     @api.onchange("internal_barcode")
     def _onchange_internal_barcode(self):
         self.product_card = False
+        self.internal_barcode_readonly = True
         visible_log(f"search internal barcode {self.internal_barcode} {self.product_card}")
         #IF THERE'S A BAR CODE TO SEARCH
         if self.internal_barcode:
@@ -159,3 +164,7 @@ class ScannerCheckLifecycle(models.TransientModel):
         else:
             self.product_card = False
             self.internal_barcode_exists = True
+
+    def reset_internal_barcode(self):
+        self.internal_barcode = False
+        self.internal_barcode_readonly = False
