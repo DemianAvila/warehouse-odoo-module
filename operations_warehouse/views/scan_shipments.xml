@@ -14,10 +14,9 @@
           </div>
           <group>
           <group attrs="{'invisible': [('shipment_order_id', '=', False)]}">
-            <label for="internal_barcode" string="Internal barcode"/>
             <field name="internal_barcode"
               attrs="{'readonly':[('internal_barcode_readonly','=', True)]}" />
-            <button name="reset_internal_barcode"  type="object" class="btn text-nowrap me-2 btn-odoo w-25">
+            <button name="reset_internal_barcode"  type="object" class="btn text-nowrap me-2 btn-odoo">
               <i class="fa fa-trash"/>
             </button>
           </group>
