@@ -47,11 +47,11 @@ class ShipmentFields(models.Model):
 
     life_cycle = fields.Selection(
         selection=[
-            ("not_suplied", "Not Suplied"),
+            ("not_supplied", "Not Supplied"),
             ('supplied', 'Supplied'),
             ('delivered_to_the_package_company', 'Delivered To The Package Company')
         ],
-        default = 'not_suplied'
+        default = 'not_supplied'
     )
 
 class ShipmentOrderInherit(models.Model):

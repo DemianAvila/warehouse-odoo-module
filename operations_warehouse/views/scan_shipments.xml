@@ -15,9 +15,9 @@
           <group>
             <div class="w-100" attrs="{'invisible': [('shipment_order_id', '=', False)]}">
               <label for="internal_barcode" string="Internal barcode"/>
-              <field name="internal_barcode" class="w-80"
+              <field name="internal_barcode" class="w-75"
                     attrs="{'readonly':[('internal_barcode_readonly','=', True)]}" />
-              <button name="reset_internal_barcode"  type="object" class="btn text-nowrap me-2 btn-odoo w-10">
+              <button name="reset_internal_barcode"  type="object" class="btn text-nowrap me-2 btn-odoo w-25">
                 <i class="fa fa-trash"/>
               </button>
             </div>
