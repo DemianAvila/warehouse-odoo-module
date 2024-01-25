@@ -13,7 +13,7 @@
             </h1>
           </div>
           <group>
-            <div class="w-100" attrs="{'invisible': [('shipment_order_id', '=', False)]]">
+            <div class="w-100" attrs="{'invisible': [('shipment_order_id', '=', False)]}">
               <label for="internal_barcode" string="Internal barcode"/>
               <field name="internal_barcode" class="w-80"
                     attrs="{'readonly':[('internal_barcode_readonly','=', True)]}" />
