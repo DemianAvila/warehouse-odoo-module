@@ -13,13 +13,19 @@
             </h1>
           </div>
           <group>
-            <div class="w-100" attrs="{'invisible': [('shipment_order_id', '=', False)]}">
-              <label for="internal_barcode" string="Internal barcode"/>
-              <field name="internal_barcode" class="w-75"
+            <div class="w-100 container" attrs="{'invisible': [('shipment_order_id', '=', False)]}">
+              <div class="w-100 row">
+                <div class="w-75 col">
+                  <label for="internal_barcode" string="Internal barcode"/>
+                  <field name="internal_barcode"
                     attrs="{'readonly':[('internal_barcode_readonly','=', True)]}" />
-              <button name="reset_internal_barcode"  type="object" class="btn text-nowrap me-2 btn-odoo w-25">
-                <i class="fa fa-trash"/>
-              </button>
+                </div>
+                <div class="w-25 col">
+                  <button name="reset_internal_barcode"  type="object" class="btn text-nowrap me-2 btn-odoo w-25">
+                    <i class="fa fa-trash"/>
+                  </button>
+                </div>
+              </div>
             </div>
 
             <field name="internal_barcode_exists" invisible="1"/>
