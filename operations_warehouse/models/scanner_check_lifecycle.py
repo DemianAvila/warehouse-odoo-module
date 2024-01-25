@@ -168,3 +168,4 @@ class ScannerCheckLifecycle(models.TransientModel):
     def reset_internal_barcode(self):
         self.internal_barcode = False
         self.internal_barcode_readonly = False
+        self.product_card = False
