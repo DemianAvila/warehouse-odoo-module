@@ -139,8 +139,8 @@ class TmpGuides(models.TransientModel):
                 logging.info("creating doc")
                 id_write = self.env['ir.attachment'].create(
                     {
-                        "datas": self.file,
-                        "name": self.filename,
+                        "datas": guide[2]["file"],
+                        "name": guide[2]["filename"],
                         "order_line": self.env["sale.order.line"].search(
                             ["id", "=", self.env.context.get('order_line')]
                         )[0]
