@@ -114,7 +114,7 @@ class TmpGuides(models.TransientModel):
         logging.info(vals["guides"])
         logging.info("==========================")
         # OVERRIDE THE DOCUMENTS
-        for guide in self.guides:
+        for guide in vals["guides"]:
             logging.info("==========================")
             logging.info(guide)
             logging.info("==========================")
