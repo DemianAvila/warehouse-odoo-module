@@ -170,8 +170,10 @@ class TmpGuides(models.TransientModel):
                             ]
                         )
                         document[0].unlink()
+        else:
+            return super(TmpGuides, self).create(vals)
 
-        return super(TmpGuides, self).create(vals)
+
 
 
 class ScanerLog(models.Model):
