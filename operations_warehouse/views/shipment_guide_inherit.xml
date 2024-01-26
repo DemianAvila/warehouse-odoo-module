@@ -17,8 +17,8 @@
     <field name="arch" type="xml">
       <form string="Edit your shipment guides">
         <field name="guides">
-          <tree>
-            <field name="filename" invisible="1"/>
+          <tree edit="bottom">
+            <field name="filename"/>
             <field name="file" widget="binary" filename="filename"/>
           </tree>
         </field>
