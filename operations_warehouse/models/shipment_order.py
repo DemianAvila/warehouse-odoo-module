@@ -52,7 +52,6 @@ class TmpGuides(models.TransientModel):
             })
         return super(TmpGuides, self).default_get(fields)
 
-    @api.model
     def write(self, vals):
         non_erased = []
         #OVERRIDE THE DOCUMENTS
@@ -104,7 +103,6 @@ class TmpGuides(models.TransientModel):
 
         return super(TmpGuides, self).write(vals)
 
-    @api.model
     def create(self, vals):
         non_erased = []
         # OVERRIDE THE DOCUMENTS
