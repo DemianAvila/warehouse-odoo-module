@@ -125,7 +125,8 @@ class ShipmentOrderInherit(models.Model):
         rec_in_dates = sale_order_cursor.search(
             [
                 ("create_date", ">=", since),
-                ("create_date", "<=", until)
+                ("create_date", "<=", until),
+                ("state", "!=", "cancel")
             ]
         )
         #STABLISH AN ONLY ID BY THE EPOCH
