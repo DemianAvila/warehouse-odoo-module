@@ -139,7 +139,9 @@ class TmpGuides(models.TransientModel):
                 logging.info("creating doc")
                 logging.info(self.env.context.get('order_id'))
                 order_rec = self.env["sale.order.line"].search(
-                    ["id", "=", self.env.context.get('order_id')]
+                    [
+                        ("id", "=", self.env.context.get('order_id'))
+                    ]
                 )
                 logging.info(order_rec)
                 id_write = self.env['ir.attachment'].create(
