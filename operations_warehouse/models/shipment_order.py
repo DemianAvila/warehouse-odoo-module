@@ -108,6 +108,9 @@ class TmpGuides(models.TransientModel):
         non_erased = []
         # OVERRIDE THE DOCUMENTS
         for guide in self.guides:
+            logging.info("==========================")
+            logging.info(guide)
+            logging.info("==========================")
             # IF DOCUMENT HAS EXTERNAL ID
             if guide.ext_id:
                 logging.info("==========================")
