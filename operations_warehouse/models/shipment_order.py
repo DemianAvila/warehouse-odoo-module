@@ -116,7 +116,7 @@ class TmpGuides(models.TransientModel):
         # OVERRIDE THE DOCUMENTS
         for guide in vals["guides"]:
             logging.info("==========================")
-            logging.info(guide[2]["filename"])
+            logging.info(guide[2].keys())
             logging.info("==========================")
             # IF DOCUMENT HAS EXTERNAL ID
             if "ext_id" in guide[2].keys():
