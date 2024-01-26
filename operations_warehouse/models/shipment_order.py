@@ -81,6 +81,7 @@ class ShipmentFields(models.Model):
         logging.info("==========================")
         logging.info(dir(self))
         logging.info(self.id)
+        logging.info(self.name)
         logging.info("==========================")
         return self.env.ref("operations_warehouse.upload_shipment_guides_action").read()[0]
 
