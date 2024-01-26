@@ -115,9 +115,7 @@ class TmpGuides(models.TransientModel):
         logging.info(vals.keys())
         logging.info("==========================")
         #IF THERE IS NO GUIDE IN THE VALS FIELD, MEANS THAT WE ARE CREATING THE RECORD FROM CODE
-        if "guides"  not in vals.keys():
-            return super(TmpGuides, self).create(vals)
-        else:
+        if "guides" in vals.keys():
             # OVERRIDE THE DOCUMENTS
             for guide in vals["guides"]:
                 logging.info("==========================")
