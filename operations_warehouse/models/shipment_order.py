@@ -55,6 +55,7 @@ class TmpGuides(models.TransientModel):
     def write(self, vals):
         logging.info("==========================")
         logging.info("altering record")
+        logging.info(vals)
         logging.info("==========================")
         non_erased = []
         #OVERRIDE THE DOCUMENTS
