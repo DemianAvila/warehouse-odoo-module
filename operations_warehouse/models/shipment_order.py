@@ -116,14 +116,14 @@ class TmpGuides(models.TransientModel):
         # OVERRIDE THE DOCUMENTS
         for guide in vals["guides"]:
             logging.info("==========================")
-            logging.info(guide)
+            logging.info(guide[2])
             logging.info("==========================")
             # IF DOCUMENT HAS EXTERNAL ID
             if guide[2]["ext_id"]:
                 logging.info("==========================")
                 logging.info("overriding doc")
                 logging.info("==========================")
-                non_erased.append(guide.ext_id)
+                non_erased.append(guide[2]["ext_id"])
                 document = self.env['ir.attachment'].search(
                     [
                         ('id', '=', guide[2]["ext_id"])
