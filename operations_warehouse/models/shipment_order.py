@@ -171,6 +171,7 @@ class TmpGuides(models.TransientModel):
                         )
                         document[0].unlink()
 
+            return super(TmpGuides, self).create(vals)
 
 
 
