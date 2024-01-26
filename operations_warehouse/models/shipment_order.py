@@ -53,7 +53,7 @@ class TmpGuides(models.TransientModel):
         return super(TmpGuides, self).default_get(fields)
 
     @api.model
-    def write(self, values):
+    def write(self, vals):
         non_erased = []
         #OVERRIDE THE DOCUMENTS
         for guide in self.guides:
@@ -102,7 +102,59 @@ class TmpGuides(models.TransientModel):
                     )
                     document[0].unlink()
 
-        return super(TmpGuides, self).write(values)
+        return super(TmpGuides, self).write(vals)
+
+    @api.model
+    def create(self, vals):
+        non_erased = []
+        # OVERRIDE THE DOCUMENTS
+        for guide in self.guides:
+            # IF DOCUMENT HAS EXTERNAL ID
+            if guide.ext_id:
+                logging.info("==========================")
+                logging.info("overriding doc")
+                logging.info("==========================")
+                non_erased.append(guide.ext_id)
+                document = self.env['ir.attachment'].search(
+                    [
+                        ('id', '=', guide.ext_id)
+                    ]
+                )
+                document[0].datas = self.file,
+                document[0].name = self.filename
+                logging.info("==========================")
+                logging.info(guide.ext_id)
+                logging.info("==========================")
+            # IF IT DOESN'T EXIST, CREATE THEM
+            else:
+                logging.info("creating doc")
+                id_write = self.env['ir.attachment'].create(
+                    {
+                        "datas": self.file,
+                        "name": self.filename,
+                        "order_line": self.env["sale.order.line"].search(
+                            ["id", "=", self.env.context.get('order_line')]
+                        )[0]
+                    }
+                )
+                logging.info("==========================")
+                logging.info(id_write.id)
+                logging.info("==========================")
+            # COMPARE THE NON ERASED IDS IF THE MODEL, ERASE THE ONES NOT ON THE LIST
+            for file in self.env.context.get("documents"):
+                if file not in non_erased:
+                    logging.info("==========================")
+                    logging.info("deleting file")
+                    logging.info(file.id)
+                    logging.info("==========================")
+                    document = self.env['ir.attachment'].search(
+                        [
+                            ('id', '=', file)
+                        ]
+                    )
+                    document[0].unlink()
+
+        return super(TmpGuides, self).create(vals)
 
 
 class ScanerLog(models.Model):
