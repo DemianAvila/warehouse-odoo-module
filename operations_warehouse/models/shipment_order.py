@@ -38,7 +38,7 @@ class TmpGuides(models.TransientModel):
         #WRITE THE DOCUMENTS IN THIS TMP MODEL
         documents = self.env["ir.attachment"].search(
             [
-                ("id", "in", self.self.env.context.get('documents'))
+                ("id", "in", self.env.context.get('documents'))
             ]
         )
         logging.info("==========================")
