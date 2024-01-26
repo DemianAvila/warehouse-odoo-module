@@ -162,7 +162,7 @@ class TmpGuides(models.TransientModel):
                     if file not in non_erased:
                         logging.info("==========================")
                         logging.info("deleting file")
-                        logging.info(file.id)
+                        logging.info(file)
                         logging.info("==========================")
                         document = self.env['ir.attachment'].search(
                             [
@@ -170,7 +170,7 @@ class TmpGuides(models.TransientModel):
                             ]
                         )
                         document[0].unlink()
-        
+
 
 
 
