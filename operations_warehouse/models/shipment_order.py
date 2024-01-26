@@ -148,7 +148,7 @@ class TmpGuides(models.TransientModel):
                     {
                         "datas": guide[2]["file"],
                         "name": guide[2]["filename"],
-                        "order_line": order_rec
+                        "order_line": order_rec.id
                     }
                 )
                 logging.info("==========================")
