@@ -31,19 +31,19 @@ class TmpGuides(models.TransientModel):
 
     @api.model
     def default_get(self, fields):
-        logging.info("==========================")
-        logging.info(self)
-        logging.info(self.env.context)
-        logging.info("==========================")
+        #logging.info("==========================")
+        #logging.info(self)
+        #logging.info(self.env.context)
+        #logging.info("==========================")
         #WRITE THE DOCUMENTS IN THIS TMP MODEL
         documents = self.env["ir.attachment"].search(
             [
                 ("id", "in", self.env.context.get('documents'))
             ]
         )
-        logging.info("==========================")
-        logging.info(documents)
-        logging.info("==========================")
+        #logging.info("==========================")
+        #logging.info(documents)
+        #logging.info("==========================")
         for document in documents:
             self.create({
                 "file": document.datas,
@@ -53,6 +53,9 @@ class TmpGuides(models.TransientModel):
         return super(TmpGuides, self).default_get(fields)
 
     def write(self, vals):
+        logging.info("==========================")
+        logging.info("altering record")
+        logging.info("==========================")
         non_erased = []
         #OVERRIDE THE DOCUMENTS
         for guide in self.guides:
@@ -106,6 +109,9 @@ class TmpGuides(models.TransientModel):
     @api.model
     def create(self, vals):
         non_erased = []
+        logging.info("==========================")
+        logging.info("create record")
+        logging.info("==========================")
         # OVERRIDE THE DOCUMENTS
         for guide in self.guides:
             logging.info("==========================")
