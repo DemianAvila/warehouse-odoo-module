@@ -36,7 +36,11 @@ class TmpGuides(models.TransientModel):
         logging.info(self.env.context)
         logging.info("==========================")
         #WRITE THE DOCUMENTS IN THIS TMP MODEL
-        documents = self.env.context.get('documents')
+        documents = self.env["ir.attachment"].search(
+            [
+                ("id", "in", self.self.env.context.get('documents'))
+            ]
+        )
         logging.info("==========================")
         logging.info(documents)
         logging.info("==========================")
@@ -148,7 +152,7 @@ class ShipmentFields(models.Model):
             'view_mode': "form",
             'context': {
                 'order_id': self.id,
-                'documents': self.shipment_guides
+                'documents': [guide.id for guide in self.shipment_guides]
             },
         }
 
