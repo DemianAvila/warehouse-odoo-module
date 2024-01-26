@@ -19,6 +19,8 @@ class ShipmentGuides(models.TransientModel):
         comodel_name="tmp.shipment_guides"
     )
 
+    ext_id = fields.Char()
+
 class TmpGuides(models.TransientModel):
     _name = 'tmp.shipment_guides'
 
@@ -33,7 +35,52 @@ class TmpGuides(models.TransientModel):
         logging.info(self)
         logging.info(self.env.context)
         logging.info("==========================")
+        #WRITE THE DOCUMENTS IN THIS TMP MODEL
+        documents = self.env.context.get('documents')
+        for document in documents:
+            self.create({
+                "file": document.datas,
+                "filename": document.name,
+                "ext_id": document.id
+            })
         return super(TmpGuides, self).default_get(fields)
+
+    @api.model
+    def write(self, values):
+        logging.info("==========================")
+        logging.info(self)
+        logging.info(self.env.context)
+        logging.info("==========================")
+        non_erased = []
+        #OVERRIDE THE DOCUMENTS
+        for guide in self.guides:
+            #IF DOCUMENT HAS EXTERNAL ID
+            if guide.ext_id:
+                non_erased.append(guide.ext_id)
+                document = self.env['ir.attachment'].search(
+                    [
+                        ('id', '=', guide.ext_id)
+                    ]
+                )
+                document[0].datas = self.file,
+                document[0].name = self.filename
+            #IF IT DOESN'T EXIST, CREATE THEM
+            else:
+                self.env['ir.attachment'].create(
+                    {
+                        "datas": self.file,
+                        "name": self.filename,
+                        "order_line": self.env["sale.order.line"].search(
+                            ["id", "=", self.env.context.get('order_line')]
+                        )[0]
+                    }
+                )
+            #COMPARE THE NON ERASED IDS IF THE MODEL, ERASE THE ONES NOT ON THE LIST
+            for file in self.env.context.get("documents"):
+                if file.id not in non_erased:
+                    file.unlink()
+
+        return super(TmpGuides, self).write(values)
 
 
 class ScanerLog(models.Model):
