@@ -173,6 +173,12 @@ class TmpGuides(models.TransientModel):
 
             return super(TmpGuides, self).create(vals)
 
+        else:
+            logging.info("==========================")
+            logging.info("altering record on open")
+            logging.info(vals)
+            logging.info("==========================")
+
 
 
 
