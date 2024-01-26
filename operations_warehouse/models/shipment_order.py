@@ -15,7 +15,7 @@ class ShipmentGuides(models.TransientModel):
     filename = fields.Char()
 
     sale_guide = fields.Many2one(
-        comodel_name=""
+        comodel_name="tmp.shipment_guides"
     )
 
 class TmpGuides(models.TransientModel):

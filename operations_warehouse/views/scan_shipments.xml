@@ -46,7 +46,6 @@
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">scanner.check.lifecycle</field>
     <field name="view_mode">form</field>
-    <field name="target">new</field>
   </record>
 
   <menuitem
