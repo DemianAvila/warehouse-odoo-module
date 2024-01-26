@@ -27,6 +27,14 @@ class TmpGuides(models.TransientModel):
         inverse_name="sale_guide"
     )
 
+    @api.model
+    def default_get(self, fields):
+        logging.info("==========================")
+        logging.info(self)
+        logging.info(self.env.context)
+        logging.info("==========================")
+        return super(TmpGuides, self).default_get(fields)
+
 
 class ScanerLog(models.Model):
     _name = "scanner.log"
@@ -83,7 +91,18 @@ class ShipmentFields(models.Model):
         logging.info(self.id)
         logging.info(self.name)
         logging.info("==========================")
-        return self.env.ref("operations_warehouse.upload_shipment_guides_action").read()[0]
+        return {
+            'name': "operations_warehouse.upload_shipment_guides_action",
+            'res_model': "tmp.shipment_guides",
+            'type': 'ir.actions.act_window',
+            'view_mode': "form",
+            'context': {
+                'order_id': self.id,
+                'documents': self.shipment_guides
+            },
+        }
+
+        #return self.env.ref("operations_warehouse.upload_shipment_guides_action").read()[0]
 
 class ShipmentOrderInherit(models.Model):
     _inherit = "bossa.shipment.orders"
