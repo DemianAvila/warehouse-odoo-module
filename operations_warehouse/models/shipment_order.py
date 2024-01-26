@@ -3,6 +3,7 @@ from odoo import models, fields, api
 import json
 from . import printable_order
 import base64
+import logging
 
 class ShipmentGuides(models.TransientModel):
     _name = 'sale_order.shipment_guides'
@@ -77,6 +78,10 @@ class ShipmentFields(models.Model):
     )
 
     def check_guides (self):
+        logging.info("==========================")
+        logging.info(dir(self))
+        logging.info(self.id)
+        logging.info("==========================")
         return self.env.ref("operations_warehouse.upload_shipment_guides_action").read()[0]
 
 class ShipmentOrderInherit(models.Model):
