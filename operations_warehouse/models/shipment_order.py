@@ -112,7 +112,7 @@ class TmpGuides(models.TransientModel):
         non_erased = []
         logging.info("==========================")
         logging.info("create record")
-        logging.info(vals["guides"])
+        logging.info(vals)
         logging.info("==========================")
         # OVERRIDE THE DOCUMENTS
         for guide in vals["guides"]:
