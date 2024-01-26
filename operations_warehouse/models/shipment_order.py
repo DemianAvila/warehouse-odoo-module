@@ -4,6 +4,28 @@ import json
 from . import printable_order
 import base64
 
+class ShipmentGuides(models.TransientModel):
+    _name = 'sale_order.shipment_guides'
+
+    file = fields.Binary(
+        attachment = False,
+        string = "Shipment Guide"
+    )
+
+    filename = fields.Char()
+
+    sale_guide = fields.Many2one(
+        comodel_name=""
+    )
+
+class TmpGuides(models.TransientModel):
+    _name = 'tmp.shipment_guides'
+
+    guides = fields.One2many(
+        comodel_name="sale_order.shipment_guides",
+        inverse_name="sale_guide"
+    )
+
 
 class ScanerLog(models.Model):
     _name = "scanner.log"
@@ -53,6 +75,9 @@ class ShipmentFields(models.Model):
         ],
         default = 'not_supplied'
     )
+
+    def check_guides (self):
+        return self.env.ref("operations_warehouse.upload_shipment_guides_action").read()[0]
 
 class ShipmentOrderInherit(models.Model):
     _inherit = "bossa.shipment.orders"

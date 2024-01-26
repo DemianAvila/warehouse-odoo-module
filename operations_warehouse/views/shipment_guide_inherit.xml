@@ -6,8 +6,31 @@
     <field name="inherit_id" ref="sale.view_order_form"/>
     <field name="arch" type="xml">
       <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree" position="inside">
-        <field name="shipment_guides" string="Shipment guides" />
+        <button string="Product guides" type="object" class="oe_highlight" name="check_guides"/>
       </xpath>
     </field>
+  </record>
+
+  <record id="sale_order_line_guides_wizard_form" model="ir.ui.view">
+    <field name="name">sale_order_line_guides_wizard_form</field>
+    <field name="model">tmp.shipment_guides</field>
+    <field name="arch" type="xml">
+      <form string="Edit your shipment guides">
+        <field name="guides">
+          <tree>
+            <field name="filename" invisible="1"/>
+            <field name="file" widget="binary" filename="filename"/>
+          </tree>
+        </field>
+      </form>
+    </field>
+  </record>
+
+    <record id="upload_shipment_guides_action" model="ir.actions.act_window">
+    <field name="name">Upload shipment guides</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">tmp.shipment_guides</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
   </record>
 </odoo>
