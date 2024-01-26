@@ -54,15 +54,14 @@ class TmpGuides(models.TransientModel):
 
     @api.model
     def write(self, values):
-        logging.info("==========================")
-        logging.info(self)
-        logging.info(self.env.context)
-        logging.info("==========================")
         non_erased = []
         #OVERRIDE THE DOCUMENTS
         for guide in self.guides:
             #IF DOCUMENT HAS EXTERNAL ID
             if guide.ext_id:
+                logging.info("==========================")
+                logging.info("overriding doc")
+                logging.info("==========================")
                 non_erased.append(guide.ext_id)
                 document = self.env['ir.attachment'].search(
                     [
@@ -71,9 +70,13 @@ class TmpGuides(models.TransientModel):
                 )
                 document[0].datas = self.file,
                 document[0].name = self.filename
+                logging.info("==========================")
+                logging.info(guide.ext_id)
+                logging.info("==========================")
             #IF IT DOESN'T EXIST, CREATE THEM
             else:
-                self.env['ir.attachment'].create(
+                logging.info("creating doc")
+                id_write = self.env['ir.attachment'].create(
                     {
                         "datas": self.file,
                         "name": self.filename,
@@ -82,10 +85,22 @@ class TmpGuides(models.TransientModel):
                         )[0]
                     }
                 )
+                logging.info("==========================")
+                logging.info(id_write.id)
+                logging.info("==========================")
             #COMPARE THE NON ERASED IDS IF THE MODEL, ERASE THE ONES NOT ON THE LIST
             for file in self.env.context.get("documents"):
-                if file.id not in non_erased:
-                    file.unlink()
+                if file not in non_erased:
+                    logging.info("==========================")
+                    logging.info("deleting file")
+                    logging.info(file.id)
+                    logging.info("==========================")
+                    document = self.env['ir.attachment'].search(
+                        [
+                            ('id', '=', file)
+                        ]
+                    )
+                    document[0].unlink()
 
         return super(TmpGuides, self).write(values)
 
