@@ -36,7 +36,10 @@ class TmpGuides(models.TransientModel):
         logging.info(self.env.context)
         logging.info("==========================")
         #WRITE THE DOCUMENTS IN THIS TMP MODEL
-        documents = self.env.context.documents
+        documents = self.env.context.get('documents')
+        logging.info("==========================")
+        logging.info(documents)
+        logging.info("==========================")
         for document in documents:
             self.create({
                 "file": document.datas,
