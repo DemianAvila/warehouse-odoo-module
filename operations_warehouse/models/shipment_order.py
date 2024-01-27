@@ -176,8 +176,11 @@ class TmpGuides(models.TransientModel):
         else:
             logging.info("==========================")
             logging.info("altering record on open")
-            logging.info(vals)
+            logging.info(vals.keys())
             logging.info("==========================")
+            self.file = vals["file"]
+            self.filename = vals["filename"]
+            self.ext_id = vals["ext_id"]
 
 
 
