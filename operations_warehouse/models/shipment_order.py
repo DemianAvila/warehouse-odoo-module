@@ -181,7 +181,7 @@ class TmpGuides(models.TransientModel):
             logging.info("==========================")
             check_rec = self.guides.create(
                 {
-                    "sale_guide": self,
+                    "sale_guide": self.id,
                     "file": vals["file"],
                     "filename": vals["filename"],
                     "ext_id": vals["ext_id"]
