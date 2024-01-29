@@ -42,23 +42,21 @@ class TmpGuides(models.TransientModel):
                 ("id", "in", self.env.context.get('documents'))
             ]
         )
-        #logging.info("==========================")
-        #logging.info(documents)
-        #logging.info("==========================")
+        logging.info("==========================")
+        logging.info("writing documents in model")
+        logging.info(documents)
+        logging.info("==========================")
         for document in documents:
-            self.create({
-                "file": document.datas,
-                "filename": document.name,
-                "ext_id": document.id
+            self.write(0,0,{
+                "guides": {
+                    "file": document.datas,
+                    "filename": document.name,
+                    "ext_id": document.id
+                }
             })
         return super(TmpGuides, self).default_get(fields)
 
-    def write(self, vals):
-        logging.info("==========================")
-        logging.info("altering record")
-        logging.info(vals)
-        logging.info("==========================")
-        return super(TmpGuides, self).write(vals)
+
 
     @api.model
     def create(self, vals):
@@ -124,29 +122,9 @@ class TmpGuides(models.TransientModel):
                         )
                         document[0].unlink()
 
-            return super(TmpGuides, self).create(vals)
+        return super(TmpGuides, self).create(vals)
 
-        else:
-            logging.info("==========================")
-            logging.info("altering record on open")
-            logging.info(vals.keys())
-            logging.info(self.guides)
-            logging.info("==========================")
-            self.write(
-                {
-                    "guides": (0,0, {
-                            "file": vals["file"],
-                            "filename": vals["filename"],
-                            "ext_id": vals["ext_id"]
-                        }
-                    )
-                }
-            )
-            logging.info("==========================")
-            logging.info("check if rec is being writed")
-            logging.info(self.guides)
-            logging.info(self)
-            logging.info("==========================")
+
 
 
 
