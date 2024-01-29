@@ -179,7 +179,7 @@ class TmpGuides(models.TransientModel):
             logging.info(vals.keys())
             logging.info(self.guides)
             logging.info("==========================")
-            check_rec = self.guides.create(
+            check_rec = self.guides.write(
                 {
                     "sale_guide": self.id,
                     "file": vals["file"],
@@ -191,6 +191,8 @@ class TmpGuides(models.TransientModel):
             logging.info("check if rec is being writed")
             logging.info(check_rec)
             logging.info(self.guides)
+            logging.info(self.id)
+            logging.info(self)
             logging.info("==========================")
 
 
