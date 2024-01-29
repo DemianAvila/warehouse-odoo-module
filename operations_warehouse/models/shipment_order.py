@@ -47,12 +47,13 @@ class TmpGuides(models.TransientModel):
         logging.info(documents)
         logging.info("==========================")
         for document in documents:
-            self.write(0,0,{
-                "guides": {
-                    "file": document.datas,
-                    "filename": document.name,
-                    "ext_id": document.id
-                }
+            self.write({
+                "guides": (0,0,{
+                        "file": document.datas,
+                        "filename": document.name,
+                        "ext_id": document.id
+                    }
+                )
             })
         return super(TmpGuides, self).default_get(fields)
 
