@@ -43,8 +43,8 @@
           </div>
           <group attrs="{'invisible': [('is_error_prod_equal', '=', True)]}">
             <field name="documents" attrs="{'invisible': [('prod_barcode_equal', '=', False)]}" >
-               <tree readonly="1">
-                <field name="filename"/>
+               <tree editable="bottom" create="1" edit="1">
+                <field name="filename" readonly="1"/>
                 <field name="file" widget="file" filename="filename"/>
                </tree>
             </field>
