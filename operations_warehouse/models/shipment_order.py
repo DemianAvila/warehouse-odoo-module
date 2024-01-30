@@ -64,26 +64,25 @@ class TmpGuides(models.TransientModel):
     def create(self, vals):
         logging.info("=================================")
         logging.info("creating document, logging the vals")
-        logging.info(vals.keys())
         logging.info("=================================")
         if "guides" in vals.keys():
-            logging.info("=================================")
-            logging.info("logging the guides")
-            try:
-                logging.info(vals["guides"].keys())
-            except:
-                logging.info("vals guides is no dict")
-                logging.info(len(vals["guides"]))
-            logging.info("=================================")
             for guide in vals["guides"]:
                 logging.info("=================================")
                 logging.info("checking the guide info")
                 logging.info(guide[2].keys())
-                logging.info(self.id)
+                logging.info(self.env.context.get('order_id'))
                 logging.info("=================================")
-               
-        return super(TmpGuides, self).create(vals)
+                attachment_id = self.env["ir.attachment"].create({
+                    "datas": guide[2]["file"],
+                    "name": guide[2]["filename"],
+                    "order_line": self.env.context.get('order_id')
+                })
+                logging.info("=================================")
+                logging.info("checking the attachment created info")
+                logging.info(attachment_id)
+                logging.info("=================================")
 
+        return super(TmpGuides, self).create(vals)
 
 
 
