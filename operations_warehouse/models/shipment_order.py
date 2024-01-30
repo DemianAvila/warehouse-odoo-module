@@ -63,6 +63,8 @@ class TmpGuides(models.TransientModel):
     @api.model
     def create(self, vals):
         logging.info("=================================")
+        logging.info("creating document, logging the vals")
+        logging.info(vals)
         logging.info(len(vals))
         logging.info("=================================")
         return super(TmpGuides, self).create(vals)
