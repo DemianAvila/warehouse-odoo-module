@@ -42,7 +42,7 @@
             El código escaneado no corresponde con el del producto, verifica que el producto sea el adecuado
           </div>
           <group attrs="{'invisible': [('is_error_prod_equal', '=', True)]}">
-            <field name="documents" attrs="{'invisible': [('prod_barcode_equal', '=', False)]}" >
+            <field name="documents"  >
                <tree editable="bottom" create="1" edit="1">
                 <field name="filename" invisible="1"/>
                 <field name="file" widget="file" filename="filename"/>
