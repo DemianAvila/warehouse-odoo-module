@@ -163,7 +163,7 @@ class ScannerCheckLifecycle(models.TransientModel):
                 self.status_of_product = sell_line.life_cycle
                 # .get(self.type)
                 self.order_id = sell_line.order_id.name
-                self.order_id_int = sell_line.order_id.id
+                self.order_id_int = sell_line.id
                 self.marketplace = "Marketplace no asignado" if len(sell_line.order_id.tag_ids) == 0  else sell_line.order_id.tag_ids[0].name
                 self.delivery_company = "Paqueteria no asignada" if len(sell_line.order_id.x_studio_envio) == 0 else sell_line.order_id.x_studio_envio[0].name
                 self.compare_barcode = sell_line.product_template_id.barcode
