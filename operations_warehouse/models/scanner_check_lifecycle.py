@@ -197,17 +197,7 @@ class ScannerCheckLifecycle(models.TransientModel):
          {self.compare_barcode}
          {self.order_id_int}
          """)
-        visible_log(f"""
-                        {self.internal_barcode_exists}
-                        {self.product_name} 
-                        {self.image} 
-                        {self.status_of_product} 
-                        {self.order_id} 
-                        {self.marketplace} 
-                        {self.delivery_company} 
-                        {self.order_id_int}
-                        {self.compare_barcode}
-                        """)
+        
         if self.product_barcode == self.compare_barcode:
             visible_log(f"the barcode scanned is equal")
             self.prod_barcode_equal = True
