@@ -185,7 +185,12 @@ class ScannerCheckLifecycle(models.TransientModel):
 
     @api.onchange("product_barcode")
     def _onchange_product_barcode(self):
+        visible_log(f"""The product bar code has been scanned
+         {self.product_barcode}
+         {self.compare_barcode}
+         """)
         if self.product_barcode == self.compare_barcode:
+            visible_log(f"the barcode scanned is equal")
             self.prod_barcode_equal = True
             self.is_error_prod_equal = False
             #GET ALL DOCUMENTS OF A ORDER
@@ -194,6 +199,7 @@ class ScannerCheckLifecycle(models.TransientModel):
                     ("order_line", "=", self.order_id_int)
                 ]
             )
+            visible_log(f"GET THE DOCUMENTS {documents}")
             write_documents = []
             for document in documents:
                 write_documents.append(
@@ -202,9 +208,12 @@ class ScannerCheckLifecycle(models.TransientModel):
                         "filename": document.name
                     })
                 )
+            visible_log(f"update the documents in this notebook {write_documents}")
             if len(write_documents) > 0:
-                self.update({"documents":write_documents})
+                visible_log(f"try to upgrade the doc list")
+                #self.update({"documents":write_documents})
         else:
+            visible_log(f"the barcode scanned is different")
             self.prod_barcode_equal = False
             self.is_error_prod_equal = True
 
