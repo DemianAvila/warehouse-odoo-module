@@ -60,86 +60,11 @@ class TmpGuides(models.TransientModel):
         return res
 
 
-
     @api.model
     def create(self, vals):
-        non_erased = []
-        logging.info("==========================")
-        logging.info("create record")
-        logging.info(vals.keys())
-        logging.info("==========================")
-        #IF THERE IS NO GUIDE IN THE VALS FIELD, MEANS THAT WE ARE CREATING THE RECORD FROM CODE
-        if "guides" in vals.keys():
-            # OVERRIDE THE DOCUMENTS
-            for guide in vals["guides"]:
-                logging.info("==========================")
-                logging.info(guide[2].keys())
-                logging.info("==========================")
-                # IF DOCUMENT HAS EXTERNAL ID
-                if "ext_id" in guide[2].keys():
-                    logging.info("==========================")
-                    logging.info("overriding doc")
-                    logging.info("==========================")
-                    non_erased.append(guide[2]["ext_id"])
-                    document = self.env['ir.attachment'].search(
-                        [
-                            ('id', '=', guide[2]["ext_id"])
-                        ]
-                    )
-                    document[0].datas = self.file,
-                    document[0].name = self.filename
-                    logging.info("==========================")
-                    logging.info(guide[2]["ext_id"])
-                    logging.info("==========================")
-                # IF IT DOESN'T EXIST, CREATE THEM
-                else:
-                    logging.info("creating doc")
-                    logging.info(self.env.context.get('order_id'))
-                    order_rec = self.env["sale.order.line"].search(
-                        [
-                            ("id", "=", self.env.context.get('order_id'))
-                        ]
-                    )
-                    logging.info(order_rec)
-                    id_write = self.env['ir.attachment'].create(
-                        {
-                            "datas": guide[2]["file"],
-                            "name": guide[2]["filename"],
-                            "order_line": order_rec.id
-                        }
-                    )
-                    logging.info("==========================")
-                    logging.info(id_write.id)
-                    logging.info("==========================")
-                    non_erased.append(id_write.id)
-
-            # COMPARE THE NON ERASED IDS IF THE MODEL, ERASE THE ONES NOT ON THE LIST
-            logging.info("==========================")
-            logging.info("get guides of this model")
-            logging.info(self.guides)
-            logging.info("==========================")
-            guides_ids = [guide[2]["ext_id"] for guide in vals["guides"]]
-            logging.info("==========================")
-            logging.info("get guides of this model")
-            logging.info(guides_ids)
-            logging.info("==========================")
-            for file in self.env['ir.attachment'].search([('order_line', 'in', guides_ids)]):
-                if file not in non_erased:
-                    logging.info("==========================")
-                    logging.info("deleting file")
-                    logging.info(file)
-                    logging.info(non_erased)
-                    logging.info("==========================")
-                    document = self.env['ir.attachment'].search(
-                        [
-                            ('id', '=', file)
-                        ]
-                    )
-                    logging.info("==========================")
-                    logging.info(document)
-                    logging.info("==========================")
-                    document[0].unlink()
-
+        logging.info("=================================")
+        logging.info(len(vals))
+        logging.info("=================================")
         return super(TmpGuides, self).create(vals)
 
 
