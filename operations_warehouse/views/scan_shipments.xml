@@ -36,6 +36,17 @@
           <group>
             <field name="product_barcode" attrs="{'invisible': [('shipment_order_id', '=', False)]}"/>
           </group>
+          <div attrs="{'invisible': [('is_error_prod_equal', '=', False)]}" class="p-3 mb-2 bg-danger text-white">
+            El código escaneado no corresponde con el del producto, verifica que el producto sea el adecuado
+          </div>
+          <group attrs="{'invisible': [('is_error_prod_equal', '=', True)]}">
+            <field name="documents" attrs="{'invisible': [('prod_barcode_equal', '=', False)]}" >
+               <tree readonly="1">
+                <field name="filename"/>
+                <field name="file" widget="file" filename="filename"/>
+               </tree>
+            </field>
+          </group>
         </sheet>
       </form>
     </field>

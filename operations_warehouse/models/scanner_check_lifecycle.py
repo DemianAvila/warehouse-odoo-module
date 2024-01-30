@@ -9,6 +9,7 @@ def visible_log(log):
 class DownloadShipmentGuides(models.TransientModel):
     _name = 'download.shipment.guides'
     file = fields.Binary()
+    filename = fields.Char()
     scanner_view = fields.Many2one(
         comodel_name = 'scanner.check.view',
         string = 'Scanner View'
@@ -34,6 +35,18 @@ class ScannerCheckLifecycle(models.TransientModel):
 
     product_barcode = fields.Char(
         string = 'Product Barcode'
+    )
+
+    compare_barcode = fields.Char(
+        string = 'Compare Barcode'
+    )
+
+    prod_barcode_equal = fields.Boolean(
+        default = False
+    )
+
+    is_error_prod_equal = fields.Boolean(
+        default = False
     )
 
     internal_barcode_exists = fields.Boolean(
@@ -62,6 +75,8 @@ class ScannerCheckLifecycle(models.TransientModel):
         string = "Order ID",
         readonly = True
     )
+
+    order_id_int = fields.Char()
 
     marketplace = fields.Char(
         string = "Marketplace",
@@ -143,8 +158,10 @@ class ScannerCheckLifecycle(models.TransientModel):
                 self.status_of_product = sell_line.life_cycle
                 # .get(self.type)
                 self.order_id = sell_line.order_id.name
+                self.order_id_int = sell_line.order_id.id
                 self.marketplace = "Marketplace no asignado" if len(sell_line.order_id.tag_ids) == 0  else sell_line.order_id.tag_ids[0].name
                 self.delivery_company = "Paqueteria no asignada" if len(sell_line.order_id.x_studio_envio) == 0 else sell_line.order_id.x_studio_envio[0].name
+                self.compare_barcode = sell_line.product_template_id.barcode
                 visible_log(f"""
                 {self.internal_barcode_exists}
                 {sell_line}
@@ -165,6 +182,34 @@ class ScannerCheckLifecycle(models.TransientModel):
         else:
             self.product_card = False
             self.internal_barcode_exists = True
+
+    @api.onchange("product_barcode")
+    def _onchange_product_barcode(self):
+        if self.product_barcode == self.compare_barcode:
+            self.prod_barcode_equal = True
+            self.is_error_prod_equal = False
+            #GET ALL DOCUMENTS OF A ORDER
+            documents = self.env['ir.attachment'].search(
+                [
+                    ("order_line", "=", self.order_id_int)
+                ]
+            )
+            write_documents = []
+            for document in documents:
+                write_documents.append(
+                    (0,0,{
+                        "file": document.datas,
+                        "filename": document.name
+                    })
+                )
+
+            self.documents.update(write_documents)
+        else:
+            self.prod_barcode_equal = False
+            self.is_error_prod_equal = True
+
+
+
 
     def reset_internal_barcode(self):
         self.internal_barcode = False

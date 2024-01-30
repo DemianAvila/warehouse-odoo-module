@@ -129,11 +129,6 @@ class ShipmentFields(models.Model):
     )
 
     def check_guides (self):
-        logging.info("==========================")
-        logging.info(dir(self))
-        logging.info(self.id)
-        logging.info(self.name)
-        logging.info("==========================")
         return {
             'name': "operations_warehouse.upload_shipment_guides_action",
             'res_model': "tmp.shipment_guides",
@@ -144,8 +139,6 @@ class ShipmentFields(models.Model):
                 'documents': [guide.id for guide in self.shipment_guides]
             },
         }
-
-        #return self.env.ref("operations_warehouse.upload_shipment_guides_action").read()[0]
 
 class ShipmentOrderInherit(models.Model):
     _inherit = "bossa.shipment.orders"
