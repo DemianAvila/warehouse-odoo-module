@@ -96,7 +96,6 @@ class ScannerCheckLifecycle(models.TransientModel):
     documents = fields.One2many(
         comodel_name = "download.shipment.guides",
         inverse_name = "scanner_view",
-        readonly = True
     )
 
     internal_barcode_readonly = fields.Boolean(
