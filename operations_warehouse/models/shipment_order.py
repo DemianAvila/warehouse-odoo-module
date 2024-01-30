@@ -32,21 +32,12 @@ class TmpGuides(models.TransientModel):
     @api.model
     def default_get(self, fields):
         res = super(TmpGuides, self).default_get(fields)
-        logging.info("==========================")
-        logging.info(self)
-        logging.info(self.env.context)
-        logging.info("opening the default get method")
-        logging.info("==========================")
         #WRITE THE DOCUMENTS IN THIS TMP MODEL
         documents = self.env["ir.attachment"].search(
             [
                 ("id", "in", self.env.context.get('documents'))
             ]
         )
-        logging.info("==========================")
-        logging.info("writing documents in model")
-        logging.info(documents)
-        logging.info("==========================")
         doc_values = []
         for document in documents:
             doc_values.append((0,0,{
@@ -55,7 +46,6 @@ class TmpGuides(models.TransientModel):
                     "ext_id": document.id
                 })
             )
-
         res.update({"guides": doc_values})
         return res
 
@@ -63,25 +53,13 @@ class TmpGuides(models.TransientModel):
     @api.model
     def create(self, vals):
         newly_created_att = []
-        logging.info("=================================")
-        logging.info("creating document, logging the vals")
-        logging.info("=================================")
         if "guides" in vals.keys():
             for guide in vals["guides"]:
-                logging.info("=================================")
-                logging.info("checking the guide info")
-                logging.info(guide[2].keys())
-                logging.info(self.env.context.get('order_id'))
-                logging.info("=================================")
                 attachment_id = self.env["ir.attachment"].create({
                     "datas": guide[2]["file"],
                     "name": guide[2]["filename"],
                     "order_line": self.env.context.get('order_id')
                 })
-                logging.info("=================================")
-                logging.info("checking the attachment created info")
-                logging.info(attachment_id.order_line)
-                logging.info("=================================")
                 newly_created_att.append(attachment_id.id)
 
         #DELETE THE NON CREATED ATTACHMENTS
@@ -90,14 +68,9 @@ class TmpGuides(models.TransientModel):
                 ("order_line", "=", self.env.context.get('order_id'))
             ]
         )
-        logging.info("=================================")
-        logging.info("print all attachment")
-        logging.info(all_attachments)
-        logging.info("=================================")
         for attachment in all_attachments:
             if attachment.id not in newly_created_att:
                 attachment.unlink()
-
 
         return super(TmpGuides, self).create(vals)
 
