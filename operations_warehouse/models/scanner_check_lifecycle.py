@@ -11,7 +11,7 @@ class DownloadShipmentGuides(models.TransientModel):
     file = fields.Binary()
     filename = fields.Char()
     scanner_view = fields.Many2one(
-        comodel_name = 'scanner.check.view',
+        comodel_name = 'scanner.check.lifecycle',
         string = 'Scanner View'
     )
 
@@ -171,6 +171,8 @@ class ScannerCheckLifecycle(models.TransientModel):
                 {self.order_id} 
                 {self.marketplace} 
                 {self.delivery_company} 
+                {self.order_id_int}
+                {self.compare_barcode}
                 """)
                 self.internal_barcode_exists = True
                 self.product_card = True
