@@ -116,10 +116,10 @@ class TmpGuides(models.TransientModel):
             # COMPARE THE NON ERASED IDS IF THE MODEL, ERASE THE ONES NOT ON THE LIST
             logging.info("==========================")
             logging.info("get guides of this model")
-            logging.info(vals["guides"])
+            logging.info(vals["guides"][2]["ext_id"])
             logging.info(self.guides)
             logging.info("==========================")
-            guides_ids = [guide.id for guide in vals["guides"]]
+            guides_ids = [guide for guide in vals["guides"][2]["ext_id"]]
             logging.info("==========================")
             logging.info("get guides of this model")
             logging.info(guides_ids)
