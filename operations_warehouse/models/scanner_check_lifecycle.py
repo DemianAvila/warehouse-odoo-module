@@ -8,8 +8,8 @@ def visible_log(log):
 
 class DownloadShipmentGuides(models.TransientModel):
     _name = 'download.shipment.guides'
-    file = fields.Binary()
-    filename = fields.Char()
+    file = fields.Binary(readonly = True)
+    filename = fields.Char(readonly = True)
     scanner_view = fields.Many2one(
         comodel_name = 'scanner.check.lifecycle',
         string = 'Scanner View'
