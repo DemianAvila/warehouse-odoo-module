@@ -123,6 +123,9 @@ class TmpGuides(models.TransientModel):
                                 ('id', '=', file)
                             ]
                         )
+                        logging.info("==========================")
+                        logging.info(document)
+                        logging.info("==========================")
                         document[0].unlink()
 
         return super(TmpGuides, self).create(vals)
