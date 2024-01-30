@@ -221,7 +221,7 @@ class ScannerCheckLifecycle(models.TransientModel):
             visible_log(f"update the documents in this notebook {write_documents}")
             if len(write_documents) > 0:
                 visible_log(f"try to upgrade the doc list")
-                #self.update({"documents":write_documents})
+                self.update({"documents":write_documents})
         else:
             visible_log(f"the barcode scanned is different")
             self.prod_barcode_equal = False
