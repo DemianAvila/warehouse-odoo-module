@@ -203,7 +203,7 @@ class ScannerCheckLifecycle(models.TransientModel):
                     })
                 )
             if len(write_documents) > 0:
-                self.documents.update(write_documents)
+                self.documents.update({"documents":write_documents})
         else:
             self.prod_barcode_equal = False
             self.is_error_prod_equal = True
