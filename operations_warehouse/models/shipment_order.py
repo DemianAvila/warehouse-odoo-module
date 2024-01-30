@@ -111,23 +111,30 @@ class TmpGuides(models.TransientModel):
                     logging.info("==========================")
                     logging.info(id_write.id)
                     logging.info("==========================")
-                # COMPARE THE NON ERASED IDS IF THE MODEL, ERASE THE ONES NOT ON THE LIST
-                for file in self.env.context.get("documents"):
-                    if file not in non_erased:
-                        logging.info("==========================")
-                        logging.info("deleting file")
-                        logging.info(file)
-                        logging.info(non_erased)
-                        logging.info("==========================")
-                        document = self.env['ir.attachment'].search(
-                            [
-                                ('id', '=', file)
-                            ]
-                        )
-                        logging.info("==========================")
-                        logging.info(document)
-                        logging.info("==========================")
-                        document[0].unlink()
+                    non_erased.append(id_write.id)
+
+            # COMPARE THE NON ERASED IDS IF THE MODEL, ERASE THE ONES NOT ON THE LIST
+            guides_ids = [guide.id for guide in vals["guides"]]
+            logging.info("==========================")
+            logging.info("get guides of this model")
+            logging.info(guides_ids)
+            logging.info("==========================")
+            for file in self.env['ir.attachment'].search([('order_line', 'in', guides_ids)]):
+                if file not in non_erased:
+                    logging.info("==========================")
+                    logging.info("deleting file")
+                    logging.info(file)
+                    logging.info(non_erased)
+                    logging.info("==========================")
+                    document = self.env['ir.attachment'].search(
+                        [
+                            ('id', '=', file)
+                        ]
+                    )
+                    logging.info("==========================")
+                    logging.info(document)
+                    logging.info("==========================")
+                    document[0].unlink()
 
         return super(TmpGuides, self).create(vals)
 
