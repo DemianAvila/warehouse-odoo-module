@@ -62,6 +62,7 @@ class TmpGuides(models.TransientModel):
 
     @api.model
     def create(self, vals):
+        newly_created_att = []
         logging.info("=================================")
         logging.info("creating document, logging the vals")
         logging.info("=================================")
@@ -79,8 +80,24 @@ class TmpGuides(models.TransientModel):
                 })
                 logging.info("=================================")
                 logging.info("checking the attachment created info")
-                logging.info(attachment_id)
+                logging.info(attachment_id.order_line)
                 logging.info("=================================")
+                newly_created_att.append(attachment_id.id)
+
+        #DELETE THE NON CREATED ATTACHMENTS
+        all_attachments = self.env["ir.attachment"].search(
+            [
+                ("order_line", "=", self.env.context.get('order_id'))
+            ]
+        )
+        logging.info("=================================")
+        logging.info("print all attachment")
+        logging.info(all_attachments)
+        logging.info("=================================")
+        for attachment in all_attachments:
+            if attachment.id not in newly_created_att:
+                attachment.unlink()
+
 
         return super(TmpGuides, self).create(vals)
 
