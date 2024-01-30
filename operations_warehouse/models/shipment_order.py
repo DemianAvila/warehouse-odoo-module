@@ -75,6 +75,10 @@ class TmpGuides(models.TransientModel):
                 logging.info("vals guides is no dict")
                 logging.info(len(vals["guides"]))
             logging.info("=================================")
+            for guide in vals["guides"]:
+                logging.info("=================================")
+                logging.info(guide.keys())
+                logging.info("=================================")
         return super(TmpGuides, self).create(vals)
 
 
