@@ -197,7 +197,8 @@ class ScannerCheckLifecycle(models.TransientModel):
             #GET ALL DOCUMENTS OF A ORDER
             documents = self.env['ir.attachment'].search(
                 [
-                    ("order_line", "=", self.order_id_int)
+                    ("order_line", "=", self.order_id_int),
+                    ("order_line", "!=", False)
                 ]
             )
             visible_log(f"GET THE DOCUMENTS {documents}")
