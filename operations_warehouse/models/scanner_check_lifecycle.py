@@ -187,39 +187,40 @@ class ScannerCheckLifecycle(models.TransientModel):
 
     @api.onchange("product_barcode")
     def _onchange_product_barcode(self):
-        visible_log(f"""The product bar code has been scanned
-         {self.product_barcode}
-         {self.compare_barcode}
-         {self.order_id_int}
-         """)
-        if self.product_barcode == self.compare_barcode:
-            visible_log(f"the barcode scanned is equal")
-            self.prod_barcode_equal = True
-            self.is_error_prod_equal = False
-            #GET ALL DOCUMENTS OF A ORDER
-            documents = self.env['ir.attachment'].search(
-                [
-                    ("order_line", "=", self.order_id_int),
-                    ("order_line", "!=", False)
-                ]
-            )
-            visible_log(f"GET THE DOCUMENTS {documents}")
-            write_documents = []
-            for document in documents:
-                write_documents.append(
-                    (0,0,{
-                        "file": document.datas,
-                        "filename": document.name
-                    })
+        for rec in self:
+            visible_log(f"""The product bar code has been scanned
+             {rec.product_barcode}
+             {rec.compare_barcode}
+             {rec.order_id_int}
+             """)
+            if rec.product_barcode == rec.compare_barcode:
+                visible_log(f"the barcode scanned is equal")
+                rec.prod_barcode_equal = True
+                rec.is_error_prod_equal = False
+                #GET ALL DOCUMENTS OF A ORDER
+                documents = self.env['ir.attachment'].search(
+                    [
+                        ("order_line", "=", rec.order_id_int),
+                        ("order_line", "!=", False)
+                    ]
                 )
-            visible_log(f"update the documents in this notebook {write_documents}")
-            if len(write_documents) > 0:
-                visible_log(f"try to upgrade the doc list")
-                #self.update({"documents":write_documents})
-        else:
-            visible_log(f"the barcode scanned is different")
-            self.prod_barcode_equal = False
-            self.is_error_prod_equal = True
+                visible_log(f"GET THE DOCUMENTS {documents}")
+                write_documents = []
+                for document in documents:
+                    write_documents.append(
+                        (0,0,{
+                            "file": document.datas,
+                            "filename": document.name
+                        })
+                    )
+                visible_log(f"update the documents in this notebook {write_documents}")
+                if len(write_documents) > 0:
+                    visible_log(f"try to upgrade the doc list")
+                    #self.update({"documents":write_documents})
+            else:
+                visible_log(f"the barcode scanned is different")
+                rec.prod_barcode_equal = False
+                rec.is_error_prod_equal = True
 
 
 
