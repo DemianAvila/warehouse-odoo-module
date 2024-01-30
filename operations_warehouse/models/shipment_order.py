@@ -31,6 +31,7 @@ class TmpGuides(models.TransientModel):
 
     @api.model
     def default_get(self, fields):
+        res = super(TmpGuides, self).default_get(fields)
         logging.info("==========================")
         logging.info(self)
         logging.info(self.env.context)
@@ -46,16 +47,17 @@ class TmpGuides(models.TransientModel):
         logging.info("writing documents in model")
         logging.info(documents)
         logging.info("==========================")
+        doc_values = []
         for document in documents:
-            self.write({
-                "guides": (0,0,{
-                        "file": document.datas,
-                        "filename": document.name,
-                        "ext_id": document.id
-                    }
-                )
-            })
-        return super(TmpGuides, self).default_get(fields)
+            doc_values.append((0,0,{
+                    "file": document.datas,
+                    "filename": document.name,
+                    "ext_id": document.id
+                })
+            )
+
+        res.update({"guides": doc_values})
+        return res
 
 
 
