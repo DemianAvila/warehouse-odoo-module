@@ -27,7 +27,7 @@ class ScannerCheckLifecycle(models.TransientModel):
 
     shipment_order_id = fields.Many2one(
         comodel_name = 'shipment.orders'
-        )
+    )
 
     internal_barcode = fields.Char(
         string = 'Internal Barcode'
@@ -38,15 +38,18 @@ class ScannerCheckLifecycle(models.TransientModel):
     )
 
     compare_barcode = fields.Char(
-        string = 'Compare Barcode'
+        string = 'Compare Barcode',
+        readonly=True
     )
 
     prod_barcode_equal = fields.Boolean(
-        default = False
+        default = False,
+        readonly = True
     )
 
     is_error_prod_equal = fields.Boolean(
-        default = False
+        default = False,
+        readonly = True
     )
 
     internal_barcode_exists = fields.Boolean(
@@ -76,7 +79,9 @@ class ScannerCheckLifecycle(models.TransientModel):
         readonly = True
     )
 
-    order_id_int = fields.Char()
+    order_id_int = fields.Char(
+        readonly=True
+    )
 
     marketplace = fields.Char(
         string = "Marketplace",
