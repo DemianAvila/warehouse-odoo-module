@@ -77,7 +77,9 @@ class TmpGuides(models.TransientModel):
             logging.info("=================================")
             for guide in vals["guides"]:
                 logging.info("=================================")
-                logging.info(guide.keys())
+                logging.info("checking the guide info")
+                logging.info(len(guide))
+                logging.info(guide)
                 logging.info("=================================")
         return super(TmpGuides, self).create(vals)
 
