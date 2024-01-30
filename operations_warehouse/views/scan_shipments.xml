@@ -28,6 +28,8 @@
             <field name="marketplace" invisible="1"/>
             <field name="delivery_company" invisible="1"/>
             <field name="internal_barcode_readonly" invisible="1"/>
+            <field name="is_error_prod_equal" invisible="1"/>
+            <field name="prod_barcode_equal" invisible="1"/>
           </group>
           <div class="p-3 mb-2 bg-danger text-white" attrs="{'invisible': [('internal_barcode_exists', '=', True)]}">
             El codigo escaneado no corresponde con esta orden de envio
