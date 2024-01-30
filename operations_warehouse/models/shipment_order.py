@@ -65,8 +65,16 @@ class TmpGuides(models.TransientModel):
         logging.info("=================================")
         logging.info("creating document, logging the vals")
         logging.info(vals.keys())
-        logging.info(len(vals[2]))
         logging.info("=================================")
+        if "guides" in vals.keys():
+            logging.info("=================================")
+            logging.info("logging the guides")
+            try:
+                logging.info(vals["guides"].keys())
+            except:
+                logging.info("vals guides is no dict")
+                logging.info(len(vals["guides"]))
+            logging.info("=================================")
         return super(TmpGuides, self).create(vals)
 
 
