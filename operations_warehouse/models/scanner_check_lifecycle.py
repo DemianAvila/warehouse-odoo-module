@@ -139,7 +139,7 @@ class ScannerCheckLifecycle(models.TransientModel):
 
         return ids
 
-    @api.onchange("internal_barcode")
+    @api.onchange("internal_barcode", "product_barcode")
     def _onchange_internal_barcode(self):
         self.product_card = False
         self.internal_barcode_readonly = True
@@ -197,7 +197,7 @@ class ScannerCheckLifecycle(models.TransientModel):
          {self.compare_barcode}
          {self.order_id_int}
          """)
-        
+
         if self.product_barcode == self.compare_barcode:
             visible_log(f"the barcode scanned is equal")
             self.prod_barcode_equal = True
