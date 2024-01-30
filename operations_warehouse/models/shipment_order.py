@@ -117,6 +117,7 @@ class TmpGuides(models.TransientModel):
                         logging.info("==========================")
                         logging.info("deleting file")
                         logging.info(file)
+                        logging.info(non_erased)
                         logging.info("==========================")
                         document = self.env['ir.attachment'].search(
                             [
